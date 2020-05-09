@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/clear"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/sevenButton"
+        app:layout_constraintEnd_toEndOf="@+id/riseToBaseButton" />
+
+    <Button
+        android:id="@+id/setCustomAngleButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/set_custom_angle"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/setRoofSlopeButton"
+        app:layout_constraintTop_toBottomOf="@+id/setRoofSlopeButton" />
+
+    <Button
+        android:id="@+id/setRoofSlopeButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginTop="8dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/set_slope"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/currentRoofSlopeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/currentRoofSlopeTextView" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/delete"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/sevenButton"
+        app:layout_constraintEnd_toStartOf="@+id/riseToBaseButton" />
+
+    <Button
+        android:id="@+id/riseToSlopeButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/rise_to_slope"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/baseToSlopeButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/riseToBaseButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/rise_to_base"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/riseToSlopeButton"
+        app:layout_constraintEnd_toStartOf="@+id/zeroButton"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toEndOf="@+id/slopeToBaseButton" />
+
+    <Button
+        android:id="@+id/baseToSlopeButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/base_to_slope"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/slopeToBaseButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/baseToRiseButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/base_to_rise"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/baseToSlopeButton"
+        app:layout_constraintEnd_toStartOf="@+id/zeroButton"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toEndOf="@+id/slopeToBaseButton" />
+
+    <Button
+        android:id="@+id/slopeToRiseButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/slope_to_rise"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/slopeToBaseButton"
+        app:layout_constraintEnd_toStartOf="@+id/zeroButton"
+        app:layout_constraintStart_toEndOf="@+id/slopeToBaseButton" />
+
+    <Button
+        android:id="@+id/slopeToBaseButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/slope_to_base"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/mathMethodSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/detailing_math"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/divideButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/divide"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/eightButton"
+        app:layout_constraintEnd_toStartOf="@+id/multiplyButton" />
+
+    <Button
+        android:id="@+id/plusButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/doubleSmallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:orientation="vertical"
+        android:rotation="0"
+        android:text="@string/plus"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/enterButton"
+        app:layout_constraintEnd_toEndOf="@+id/enterButton" />
+
+    <Button
+        android:id="@+id/minusButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background"
+        android:text="@string/minus"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintEnd_toEndOf="@+id/enterButton" />
+
+    <Button
+        android:id="@+id/multiplyButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/multiply"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintEnd_toStartOf="@+id/minusButton" />
+
+    <Button
+        android:id="@+id/sevenButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/seven"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/nineButton"
+        app:layout_constraintEnd_toStartOf="@+id/eightButton" />
+
+    <Button
+        android:id="@+id/nineButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/nine"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/sixButton"
+        app:layout_constraintEnd_toStartOf="@+id/enterButton" />
+
+    <Button
+        android:id="@+id/eightButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/eight"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/nineButton"
+        app:layout_constraintEnd_toStartOf="@+id/sixButton" />
+
+    <Button
+        android:id="@+id/fourButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/four"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/sixButton"
+        app:layout_constraintEnd_toStartOf="@+id/fiveButton" />
+
+    <Button
+        android:id="@+id/sixButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/six"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/threeButton"
+        app:layout_constraintEnd_toStartOf="@+id/enterButton" />
+
+    <Button
+        android:id="@+id/fiveButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/five"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/sixButton"
+        app:layout_constraintEnd_toStartOf="@+id/sixButton" />
+
+    <Button
+        android:id="@+id/oneButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/one"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/twoButton"
+        app:layout_constraintEnd_toStartOf="@+id/twoButton" />
+
+    <Button
+        android:id="@+id/threeButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/three"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/decimalButton"
+        app:layout_constraintEnd_toStartOf="@+id/enterButton" />
+
+    <Button
+        android:id="@+id/twoButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/two"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/threeButton"
+        app:layout_constraintEnd_toStartOf="@+id/threeButton" />
+
+    <Button
+        android:id="@+id/zeroButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/zero"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/enterButton"
+        app:layout_constraintEnd_toStartOf="@+id/decimalButton" />
+
+    <Button
+        android:id="@+id/decimalButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/decimal"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/enterButton"
+        app:layout_constraintEnd_toStartOf="@+id/enterButton" />
+
+    <Button
+        android:id="@+id/enterButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/doubleSmallButtonSize"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/enter"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/smallButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/outputLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:paddingLeft="4.0dip"
+        android:paddingTop="5.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingBottom="1.0dip"
+        app:layout_constraintBottom_toTopOf="@+id/divideButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/outputView1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1.0"
+            android:background="@color/colorAccent"
+            app:reverseLayout="true"
+            app:stackFromEnd="true"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/outputView2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1.0"
+            android:background="@color/colorAccent"
+            app:reverseLayout="true"
+            app:stackFromEnd="true"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/spinnerLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:paddingLeft="4.0dip"
+        android:paddingTop="5.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingBottom="1.0dip"
+        app:layout_constraintBottom_toTopOf="@+id/outputLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <Spinner
+            android:id="@+id/output1NameSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1.0"
+            android:entries="@array/stateSave" />
+
+        <Spinner
+            android:id="@+id/output2NameSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1.0"
+            android:entries="@array/stateSave" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="96dp"
+        android:layout_height="145dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/angleTitleSection"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:text="@string/angles" />
+
+        <RadioButton
+            android:id="@+id/angle1RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/angle_1" />
+
+        <RadioButton
+            android:id="@+id/angle2RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_2" />
+
+        <RadioButton
+            android:id="@+id/angle3RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_3" />
+
+        <RadioButton
+            android:id="@+id/angle4RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_4" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/currentRoofSlopeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dummyRoofSlope"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/current_roof_slope"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+        app:layout_constraintTop_toTopOf="@+id/radioGroup" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

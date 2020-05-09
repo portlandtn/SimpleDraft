@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Simple Draft</string>
+    <string name="multiply">*</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="enter">Enter</string>
+    <string name="decimal">.</string>
+    <string name="zero">0</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="one">1</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="four">4</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="seven">7</string>
+    <string name="detailing_math">Detailing Math</string>
+    <string name="divide">/</string>
+    <string name="slope_to_base">Slope to Base</string>
+    <string name="slope_to_rise">Slope To Rise</string>
+    <string name="base_to_rise">Base To Rise</string>
+    <string name="base_to_slope">Base To Slope</string>
+    <string name="rise_to_slope">Rise To Slope</string>
+    <string name="rise_to_base">Rise To Base</string>
+    <string name="delete">Delete</string>
+    <string name="standard_math">Standard Math</string>
+    <string name="angle_1">14.0623</string>
+    <string name="angle_2">1.1893</string>
+    <string name="angle_3">4.7623</string>
+    <string name="angle_4">14.0623</string>
+    <string name="roof_slope">Roof Slope</string>
+    <string name="_1">1</string>
+    <string name="on12">:12</string>
+    <string name="angles">Angles</string>
+    <string name="dummyRoofSlope">12.2624:12</string>
+    <string name="current_roof_slope">Current Roof Slope</string>
+    <string name="set_custom_angle">Enter Angle</string>
+    <string name="set_slope">Set Slope</string>
+    <string name="clear">Clear</string>
+
+    <string-array name="stateSave">
+        <item> - New Save - </item>
+        <item>K13J0283</item>
+        <item>K21H0332</item>
+    </string-array>
+</resources>
