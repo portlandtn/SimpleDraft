@@ -2,6 +2,10 @@ package com.jedmay.simpledraft.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
+
+import com.jedmay.simpledraft.helper.Converters;
 
 import java.util.List;
 
@@ -11,7 +15,18 @@ public class OutputState {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    private List<Float> values;
+    @TypeConverters(Converters.class)
+    private List<Double> values;
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public long getId() {
         return id;
@@ -21,11 +36,11 @@ public class OutputState {
         this.id = id;
     }
 
-    public List<Float> getValues() {
+    public List<Double> getValues() {
         return values;
     }
 
-    public void setValues(List<Float> values) {
+    public void setValues(List<Double> values) {
         this.values = values;
     }
 }

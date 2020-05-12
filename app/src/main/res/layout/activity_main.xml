@@ -340,6 +340,7 @@
             android:layout_marginRight="8dp"
             android:layout_weight="1.0"
             android:background="@color/colorAccent"
+            tools:listitem="@layout/recyclerview_item"
             app:reverseLayout="true"
             app:stackFromEnd="true"/>
 

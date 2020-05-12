@@ -13,8 +13,6 @@ public class UserSettings {
 
     private String name;
 
-    private List<OutputState> outputStates;
-
     public long getId() {
         return id;
     }
@@ -31,11 +29,4 @@ public class UserSettings {
         this.name = name;
     }
 
-    public List<OutputState> getOutputStates() {
-        return outputStates;
-    }
-
-    public void setOutputStates(List<OutputState> outputStates) {
-        this.outputStates = outputStates;
-    }
 }
