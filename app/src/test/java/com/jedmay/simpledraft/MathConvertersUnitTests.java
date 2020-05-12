@@ -8,6 +8,8 @@ import static org.junit.Assert.*;
 
 public class MathConvertersUnitTests {
 
+    private double deltaValue = 0.000001;
+
     @Test
     public void ExtractFeetFromDimension() {
         double dimension = 14.0204;
@@ -25,7 +27,7 @@ public class MathConvertersUnitTests {
         double expected = -14;
         double actual = MathConverters.extractWholeNumberFromDimension(dimension);
 
-        assertEquals(expected,actual,0);
+        assertEquals(expected,actual,deltaValue);
     }
 
     @Test
@@ -36,7 +38,7 @@ public class MathConvertersUnitTests {
 
         double actual = MathConverters.extractInchesFromDimension(dimension);
 
-        assertEquals(expected,actual,0);
+        assertEquals(expected,actual,deltaValue);
 
     }
 
@@ -48,7 +50,7 @@ public class MathConvertersUnitTests {
 
         double actual = MathConverters.extractInchesFromDimension(dimension);
 
-        assertEquals(expected,actual,0);
+        assertEquals(expected,actual,deltaValue);
 
     }
 
@@ -60,7 +62,7 @@ public class MathConvertersUnitTests {
 
         double actual = MathConverters.extractSixteenthsFromDimension(dimension);
 
-        assertEquals(expected,actual,0.000000001);
+        assertEquals(expected,actual,deltaValue);
 
     }
 
@@ -72,7 +74,7 @@ public class MathConvertersUnitTests {
 
         double actual = MathConverters.extractSixteenthsFromDimension(dimension);
 
-        assertEquals(expected,actual,0.000000001);
+        assertEquals(expected,actual,deltaValue);
 
     }
 

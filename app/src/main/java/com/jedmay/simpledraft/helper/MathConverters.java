@@ -15,9 +15,9 @@ public class MathConverters {
         dimension *= 100;
 
         //Truncate sixteenths off
-        dimension -= extractWholeNumberFromDimension(dimension);
-        dimension /= 100;
-        return ((int) dimension);
+        double returnValue = (int) dimension;
+        return returnValue / 100;
+
     }
 
     public static double extractSixteenthsFromDimension(double dimension) {
