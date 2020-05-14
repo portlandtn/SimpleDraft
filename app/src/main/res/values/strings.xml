@@ -38,6 +38,9 @@
     <string name="set_custom_angle">Enter Angle</string>
     <string name="set_slope">Set Slope</string>
     <string name="clear">Clear</string>
+    <string name="weight">Weight</string>
+    <string name="dec_to_foot">Dec to Foot</string>
+    <string name="foot_to_decimal">Foot to Dec</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
