@@ -26,6 +26,5 @@ public class OutputStateViewModel extends AndroidViewModel {
     public void insert(OutputState outputState) { mOutputStateRepository.insert(outputState);}
     public void update(OutputState outputState) { mOutputStateRepository.update(outputState);}
     public void delete(OutputState outputState) { mOutputStateRepository.delete(outputState);}
-
-
+    public void deleteAll() {mOutputStateRepository.deleteAll();}
 }

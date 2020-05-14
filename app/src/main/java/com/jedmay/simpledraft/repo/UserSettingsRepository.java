@@ -4,10 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.jedmay.simpledraft.dao.OutputStateDao;
 import com.jedmay.simpledraft.dao.UserSettingsDao;
 import com.jedmay.simpledraft.db.SimpleDraftDb;
-import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.model.UserSettings;
 
 import java.util.List;
@@ -37,5 +35,9 @@ public class UserSettingsRepository {
 
     public void delete(UserSettings userSettings){
         SimpleDraftDb.databaseWriteExecutor.execute(() -> userSettingsDao.delete(userSettings));
+    }
+
+    public void deleteAll() {
+        SimpleDraftDb.databaseWriteExecutor.execute(() -> userSettingsDao.deleteAll());
     }
 }

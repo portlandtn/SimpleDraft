@@ -36,4 +36,8 @@ public class OutputStateRepository {
     public void delete(OutputState outputState){
         SimpleDraftDb.databaseWriteExecutor.execute(() -> outputStateDao.delete(outputState));
     }
+
+    public void deleteAll() {
+        SimpleDraftDb.databaseWriteExecutor.execute(() -> outputStateDao.deleteAll());
+    }
 }

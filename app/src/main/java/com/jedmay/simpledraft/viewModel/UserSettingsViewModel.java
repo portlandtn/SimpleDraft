@@ -25,5 +25,5 @@ public class UserSettingsViewModel extends AndroidViewModel {
     public void insert(UserSettings userSettings) {mUserSettingsRepository.insert(userSettings);}
     public void update(UserSettings userSettings) {mUserSettingsRepository.update(userSettings);}
     public void delete(UserSettings userSettings) {mUserSettingsRepository.delete(userSettings);}
-
+    public void deleteAll() {mUserSettingsRepository.deleteAll();}
 }

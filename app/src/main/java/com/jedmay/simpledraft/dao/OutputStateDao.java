@@ -27,4 +27,7 @@ public interface OutputStateDao {
     @Delete()
     void delete(OutputState outputState);
 
+    @Query("DELETE FROM output_state")
+    void deleteAll();
+
 }

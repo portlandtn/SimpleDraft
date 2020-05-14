@@ -27,4 +27,7 @@ public interface UserSettingsDao {
     @Delete()
     void delete(UserSettings userSettings);
 
+    @Query("DELETE FROM user_settings")
+    void deleteAll();
+
 }
