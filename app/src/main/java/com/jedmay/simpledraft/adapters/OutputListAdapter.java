@@ -22,7 +22,7 @@ public class OutputListAdapter extends RecyclerView.Adapter<OutputListAdapter.Ou
     private int outputViewId;
 
 
-    OutputListAdapter(Context context, int outputViewId) {
+    public OutputListAdapter(Context context, int outputViewId) {
         mInflator = LayoutInflater.from(context);
         this.outputViewId = outputViewId;
     }
