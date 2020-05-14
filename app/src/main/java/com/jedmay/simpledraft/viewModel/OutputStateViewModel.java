@@ -21,7 +21,7 @@ public class OutputStateViewModel extends AndroidViewModel {
         mAllOutputStates = mOutputStateRepository.getmAllOutputStates();
     }
 
-    LiveData<List<OutputState>> getAllOutputStates() {return mAllOutputStates;}
+    public LiveData<List<OutputState>> getAllOutputStates() {return mAllOutputStates;}
 
     public void insert(OutputState outputState) { mOutputStateRepository.insert(outputState);}
     public void update(OutputState outputState) { mOutputStateRepository.update(outputState);}

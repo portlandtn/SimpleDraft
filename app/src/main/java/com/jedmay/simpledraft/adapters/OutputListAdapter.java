@@ -51,7 +51,7 @@ public class OutputListAdapter extends RecyclerView.Adapter<OutputListAdapter.Ou
         } else return 0;
     }
 
-    void setOutputStates(List<OutputState> outputStates) {
+    public void setOutputStates(List<OutputState> outputStates) {
         mOutputStates = outputStates;
         notifyDataSetChanged();
     }
