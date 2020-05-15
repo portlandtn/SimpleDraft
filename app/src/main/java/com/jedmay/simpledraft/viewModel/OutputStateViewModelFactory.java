@@ -3,7 +3,6 @@ package com.jedmay.simpledraft.viewModel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,7 +12,7 @@ import com.jedmay.simpledraft.repo.OutputStateRepository;
 
 import java.util.List;
 
-public class outputFact implements ViewModelProvider.Factory {
+public class OutputStateViewModelFactory implements ViewModelProvider.Factory {
 
     private Application mApplication;
     private String mStateName;
@@ -22,7 +21,7 @@ public class outputFact implements ViewModelProvider.Factory {
     private LiveData<List<OutputState>> mAllOutputStates;
     private LiveData<List<OutputState>> mOutputStateValues;
 
-    public outputFact(Application application, String stateName) {
+    public OutputStateViewModelFactory(Application application, String stateName) {
         mApplication = application;
         mStateName = stateName;
         mOutputStateRepository = new OutputStateRepository(application, stateName);
@@ -41,6 +40,6 @@ public class outputFact implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new ViewMod(mApplication, mStateName);
+        return (T) new OutputStateViewModel(mApplication, mStateName);
     }
 }

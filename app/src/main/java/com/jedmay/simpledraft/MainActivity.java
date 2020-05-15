@@ -12,16 +12,16 @@ import android.view.View;
 
 import com.jedmay.simpledraft.adapters.OutputListAdapter;
 import com.jedmay.simpledraft.model.OutputState;
-import com.jedmay.simpledraft.viewModel.ViewMod;
-import com.jedmay.simpledraft.viewModel.outputFact;
+import com.jedmay.simpledraft.viewModel.OutputStateViewModel;
+import com.jedmay.simpledraft.viewModel.OutputStateViewModelFactory;
 
 import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewMod mOutputStateViewModel1;
-    private ViewMod mOutputStateViewModel2;
+    private OutputStateViewModel mOutputStateViewModel1;
+    private OutputStateViewModel mOutputStateViewModel2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +31,8 @@ public class MainActivity extends AppCompatActivity {
         String stateName1 = "K12J0208";
         String stateName2 = "K12J0209";
 
-        mOutputStateViewModel1 = new ViewModelProvider(this, new outputFact(this.getApplication(), stateName1)).get(ViewMod.class);
-        mOutputStateViewModel2 = new ViewModelProvider(this, new outputFact(this.getApplication(), stateName2)).get(ViewMod.class);
-
-//        mOutputStateViewModel1 = new ViewModelProvider(this).get(OutputStateViewModel.class);
-//        mOutputStateViewModel2 = new ViewModelProvider(this).get(OutputStateViewModel.class);
+        mOutputStateViewModel1 = new ViewModelProvider(this, new OutputStateViewModelFactory(this.getApplication(), stateName1)).get(OutputStateViewModel.class);
+        mOutputStateViewModel2 = new ViewModelProvider(this, new OutputStateViewModelFactory(this.getApplication(), stateName2)).get(OutputStateViewModel.class);
 
         mOutputStateViewModel1.getOutputStateValues().observe(this, new Observer<List<OutputState>>() {
             OutputListAdapter adapter;
