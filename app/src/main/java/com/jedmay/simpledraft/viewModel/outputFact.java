@@ -13,7 +13,7 @@ import com.jedmay.simpledraft.repo.OutputStateRepository;
 
 import java.util.List;
 
-class OutputStateViewModelFactory implements ViewModelProvider.Factory {
+public class outputFact implements ViewModelProvider.Factory {
 
     private Application mApplication;
     private String mStateName;
@@ -22,7 +22,7 @@ class OutputStateViewModelFactory implements ViewModelProvider.Factory {
     private LiveData<List<OutputState>> mAllOutputStates;
     private LiveData<List<OutputState>> mOutputStateValues;
 
-    public OutputStateViewModelFactory(Application application, String stateName) {
+    public outputFact(Application application, String stateName) {
         mApplication = application;
         mStateName = stateName;
         mOutputStateRepository = new OutputStateRepository(application, stateName);
