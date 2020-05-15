@@ -12,25 +12,32 @@ import android.view.View;
 
 import com.jedmay.simpledraft.adapters.OutputListAdapter;
 import com.jedmay.simpledraft.model.OutputState;
-import com.jedmay.simpledraft.viewModel.OutputStateViewModel;
+import com.jedmay.simpledraft.viewModel.ViewMod;
+import com.jedmay.simpledraft.viewModel.outputFact;
 
 import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private OutputStateViewModel mOutputStateViewModel1;
-    private OutputStateViewModel mOutputStateViewModel2;
+    private ViewMod mOutputStateViewModel1;
+    private ViewMod mOutputStateViewModel2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mOutputStateViewModel1 = new ViewModelProvider(this).get(OutputStateViewModel.class);
-        mOutputStateViewModel2 = new ViewModelProvider(this).get(OutputStateViewModel.class);
+        String stateName1 = "K12J0208";
+        String stateName2 = "K12J0209";
 
-        mOutputStateViewModel1.getAllOutputStates().observe(this, new Observer<List<OutputState>>() {
+        mOutputStateViewModel1 = new ViewModelProvider(this, new outputFact(this.getApplication(), stateName1)).get(ViewMod.class);
+        mOutputStateViewModel2 = new ViewModelProvider(this, new outputFact(this.getApplication(), stateName2)).get(ViewMod.class);
+
+//        mOutputStateViewModel1 = new ViewModelProvider(this).get(OutputStateViewModel.class);
+//        mOutputStateViewModel2 = new ViewModelProvider(this).get(OutputStateViewModel.class);
+
+        mOutputStateViewModel1.getOutputStateValues().observe(this, new Observer<List<OutputState>>() {
             OutputListAdapter adapter;
             @Override
             public void onChanged(List<OutputState> outputStates) {
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mOutputStateViewModel2.getAllOutputStates().observe(this, new Observer<List<OutputState>>() {
+        mOutputStateViewModel2.getOutputStateValues().observe(this, new Observer<List<OutputState>>() {
             OutputListAdapter adapter;
             @Override
             public void onChanged(List<OutputState> outputStates) {
