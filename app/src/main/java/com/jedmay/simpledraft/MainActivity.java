@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.view.View;
 import com.jedmay.simpledraft.adapters.OutputListAdapter;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.viewModel.OutputStateViewModel;
-import com.jedmay.simpledraft.viewModel.UserSettingsViewModel;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     private OutputStateViewModel mOutputStateViewModel1;
     private OutputStateViewModel mOutputStateViewModel2;
-    private UserSettingsViewModel mUserSettingsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         mOutputStateViewModel1 = new ViewModelProvider(this).get(OutputStateViewModel.class);
         mOutputStateViewModel2 = new ViewModelProvider(this).get(OutputStateViewModel.class);
-        mUserSettingsViewModel = new ViewModelProvider(this).get(UserSettingsViewModel.class);
 
         mOutputStateViewModel1.getAllOutputStates().observe(this, new Observer<List<OutputState>>() {
             OutputListAdapter adapter;

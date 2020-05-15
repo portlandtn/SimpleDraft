@@ -72,8 +72,4 @@ public class OutputListAdapter extends RecyclerView.Adapter<OutputListAdapter.Ou
         notifyDataSetChanged();
     }
 
-
-
-
-
 }
