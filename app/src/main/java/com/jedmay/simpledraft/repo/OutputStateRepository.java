@@ -14,15 +14,21 @@ public class OutputStateRepository {
 
     private OutputStateDao outputStateDao;
     private LiveData<List<OutputState>> mAllOutputStates;
+    private LiveData<List<OutputState>> mOutputStateValues;
 
-    public OutputStateRepository(Application application) {
+    public OutputStateRepository(Application application, String stateName) {
         SimpleDraftDb db = SimpleDraftDb.getDatabase(application);
         outputStateDao = db.outputStateDao();
         mAllOutputStates = outputStateDao.getAllOutputStates();
+        mOutputStateValues = outputStateDao.getOutputStateFromName(stateName);
     }
 
     public LiveData<List<OutputState>> getmAllOutputStates() {
         return mAllOutputStates;
+    }
+
+    public LiveData<List<OutputState>> getmOutputStateValues() {
+        return mOutputStateValues;
     }
 
     public void insert(OutputState outputState){

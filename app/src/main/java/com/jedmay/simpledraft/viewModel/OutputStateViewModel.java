@@ -14,14 +14,17 @@ public class OutputStateViewModel extends AndroidViewModel {
 
     private OutputStateRepository mOutputStateRepository;
     private LiveData<List<OutputState>> mAllOutputStates;
+    private LiveData<List<OutputState>> mOutputStateValues;
 
-    public OutputStateViewModel(Application application) {
+    public OutputStateViewModel(Application application, String stateName) {
         super(application);
-        mOutputStateRepository = new OutputStateRepository(application);
+        mOutputStateRepository = new OutputStateRepository(application, stateName);
         mAllOutputStates = mOutputStateRepository.getmAllOutputStates();
+        mOutputStateValues = mOutputStateRepository.getmOutputStateValues();
     }
 
     public LiveData<List<OutputState>> getAllOutputStates() {return mAllOutputStates;}
+    public LiveData<List<OutputState>> getOutputStateValues() {return mOutputStateValues;}
 
     public void insert(OutputState outputState) { mOutputStateRepository.insert(outputState);}
     public void update(OutputState outputState) { mOutputStateRepository.update(outputState);}

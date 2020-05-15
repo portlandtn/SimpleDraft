@@ -18,8 +18,11 @@ public interface OutputStateDao {
     @Query("SELECT * FROM output_state")
     LiveData<List<OutputState>> getAllOutputStates();
 
+    @Query("SELECT * FROM output_state where name =:stateName")
+    LiveData<List<OutputState>> getOutputStateFromName(String stateName);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insert(OutputState outputState);
+    void insert(OutputState outputState);
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
     void update(OutputState outputState);
