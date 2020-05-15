@@ -54,6 +54,10 @@ public abstract class SimpleDraftDb extends RoomDatabase {
               list.add(13.0911);
 
               state.setValues(list);
+              state.setAngle1(1.1935);
+              state.setAngle2(4.7636);
+              state.setAngle3(2.3859);
+              state.setAngle4(7.2323);
               outputStateDao.insert(state);
           });
       }
