@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             OutputListAdapter adapter;
             @Override
             public void onChanged(List<OutputState> outputStates) {
-                adapter = populateRecyclerView(findViewById(R.id.outputView1));
+                adapter = populateRecyclerView(findViewById(R.id.outputView1), 1);
                 assert adapter != null;
                 adapter.setOutputStates(outputStates);
             }
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             OutputListAdapter adapter;
             @Override
             public void onChanged(List<OutputState> outputStates) {
-                adapter = populateRecyclerView(findViewById(R.id.outputView2));
+                adapter = populateRecyclerView(findViewById(R.id.outputView2), 2);
                 assert adapter != null;
                 adapter.setOutputStates(outputStates);
             }
@@ -56,10 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private OutputListAdapter populateRecyclerView(View view) {
+    private OutputListAdapter populateRecyclerView(View view, int outputViewNumber) {
         try {
             RecyclerView outputView = findViewById(view.getId());
-            OutputListAdapter adapter = new OutputListAdapter(this);
+            OutputListAdapter adapter = new OutputListAdapter(this, outputViewNumber);
             outputView.setAdapter(adapter);
             outputView.setLayoutManager(new LinearLayoutManager(this));
             return adapter;

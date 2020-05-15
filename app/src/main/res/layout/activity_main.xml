@@ -376,7 +376,8 @@
             android:layout_weight="1.0"
             android:background="@color/colorAccent"
             app:reverseLayout="true"
-            app:stackFromEnd="true" />
+            app:stackFromEnd="true"
+            tools:listitem="@layout/recyclerview_item2" />
 
     </LinearLayout>
 

@@ -21,22 +21,33 @@ public class OutputListAdapter extends RecyclerView.Adapter<OutputListAdapter.Ou
 
         OutputListHolder(View itemView) {
             super(itemView);
-            valueItemView = itemView.findViewById(R.id.textView);
+            if (outputViewNumber == 1) {
+                valueItemView = itemView.findViewById(R.id.textView);
+            } else {
+                valueItemView = itemView.findViewById(R.id.textView2);
+            }
         }
     }
 
     private final LayoutInflater mInflater;
     private List<OutputState> mOutputStates;
+    private int outputViewNumber;
 
-    public OutputListAdapter(Context context) {
+    public OutputListAdapter(Context context, int outputViewNumber) {
         mInflater = LayoutInflater.from(context);
+        this.outputViewNumber = outputViewNumber;
     }
 
     @NonNull
     @Override
     public OutputListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-        return new OutputListHolder(itemView);
+        if (outputViewNumber == 1) {
+            View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+            return new OutputListHolder(itemView);
+        } else {
+            View itemView = mInflater.inflate(R.layout.recyclerview_item2, parent, false);
+            return new OutputListHolder(itemView);
+        }
     }
 
     @Override
