@@ -338,7 +338,7 @@
     <LinearLayout
         android:id="@+id/outputLinearLayout"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_height="150dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
@@ -363,8 +363,6 @@
             android:layout_marginRight="8dp"
             android:layout_weight="1.0"
             android:background="@color/colorAccent"
-            app:reverseLayout="true"
-            app:stackFromEnd="true"
             tools:listitem="@layout/recyclerview_item" />
 
         <androidx.recyclerview.widget.RecyclerView

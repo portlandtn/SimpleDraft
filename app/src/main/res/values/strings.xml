@@ -41,6 +41,7 @@
     <string name="weight">Weight</string>
     <string name="dec_to_foot">Dec to Foot</string>
     <string name="foot_to_decimal">Foot to Dec</string>
+    <string name="no_saved_data">No Saved Data</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
