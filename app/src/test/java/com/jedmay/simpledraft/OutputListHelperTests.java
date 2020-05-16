@@ -30,10 +30,8 @@ public class OutputListHelperTests {
         newWindow = (OutputListHelper.addValueToStringOutput(emptyWindow,newBuiltString));
         List<String> expected = new ArrayList<>();
         expected.add("12.0204");
-        double test = Double.parseDouble(expected.get(0));
 
         assertEquals(newWindow, expected);
-        assertEquals(test,12.0204, 0);
 
     }
 

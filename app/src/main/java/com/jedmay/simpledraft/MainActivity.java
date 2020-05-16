@@ -3,8 +3,6 @@ package com.jedmay.simpledraft;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -16,7 +14,6 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
 import com.jedmay.simpledraft.helper.Constants;
@@ -72,11 +69,76 @@ public class MainActivity extends AppCompatActivity {
         setOutputSpinnerOnClickListeners(output1Spinner);
         setOutputSpinnerOnClickListeners(output2Spinner);
 
-        Button[] arithmeticButtons = new Button[]{minusButton,plusButton,divideButton,multiplyButton};
-        Button[] trigonometryButtons = new Button[]{riseToBaseButton,riseToSlopeButton,baseToRiseButton,baseToSlopeButton,slopeToRiseButton,slopeToBaseButton};
-        Button[] fragmentButtons = new Button[]{calculateWeightButton,setSlopeButton,enterAngleButton};
-        Button[] clearScreenButtons = new Button[]{deleteButton,clearButton};
+        setArithmeticButtonOnClickListeners();
+        setTrigonometryButtonOnClickListeners();
+        setFragmentButtonOnClickListeners();
+        setClearScreenButtonOnClickListeners();
 
+    }
+
+    private void setClearScreenButtonOnClickListeners() {
+        deleteButton.setOnClickListener(v -> {
+
+        });
+
+        clearButton.setOnClickListener(v -> {
+
+        });
+    }
+
+    private void setFragmentButtonOnClickListeners() {
+        calculateWeightButton.setOnClickListener(v -> {
+
+        });
+
+        setSlopeButton.setOnClickListener(v -> {
+
+        });
+
+        enterAngleButton.setOnClickListener(v -> {
+
+        });
+    }
+
+    private void setTrigonometryButtonOnClickListeners() {
+        riseToBaseButton.setOnClickListener(v -> {
+
+        });
+
+        riseToSlopeButton.setOnClickListener(v -> {
+
+        });
+
+        baseToRiseButton.setOnClickListener(v -> {
+
+        });
+
+        baseToSlopeButton.setOnClickListener(v -> {
+
+        });
+
+        slopeToBaseButton.setOnClickListener(v -> {
+
+        });
+
+        slopeToRiseButton.setOnClickListener(v -> {
+
+        });
+    }
+
+    private void setArithmeticButtonOnClickListeners() {
+        minusButton.setOnClickListener(v -> {
+
+        });
+        plusButton.setOnClickListener(v -> {
+
+        });
+        divideButton.setOnClickListener(v -> {
+
+        });
+        multiplyButton.setOnClickListener(v -> {
+
+        });
     }
 
     private void setOutputSpinnerOnClickListeners(Spinner outputSpinner) {
