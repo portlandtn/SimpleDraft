@@ -1,6 +1,7 @@
 package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,50 +10,54 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 
 import com.jedmay.simpledraft.adapters.OutputListAdapter;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.viewModel.OutputStateViewModel;
-import com.jedmay.simpledraft.viewModel.OutputStateViewModelFactory;
 
 import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private OutputStateViewModel mOutputStateViewModel1;
-    private OutputStateViewModel mOutputStateViewModel2;
+    RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
+    Spinner output1Spinner, output2Spinner;
+    OutputStateViewModel mOutputStateViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String stateName1 = "K12J0208";
-        String stateName2 = "K12J0209";
+        output1Spinner = findViewById(R.id.output1NameSpinner);
+        output2Spinner = findViewById(R.id.output2NameSpinner);
+        populateSpinner(output1Spinner);
+        populateSpinner(output2Spinner);
 
-        mOutputStateViewModel1 = new ViewModelProvider(this, new OutputStateViewModelFactory(this.getApplication(), stateName1)).get(OutputStateViewModel.class);
-        mOutputStateViewModel2 = new ViewModelProvider(this, new OutputStateViewModelFactory(this.getApplication(), stateName2)).get(OutputStateViewModel.class);
 
-        mOutputStateViewModel1.getOutputStateValues().observe(this, new Observer<List<OutputState>>() {
-            OutputListAdapter adapter;
-            @Override
-            public void onChanged(List<OutputState> outputStates) {
-                adapter = populateRecyclerView(findViewById(R.id.outputView1), 1);
-                assert adapter != null;
-                adapter.setOutputStates(outputStates);
-            }
-        });
+    }
 
-        mOutputStateViewModel2.getOutputStateValues().observe(this, new Observer<List<OutputState>>() {
-            OutputListAdapter adapter;
-            @Override
-            public void onChanged(List<OutputState> outputStates) {
-                adapter = populateRecyclerView(findViewById(R.id.outputView2), 2);
-                assert adapter != null;
-                adapter.setOutputStates(outputStates);
-            }
-        });
+    private void populateSpinner(Spinner outputSpinner) {
+
+        List<OutputState> states = mOutputStateViewModel.getAllOutputStates();
+        String[] stateArray = new String[states.size()];
+
+        String newSave = "<New Save>";
+        stateArray[0] = newSave;
+
+        for(int i = 0; i < states.size() + 1; i++) {
+            stateArray[i+1] = states.get(i).getName();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, stateArray
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        outputSpinner.setAdapter(adapter);
 
     }
 

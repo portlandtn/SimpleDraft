@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.jedmay.simpledraft.dao.OutputStateDao;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {OutputState.class}, version = 1, exportSchema = false)
+@Database(entities = {OutputState.class}, version = 2, exportSchema = false)
 public abstract class SimpleDraftDb extends RoomDatabase {
 
     public abstract OutputStateDao outputStateDao();
@@ -29,7 +30,10 @@ public abstract class SimpleDraftDb extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (SimpleDraftDb.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), SimpleDraftDb.class, "SimpleDraftDb").addCallback(sRoomDatabaseCallback).build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), SimpleDraftDb.class, "SimpleDraftDb")
+                            .addCallback(sRoomDatabaseCallback)
+                            .allowMainThreadQueries()
+                            .build();
                 }
             }
         }
@@ -47,7 +51,7 @@ public abstract class SimpleDraftDb extends RoomDatabase {
               outputStateDao.deleteAll();
 
               OutputState state = new OutputState();
-              state.setName("K19J0208");
+              state.setName("K12J0208");
               List<Double> list = new ArrayList<>();
               list.add(12.0204);
               list.add(-11.0800);
@@ -59,6 +63,19 @@ public abstract class SimpleDraftDb extends RoomDatabase {
               state.setAngle3(2.3859);
               state.setAngle4(7.2323);
               outputStateDao.insert(state);
+
+              OutputState state2 = new OutputState();
+              state.setName("K12J0209");
+              List<Double> list2 = new ArrayList<>();
+              list2.add(31.0909);
+              list2.add(14.06);
+
+              state2.setValues(list2);
+              state2.setAngle1(14.4345);
+              state2.setAngle2(98.0909);
+              state2.setAngle3(0);
+              state2.setAngle4(0);
+              outputStateDao.insert(state2);
           });
       }
     };

@@ -13,8 +13,8 @@ import java.util.List;
 public class OutputStateRepository {
 
     private OutputStateDao outputStateDao;
-    private LiveData<List<OutputState>> mAllOutputStates;
-    private LiveData<List<OutputState>> mOutputStateValues;
+    private List<OutputState> mAllOutputStates;
+    private List<OutputState> mOutputStateValues;
 
     public OutputStateRepository(Application application, String stateName) {
         SimpleDraftDb db = SimpleDraftDb.getDatabase(application);
@@ -23,11 +23,11 @@ public class OutputStateRepository {
         mOutputStateValues = outputStateDao.getOutputStateFromName(stateName);
     }
 
-    public LiveData<List<OutputState>> getmAllOutputStates() {
+    public List<OutputState> getmAllOutputStates() {
         return mAllOutputStates;
     }
 
-    public LiveData<List<OutputState>> getmOutputStateValues() {
+    public List<OutputState> getmOutputStateValues() {
         return mOutputStateValues;
     }
 

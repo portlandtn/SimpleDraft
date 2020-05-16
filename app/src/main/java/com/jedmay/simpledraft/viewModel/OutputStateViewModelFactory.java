@@ -18,8 +18,8 @@ public class OutputStateViewModelFactory implements ViewModelProvider.Factory {
     private String mStateName;
 
     private OutputStateRepository mOutputStateRepository;
-    private LiveData<List<OutputState>> mAllOutputStates;
-    private LiveData<List<OutputState>> mOutputStateValues;
+    private List<OutputState> mAllOutputStates;
+    private List<OutputState> mOutputStateValues;
 
     public OutputStateViewModelFactory(Application application, String stateName) {
         mApplication = application;
@@ -29,8 +29,8 @@ public class OutputStateViewModelFactory implements ViewModelProvider.Factory {
         mOutputStateValues = mOutputStateRepository.getmOutputStateValues();
     }
 
-    public LiveData<List<OutputState>> getAllOutputStates() {return mAllOutputStates;}
-    public LiveData<List<OutputState>> getOutputStateValues() {return mOutputStateValues;}
+    public List<OutputState> getAllOutputStates() {return mAllOutputStates;}
+    public List<OutputState> getOutputStateValues() {return mOutputStateValues;}
 
     public void insert(OutputState outputState) { mOutputStateRepository.insert(outputState);}
     public void update(OutputState outputState) { mOutputStateRepository.update(outputState);}

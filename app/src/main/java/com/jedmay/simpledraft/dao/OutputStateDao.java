@@ -16,10 +16,10 @@ import java.util.List;
 public interface OutputStateDao {
 
     @Query("SELECT * FROM output_state")
-    LiveData<List<OutputState>> getAllOutputStates();
+    List<OutputState> getAllOutputStates();
 
     @Query("SELECT * FROM output_state where name =:stateName")
-    LiveData<List<OutputState>> getOutputStateFromName(String stateName);
+    List<OutputState> getOutputStateFromName(String stateName);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(OutputState outputState);
