@@ -19,7 +19,7 @@ public interface OutputStateDao {
     List<OutputState> getAllOutputStates();
 
     @Query("SELECT * FROM output_state where name =:stateName")
-    List<OutputState> getOutputStateFromName(String stateName);
+    OutputState getOutputStateFromName(String stateName);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(OutputState outputState);

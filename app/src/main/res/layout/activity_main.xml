@@ -7,6 +7,21 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/calculateWeightButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/calc_wgt"
+        android:textColor="@android:color/background_light"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/radioGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setRoofSlopeButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
         android:id="@+id/footToDecimal"
         android:layout_width="@dimen/doubleSmallButtonSize"
         android:layout_height="@dimen/smallButtonSize"
@@ -336,52 +351,6 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:id="@+id/outputLinearLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        android:paddingLeft="4.0dip"
-        android:paddingTop="5.0dip"
-        android:paddingRight="4.0dip"
-        android:paddingBottom="1.0dip"
-        app:layout_constraintBottom_toTopOf="@+id/divideButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/outputView1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_weight="1.0"
-            android:background="@color/colorAccent"
-            tools:listitem="@layout/recyclerview_item" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/outputView2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_weight="1.0"
-            android:background="@color/colorAccent"
-            app:reverseLayout="true"
-            app:stackFromEnd="true"
-            tools:listitem="@layout/recyclerview_item2" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/spinnerLayout"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -394,9 +363,9 @@
         android:paddingTop="5.0dip"
         android:paddingRight="4.0dip"
         android:paddingBottom="1.0dip"
-        app:layout_constraintBottom_toTopOf="@+id/outputLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup">
 
 
         <Spinner
@@ -432,8 +401,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/spinnerLayout">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/angleTitleSection"
@@ -489,5 +457,47 @@
         app:layout_constraintEnd_toStartOf="@+id/radioGroup"
         app:layout_constraintStart_toEndOf="@+id/mathMethodSwitch"
         app:layout_constraintTop_toTopOf="@+id/radioGroup" />
+
+    <LinearLayout
+        android:id="@+id/outputListLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:minHeight="150dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:paddingLeft="4.0dip"
+        android:paddingTop="5.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingBottom="1.0dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerLayout">
+
+        <ListView
+            android:id="@+id/output1ListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1.0" />
+
+        <ListView
+            android:id="@+id/output2ListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1.0" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
