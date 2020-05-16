@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Converters {
 
-
     @TypeConverter
     public static String doubleToString(List<Double> values) {
         StringBuilder returnValue = new StringBuilder();

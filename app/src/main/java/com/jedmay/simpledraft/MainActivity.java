@@ -2,10 +2,14 @@ package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,10 +19,12 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.model.OutputState;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
     SimpleDraftDbBadCompany db;
     SampleDbData sampleDbData;
+
+    StringBuilder outputNumber;
+
+    List<Double> outputNumber1View, outputNumber2View;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
 
-        Button[] numberButtons = new Button[]{oneButton,twoButton,threeButton,fourButton,fiveButton,sixButton,sevenButton,eightButton,nineButton,zeroButton};
+        Button[] numberButtons = new Button[]{zeroButton,oneButton,twoButton,threeButton,fourButton,fiveButton,sixButton,sevenButton,eightButton,nineButton};
         setNumberButtonOnClickListener(numberButtons);
+
+        setOutputSpinnerOnClickListeners(output1Spinner);
+        setOutputSpinnerOnClickListeners(output2Spinner);
+
         Button[] arithmeticButtons = new Button[]{minusButton,plusButton,divideButton,multiplyButton};
         Button[] trigonometryButtons = new Button[]{riseToBaseButton,riseToSlopeButton,baseToRiseButton,baseToSlopeButton,slopeToRiseButton,slopeToBaseButton};
         Button[] fragmentButtons = new Button[]{calculateWeightButton,setSlopeButton,enterAngleButton};
@@ -65,16 +79,56 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setNumberButtonOnClickListener(Button[] numberButtons) {
-        for(Button button : numberButtons) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+    private void setOutputSpinnerOnClickListeners(Spinner outputSpinner) {
+        outputSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                String selected = outputSpinner.getSelectedItem().toString();
+
+                if(selected.equals(Constants.newSave)){
+                    //TODO - get values currently in the output window and save them to the db
+                } else {
+                    outputNumber1View = db.outputStateDao().getOutputStateFromName(selected).getValues();
                 }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        outputSpinner.setOnItemLongClickListener((parent, view, position, id) -> {
+            deleteAlert(db.outputStateDao().getOutputStateFromName(outputSpinner.getSelectedItem().toString()));
+            return false;
+        });
+    }
+
+    private void deleteAlert(OutputState state) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Do you want to delete this entry?");
+        alertDialogBuilder.setPositiveButton("Delete",
+                (arg0, arg1) -> db.outputStateDao().delete(state));
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //do nothing
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+
+    private void setNumberButtonOnClickListener(Button[] numberButtons) {
+
+        for(int i = 0; i < numberButtons.length; i++){
+            final int finalI = i;
+            numberButtons[i].setOnClickListener(v -> {
+                if (outputNumber == null) {
+                    outputNumber = new StringBuilder();
+                }
+                outputNumber.append(finalI);
             });
         }
-
 
     }
 
@@ -86,11 +140,9 @@ public class MainActivity extends AppCompatActivity {
 
                 for(int i = 0; i < states.size(); i++) {
                     stateArray[i] = states.get(i).getName();
-                    Toast.makeText(getApplicationContext(),states.get(i).getName(),Toast.LENGTH_LONG).show();
                 }
 
-            String newSave = "<New Save>";
-            stateArray[states.size()] = newSave;
+            stateArray[states.size()] = Constants.newSave;
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this, android.R.layout.simple_spinner_item, stateArray
@@ -99,9 +151,9 @@ public class MainActivity extends AppCompatActivity {
             output1Spinner.setAdapter(adapter);
             output2Spinner.setAdapter(adapter);
         } catch (ArrayIndexOutOfBoundsException ex) {
-            Log.d("pop_index", ex.getLocalizedMessage());
+            Log.d("pop_index", Objects.requireNonNull(ex.getLocalizedMessage()));
         } catch (Exception ex) {
-            Log.d("pop_general", ex.getLocalizedMessage());
+            Log.d("pop_general", Objects.requireNonNull(ex.getLocalizedMessage()));
         }
     }
 

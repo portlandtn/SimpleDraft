@@ -46,7 +46,6 @@
 
     <string-array name="stateSave">
         <item> - New Save - </item>
-        <item>K13J0283</item>
-        <item>K21H0332</item>
     </string-array>
+
 </resources>
