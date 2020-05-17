@@ -17,6 +17,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.helper.AlertHelper;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.model.OutputState;
@@ -177,23 +178,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         outputSpinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            deleteAlert(db.outputStateDao().getOutputStateFromName(outputSpinner.getSelectedItem().toString()));
+            AlertHelper.deleteAlert(db.outputStateDao().getOutputStateFromName(outputSpinner.getSelectedItem().toString()), db, this);
             return false;
         });
     }
-
-    private void deleteAlert(OutputState state) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Do you want to delete this entry?");
-        alertDialogBuilder.setPositiveButton("Delete",
-                (arg0, arg1) -> db.outputStateDao().delete(state));
-        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-            //do nothing
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
 
     private void setNumberButtonOnClickListener(Button[] numberButtons) {
 
@@ -209,9 +197,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-
 
     private void populateOutputSpinners() {
         try {
