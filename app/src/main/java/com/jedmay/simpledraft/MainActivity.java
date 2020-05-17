@@ -2,11 +2,12 @@ package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     StringBuilder outputNumber;
 
-    List<Double> outputNumber1View, outputNumber2View;
+    List<Double> outputNumber1List, outputNumber2List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setNumberButtonOnClickListener(numberButtons);
         setDecimalButtonOnClickListener();
 
-        setOutputSpinnerOnClickListeners(output1Spinner);
-        setOutputSpinnerOnClickListeners(output2Spinner);
+        setOutputSpinnerOnClickListeners();
 
         setArithmeticButtonOnClickListeners();
         setTrigonometryButtonOnClickListeners();
@@ -157,17 +158,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setOutputSpinnerOnClickListeners(Spinner outputSpinner) {
-        outputSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void setOutputSpinnerOnClickListeners() {
+
+        output1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String selected = outputSpinner.getSelectedItem().toString();
+                String selected = output1Spinner.getSelectedItem().toString();
 
                 if(selected.equals(Constants.newSave)){
                     //TODO - get values currently in the output window and save them to the db
                 } else {
-                    outputNumber1View = db.outputStateDao().getOutputStateFromName(selected).getValues();
+                    outputNumber1List = db.outputStateDao().getOutputStateFromName(selected).getValues();
+                    updateListView(outputListView1,outputNumber1List);
                 }
             }
 
@@ -177,10 +180,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        outputSpinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            AlertHelper.deleteAlert(db.outputStateDao().getOutputStateFromName(outputSpinner.getSelectedItem().toString()), db, this);
+        output1Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
+            AlertHelper.deleteAlert(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
             return false;
         });
+
+        output2Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selected = output2Spinner.getSelectedItem().toString();
+
+                if(selected.equals(Constants.newSave)){
+                    //TODO - get values currently in the output window and save them to the db
+                } else {
+                    outputNumber2List = db.outputStateDao().getOutputStateFromName(selected).getValues();
+                    updateListView(outputListView2,outputNumber2List);
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        output2Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
+            AlertHelper.deleteAlert(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
+            return false;
+        });
+    }
+
+    private void updateListView(ListView listView, List<Double> values) {
+        String[] listStringArray = new String[values.size()];
+
+        for(int i = 0; i < values.size(); i++) {
+            listStringArray[i] = values.get(i).toString();
+        }
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listStringArray) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+                tv.setGravity(Gravity.RIGHT|Gravity.END|Gravity.CENTER_VERTICAL);
+                return tv;
+            }
+        };
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void setNumberButtonOnClickListener(Button[] numberButtons) {
