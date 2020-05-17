@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
 import com.jedmay.simpledraft.helper.Constants;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
 
-    Switch mathMethod;
+    Switch mathMethod, outputWindowSwitch;
 
     SimpleDraftDbBadCompany db;
     SampleDbData sampleDbData;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button[] numberButtons = new Button[]{zeroButton,oneButton,twoButton,threeButton,fourButton,fiveButton,sixButton,sevenButton,eightButton,nineButton};
         setNumberButtonOnClickListener(numberButtons);
+        setDecimalButtonOnClickListener();
 
         setOutputSpinnerOnClickListeners(output1Spinner);
         setOutputSpinnerOnClickListeners(output2Spinner);
@@ -74,6 +76,19 @@ public class MainActivity extends AppCompatActivity {
         setFragmentButtonOnClickListeners();
         setClearScreenButtonOnClickListeners();
 
+    }
+
+    private void setDecimalButtonOnClickListener() {
+        decimalButton.setOnClickListener(v -> {
+            if(outputNumber == null) {
+                outputNumber = new StringBuilder();
+                outputNumber.append("0.");
+            } else if(outputNumber.toString().contains(".")) {
+                return;
+            } else {
+                outputNumber.append(".");
+            } Toast.makeText(getApplicationContext(),outputNumber.toString(),Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void setClearScreenButtonOnClickListeners() {
@@ -189,10 +204,13 @@ public class MainActivity extends AppCompatActivity {
                     outputNumber = new StringBuilder();
                 }
                 outputNumber.append(finalI);
+                Toast.makeText(getApplicationContext(),outputNumber.toString(),Toast.LENGTH_SHORT).show();
             });
         }
 
     }
+
+
 
 
     private void populateOutputSpinners() {
@@ -226,8 +244,9 @@ public class MainActivity extends AppCompatActivity {
         angle3RadioButton = findViewById(R.id.angle3RadioButton);
         angle4RadioButton = findViewById(R.id.angle4RadioButton);
 
-        // Math method switch
+        // Switches
         mathMethod = findViewById(R.id.mathMethodSwitch);
+        outputWindowSwitch = findViewById(R.id.outputWindowSwitch);
 
         // Spinners
         output1Spinner = findViewById(R.id.output1NameSpinner);
