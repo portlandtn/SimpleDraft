@@ -1,7 +1,6 @@
 package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.PrimaryKey;
 
 import android.os.Bundle;
 
@@ -12,13 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
 import com.jedmay.simpledraft.helper.AlertHelper;
@@ -35,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
     Spinner output1Spinner, output2Spinner;
     ListView outputListView1, outputListView2;
-    Button calculateWeightButton, setSlopeButton, enterAngleButton, deleteButton, clearButton,
+    Button calculateWeightButton, setSlopeButton, enterAngleButton, deleteButton, clearButton, backspaceButton,
     footToDecimalButton, decimalToFootButton,
     riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         setArithmeticButtonOnClickListeners();
         setTrigonometryButtonOnClickListeners();
         setFragmentButtonOnClickListeners();
-        setClearScreenButtonOnClickListeners();
+        setGeneralButtonOnClickListeners();
 
         setSwitchOnClickListeners();
 
@@ -104,34 +101,46 @@ public class MainActivity extends AppCompatActivity {
                 outputNumber = new StringBuilder();
                 outputNumber.append("0.");
             } else if(outputNumber.toString().contains(".")) {
-                return;
+                // do nothing, the decimal is already there, so it should be ignored
             } else {
                 outputNumber.append(".");
-            } Toast.makeText(getApplicationContext(),outputNumber.toString(),Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    private void setClearScreenButtonOnClickListeners() {
+    private void setGeneralButtonOnClickListeners() {
         deleteButton.setOnClickListener(v -> {
-
+            //TODO Drop the last number entered in current active window
         });
 
         clearButton.setOnClickListener(v -> {
+            //TODO clear the screen for the current window
+        });
 
+        backspaceButton.setOnClickListener(v -> {
+            //TODO delete the last-entered text for windowText
+        });
+
+        enterButton.setOnClickListener(v -> {
+            if (outputNumber != null) {
+                //TODO add outputNumber to appropriate list
+            } else {
+                //TODO duplicate last entry in list
+            }
         });
     }
 
     private void setFragmentButtonOnClickListeners() {
         calculateWeightButton.setOnClickListener(v -> {
-
+            //TODO Must Develop fragment to display weight input
         });
 
         setSlopeButton.setOnClickListener(v -> {
-
+            //TODO Must develop fragment to set slope, base on #:12
         });
 
         enterAngleButton.setOnClickListener(v -> {
-
+            //TODO Must develop fragment to let user enter angle number
         });
     }
 
@@ -194,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // do nothing
             }
         });
 
@@ -220,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                //do nothing
             }
         });
 
@@ -236,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < values.size(); i++) {
             listStringArray[i] = values.get(i).toString();
         }
-
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listStringArray) {
             @Override
@@ -314,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
         enterAngleButton = findViewById(R.id.setCustomAngleButton);
         deleteButton = findViewById(R.id.deleteButton);
         clearButton = findViewById(R.id.clearButton);
+        backspaceButton = findViewById(R.id.backspaceButton);
 
         // Conversion Buttons
         footToDecimalButton = findViewById(R.id.footToDecimal);

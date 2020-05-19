@@ -11,6 +11,8 @@ import static org.junit.Assert.*;
 
 public class ConvertersUnitTests {
 
+    private double deltaValue = 0.000001;
+
     @Test
     public void convertListDoubleToString() {
 
@@ -40,10 +42,8 @@ public class ConvertersUnitTests {
 
     }
 
-    private double deltaValue = 0.000001;
-
     @Test
-    public void ExtractFeetFromDimension() {
+    public void extractFeetFromDimension() {
         double dimension = 14.0204;
 
         double expected = 14;
@@ -53,7 +53,7 @@ public class ConvertersUnitTests {
     }
 
     @Test
-    public void ExtractFeetFromDimensionNegativeNumber() {
+    public void extractFeetFromDimensionNegativeNumber() {
         double dimension = -14.0204;
 
         double expected = -14;
@@ -63,7 +63,7 @@ public class ConvertersUnitTests {
     }
 
     @Test
-    public void ExtractInchesFromDimension() {
+    public void extractInchesFromDimension() {
         double dimension = 14.0204;
 
         double expected = 0.02;
@@ -75,7 +75,7 @@ public class ConvertersUnitTests {
     }
 
     @Test
-    public void ExtractInchesFromDimensionNegativeNumber() {
+    public void extractInchesFromDimensionNegativeNumber() {
         double dimension = -14.0204;
 
         double expected = -0.02;
@@ -87,7 +87,7 @@ public class ConvertersUnitTests {
     }
 
     @Test
-    public void ExtractSixteenthsFromDimension() {
+    public void extractSixteenthsFromDimension() {
         double dimension = 14.0204;
 
         double expected = 0.0004;
@@ -99,7 +99,7 @@ public class ConvertersUnitTests {
     }
 
     @Test
-    public void ExtractSixteenthsFromDimensionNegativeNumber() {
+    public void extractSixteenthsFromDimensionNegativeNumber() {
         double dimension = -14.0204;
 
         double expected = -0.0004;
@@ -108,5 +108,45 @@ public class ConvertersUnitTests {
 
         assertEquals(expected,actual,deltaValue);
 
+    }
+
+    @Test
+    public void convertFootDimensionToDecimalDimension() {
+        double footDimension = 12.0204;
+        double expected = 12.1875;
+
+        double actual = Converters.footDimensionToDecimalDimension(footDimension);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void convertFootDimensionToDecimalDimensionNegativeValue() {
+        double footDimension = -12.0204;
+        double expected = -12.1875;
+
+        double actual = Converters.footDimensionToDecimalDimension(footDimension);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void convertDecimalDimensionToFootDimension() {
+        double decimalDimension = 12.1875;
+        double expected = 12.0204;
+
+        double actual = Converters.decimalDimensionToFootDimension(decimalDimension);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void convertDecimalDimensionToFootDimensionNegativeNumber() {
+        double decimalDimension = -12.1875;
+        double expected = -12.0204;
+
+        double actual = Converters.decimalDimensionToFootDimension(decimalDimension);
+
+        assertEquals(expected, actual, deltaValue);
     }
 }

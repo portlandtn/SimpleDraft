@@ -73,4 +73,31 @@ public class Converters {
         return dimension;
 
     }
+
+    public static double footDimensionToDecimalDimension(double footDimension) {
+        double feet = extractWholeNumberFromDimension(footDimension);
+        double inches = (footDimension - feet)*100;
+        double sixteenths = inches;
+        inches = (int) inches;
+        sixteenths -= inches;
+        inches /= 12;
+        sixteenths *=  100;
+        sixteenths /= 16;
+        sixteenths /= 12;
+
+        return feet + inches + sixteenths;
+    }
+
+    public static double decimalDimensionToFootDimension(double decimalDimension) {
+        double feet = extractWholeNumberFromDimension(decimalDimension);
+        double inches = (decimalDimension - feet) * 12;
+        double sixteenths = inches;
+        inches = (int) inches;
+        sixteenths -= inches;
+        inches /= 100;
+        sixteenths *= 16;
+        sixteenths /= 10000;
+
+        return feet + inches + sixteenths;
+    }
 }
