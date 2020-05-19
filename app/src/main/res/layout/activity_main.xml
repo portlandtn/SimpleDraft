@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/backspaceButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/bksp"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toBottomOf="@+id/multiplyButton"
+        app:layout_constraintEnd_toStartOf="@+id/eightButton" />
+
     <Switch
         android:id="@+id/outputWindowSwitch"
         android:layout_width="wrap_content"
@@ -480,7 +490,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/clearButton"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerLayout">
@@ -489,11 +499,6 @@
             android:id="@+id/output1ListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
             android:dividerHeight="-22dp"
             android:layout_weight="1.0"
             android:stackFromBottom="true"
@@ -503,15 +508,62 @@
             android:id="@+id/output2ListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
             android:dividerHeight="-22dp"
             android:layout_weight="1.0"
             android:stackFromBottom="true"
             android:transcriptMode="alwaysScroll" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:paddingLeft="4.0dip"
+        android:paddingTop="5.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingBottom="1.0dip"
+        app:layout_constraintBottom_toTopOf="@+id/deleteButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outputListLayout">
+
+        <TextView
+            android:id="@+id/window1Text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1.0"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:transcriptMode="alwaysScroll"
+            android:gravity="end" />
+
+        <TextView
+            android:id="@+id/window2Text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1.0"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:transcriptMode="alwaysScroll"
+            android:gravity="end" />
+
 
     </LinearLayout>
 

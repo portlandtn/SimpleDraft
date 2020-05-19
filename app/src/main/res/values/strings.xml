@@ -44,6 +44,7 @@
     <string name="no_saved_data">No Saved Data</string>
     <string name="calc_wgt">Calc Wgt</string>
     <string name="output_window_1">Output Window 1</string>
+    <string name="bksp">Bksp</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>

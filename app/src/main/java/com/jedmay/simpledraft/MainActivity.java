@@ -1,6 +1,7 @@
 package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.PrimaryKey;
 
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
+    TextView text1Input, text2Input;
 
     Switch mathMethod, outputWindowSwitch;
 
@@ -47,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
     StringBuilder outputNumber;
 
     List<Double> outputNumber1List, outputNumber2List;
+
+    int activeWindow;
+
+    boolean isDetailingMathMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,17 @@ public class MainActivity extends AppCompatActivity {
         setFragmentButtonOnClickListeners();
         setClearScreenButtonOnClickListeners();
 
+        setSwitchOnClickListeners();
+
+    }
+
+    private void setSwitchOnClickListeners() {
+        mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> isDetailingMathMethod = mathMethod.isChecked());
+
+        outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
+
+        });
     }
 
     private void setDecimalButtonOnClickListener() {
@@ -241,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     outputNumber = new StringBuilder();
                 }
                 outputNumber.append(finalI);
-                Toast.makeText(getApplicationContext(),outputNumber.toString(),Toast.LENGTH_SHORT).show();
+                text1Input.setText(outputNumber);
             });
         }
 
@@ -328,6 +346,9 @@ public class MainActivity extends AppCompatActivity {
         eightButton = findViewById(R.id.eightButton);
         nineButton = findViewById(R.id.nineButton);
         zeroButton = findViewById(R.id.zeroButton);
+
+        text1Input = findViewById(R.id.window1Text);
+        text2Input = findViewById(R.id.window2Text);
 
     }
 
