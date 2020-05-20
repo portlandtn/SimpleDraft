@@ -121,6 +121,26 @@ public class ConvertersUnitTests {
     }
 
     @Test
+    public void convertFootDimensionToDecimalDimensionOnlyInches() {
+        double footDimension = 0.01;
+        double expected = 0.083333;
+
+        double actual = Converters.footDimensionToDecimalDimension(footDimension);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void convertFootDimensionToDecimalDimensionOnlySixteenths() {
+        double footDimension = 0.0001;
+        double expected = 0.005208;
+
+        double actual = Converters.footDimensionToDecimalDimension(footDimension);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
     public void convertFootDimensionToDecimalDimensionNegativeValue() {
         double footDimension = -12.0204;
         double expected = -12.1875;

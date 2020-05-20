@@ -92,7 +92,7 @@ public class Converters {
         double feet = extractWholeNumberFromDimension(decimalDimension);
         double inches = (decimalDimension - feet) * 12;
         double sixteenths = inches;
-        inches = (int) inches;
+        inches = Math.round(inches);
         sixteenths -= inches;
         inches /= 100;
         sixteenths *= 16;
