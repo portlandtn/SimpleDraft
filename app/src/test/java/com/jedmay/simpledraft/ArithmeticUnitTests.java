@@ -67,7 +67,7 @@ public class ArithmeticUnitTests {
         double num2 = 11.0204;
         boolean isDetailingMath = true;
 
-        double expected = 50.1110;
+        double expected = 51.0815;
 
         double actual = Arithmetic.multiply(num1, num2, isDetailingMath);
 
