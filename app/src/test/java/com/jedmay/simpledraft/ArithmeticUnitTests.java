@@ -75,6 +75,32 @@ public class ArithmeticUnitTests {
     }
 
     @Test
+    public void multiplyTwoBasicNumbersWithDetailingMathMethod() {
+        double num1 = 12.06;
+        double num2 = 7;
+        boolean isDetailingMath = true;
+
+        double expected = 87.06;
+
+        double actual = Arithmetic.multiply(num1, num2, isDetailingMath);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void multiplyTwoBasicNumbersWithStandardMathMethod() {
+        double num1 = 12.06;
+        double num2 = 7;
+        boolean isDetailingMath = false;
+
+        double expected = 84.42;
+
+        double actual = Arithmetic.multiply(num1, num2, isDetailingMath);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
     public void multiplyTwoNumbersWithStandardMathMethod() {
         double num1 = 4.0708;
         double num2 = 11.0204;

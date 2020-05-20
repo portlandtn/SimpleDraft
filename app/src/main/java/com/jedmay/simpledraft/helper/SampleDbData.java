@@ -8,6 +8,7 @@ import com.jedmay.simpledraft.model.OutputState;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SampleDbData {
 
@@ -23,13 +24,9 @@ public class SampleDbData {
             db.outputStateDao().insert(setupState2());
             db.outputStateDao().insert(setupState3());
         } catch (Exception ex) {
-            Log.d("pop_db", ex.getLocalizedMessage());
+            Log.d("pop_db", Objects.requireNonNull(ex.getLocalizedMessage()));
         }
 
-    }
-
-    public void executeOrder66() {
-        db.outputStateDao().deleteAll();
     }
 
     private OutputState setupState1() {

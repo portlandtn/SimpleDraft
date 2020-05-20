@@ -22,6 +22,7 @@ import com.jedmay.simpledraft.helper.AlertHelper;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.model.OutputState;
+import com.jedmay.simpledraft.output.DataProvider;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     SimpleDraftDbBadCompany db;
     SampleDbData sampleDbData;
+    DataProvider dataProvider;
 
     StringBuilder outputNumber;
 
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         db = SimpleDraftDbBadCompany.getDatabase(getApplicationContext());
         sampleDbData = new SampleDbData(getApplicationContext());
         sampleDbData.populateDbWithSampleData();
+        dataProvider = new DataProvider();
 
         findAllViews();
 
@@ -110,25 +113,61 @@ public class MainActivity extends AppCompatActivity {
 
     private void setGeneralButtonOnClickListeners() {
         deleteButton.setOnClickListener(v -> {
-            //TODO Drop the last number entered in current active window
+            switch(activeWindow) {
+                case 1:
+                    if (outputNumber1List.size() > 0) {
+                        outputNumber1List.remove(outputNumber1List.size() - 1);
+                        updateListView(outputListView1, outputNumber1List);
+                    }
+                case 2:
+                    if (outputNumber2List.size() > 0) {
+                        outputNumber2List.remove(outputNumber2List.size() - 1);
+                        updateListView(outputListView2, outputNumber2List);
+                    }
+                default:
+                    break;
+            }
         });
 
         clearButton.setOnClickListener(v -> {
-            //TODO clear the screen for the current window
+            if(AlertHelper.deleteScreen(getApplicationContext()))
+            {
+                switch (activeWindow) {
+                    case 1:
+                        outputNumber1List.clear();
+                        updateListView(outputListView1,outputNumber1List);
+                    case 2:
+                        outputNumber2List.clear();
+                        updateListView(outputListView1,outputNumber2List);
+                    default:
+                        break;
+                }
+            }
         });
 
         backspaceButton.setOnClickListener(v -> {
-            //TODO delete the last-entered text for windowText
+            if (outputNumber.length() > 0) {
+                outputNumber.delete(0,outputNumber.length() - 1);
+            }
         });
 
         enterButton.setOnClickListener(v -> {
-            if (outputNumber != null) {
-                //TODO add outputNumber to appropriate list
-            } else {
-                //TODO duplicate last entry in list
+
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List = dataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber1List);
+                    updateListView(outputListView1, outputNumber1List);
+                    break;
+                case 2:
+                    outputNumber2List = dataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber2List);
+                    updateListView(outputListView2,outputNumber2List);
+                    break;
+                default:
+                    break;
             }
         });
     }
+
 
     private void setFragmentButtonOnClickListeners() {
         calculateWeightButton.setOnClickListener(v -> {
@@ -208,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         output1Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            AlertHelper.deleteAlert(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
+            AlertHelper.deleteOutputState(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
             return false;
         });
 
@@ -234,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         output2Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            AlertHelper.deleteAlert(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
+            AlertHelper.deleteOutputState(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
             return false;
         });
     }

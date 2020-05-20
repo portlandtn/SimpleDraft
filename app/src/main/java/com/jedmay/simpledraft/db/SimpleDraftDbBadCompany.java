@@ -10,6 +10,9 @@ import androidx.room.RoomDatabase;
 import com.jedmay.simpledraft.dao.OutputStateDao;
 import com.jedmay.simpledraft.model.OutputState;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Database(entities = OutputState.class, version = 2, exportSchema = false)
 public abstract class SimpleDraftDbBadCompany extends RoomDatabase {
 
@@ -27,5 +30,6 @@ public abstract class SimpleDraftDbBadCompany extends RoomDatabase {
         }
         return instance;
     }
+
 
 }
