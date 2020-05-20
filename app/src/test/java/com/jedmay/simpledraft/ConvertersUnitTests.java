@@ -161,6 +161,16 @@ public class ConvertersUnitTests {
     }
 
     @Test
+    public void convertDecimalDimensionToFootDimensionSmallNumber() {
+        double decimalDimension = 0.796875;
+        double expected = 0.0909;
+
+        double actual = Converters.decimalDimensionToFootDimension(decimalDimension);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
     public void convertDecimalDimensionToFootDimensionNegativeNumber() {
         double decimalDimension = -12.1875;
         double expected = -12.0204;
