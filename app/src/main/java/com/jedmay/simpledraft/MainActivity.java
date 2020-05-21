@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Double> outputNumber1List, outputNumber2List, angles;
 
-    int activeWindow;
+    int activeWindow, activeAngle;
 
     boolean isDetailingMathMethod;
 
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         sampleDbData = new SampleDbData(getApplicationContext());
         sampleDbData.populateDbWithSampleData();
         activeWindow = 1;
+        activeAngle = 1;
         isDetailingMathMethod = false;
         outputNumber = new StringBuilder();
 
@@ -79,7 +80,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSlopeText() {
-
+        switch (activeAngle) {
+            case 1:
+                setRoofSlopeText(angle1RadioButton.getText().toString());
+                break;
+            case 2:
+                setRoofSlopeText(angle2RadioButton.getText().toString());
+                break;
+            case 3:
+                setRoofSlopeText(angle3RadioButton.getText().toString());
+                break;
+            case 4:
+                setRoofSlopeText(angle4RadioButton.getText().toString());
+                break;
+            default:
+                setRoofSlopeText("0");
+                break;
+        }
 
     }
 
@@ -87,16 +104,14 @@ public class MainActivity extends AppCompatActivity {
 
         Button[] numberButtons = new Button[]{zeroButton,oneButton,twoButton,threeButton,fourButton,fiveButton,sixButton,sevenButton,eightButton,nineButton};
         setNumberButtonOnClickListener(numberButtons);
+
         setDecimalButtonOnClickListener();
-
         setOutputSpinnerOnClickListeners();
-
         setArithmeticButtonOnClickListeners();
         setTrigonometryButtonOnClickListeners();
         setFragmentButtonOnClickListeners();
         setGeneralButtonOnClickListeners();
         setRadioButtonOnClickListeners();
-
         setSwitchOnClickListeners();
 
     }
@@ -113,24 +128,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setRoofSlopeText(angle1RadioButton.getText().toString());
+                activeAngle = 1;
             }
         });
         angle2RadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setRoofSlopeText(angle2RadioButton.getText().toString());
+                activeAngle = 2;
             }
         });
         angle3RadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setRoofSlopeText(angle3RadioButton.getText().toString());
+                activeAngle = 3;
             }
         });
         angle4RadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setRoofSlopeText(angle4RadioButton.getText().toString());
+                activeAngle = 4;
             }
         });
 
