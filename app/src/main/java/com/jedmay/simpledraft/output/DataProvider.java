@@ -1,5 +1,6 @@
 package com.jedmay.simpledraft.output;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,4 +30,34 @@ public class DataProvider {
     }
 
 
+    public static List<Double> getValuesForArithmetic(String outputNumber, List<Double> listOfDouble) {
+
+        List<Double> response = new ArrayList<>();
+
+        if (listOfDouble.size() < 1 || listOfDouble.size() == 1 && outputNumber.length() == 0) {
+            return null;
+        }
+
+        if (outputNumber.length() == 0) {
+            response.add(listOfDouble.get(listOfDouble.size() - 2));
+            response.add(listOfDouble.get(listOfDouble.size() - 1));
+        }
+
+        if (outputNumber.length() > 0) {
+            response.add(listOfDouble.get(listOfDouble.size() - 1));
+            response.add(Double.parseDouble(outputNumber));
+        }
+
+        return response;
+    }
+
+    public static Double getValueForTrig(String outputNumber, List<Double> listOfDouble) {
+        if (outputNumber.length() > 0) {
+            return Double.parseDouble(outputNumber);
+        } else if (listOfDouble.size() > 0) {
+            return listOfDouble.get(listOfDouble.size() - 1);
+        } else {
+            return null;
+        }
+    }
 }
