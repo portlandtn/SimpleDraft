@@ -1,6 +1,7 @@
 package com.jedmay.simpledraft.output;
 
 import java.lang.reflect.Array;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +60,22 @@ public class DataProvider {
         } else {
             return null;
         }
+    }
+
+    public static List<Double> formatListAfterArithmetic(boolean outputNumberUsedInCalc, List<Double> listOfDouble, double arithmeticAnswer) {
+        listOfDouble.remove(listOfDouble.size() - 1);
+        if (!outputNumberUsedInCalc) {
+            listOfDouble.remove(listOfDouble.size() - 1);
+        }
+        listOfDouble.add(arithmeticAnswer);
+        return listOfDouble;
+    }
+
+    public static List<Double> formatListAfterTrig(boolean outputNumberUsedInCalc, List<Double> listOfDouble, double arithmeticAnswer) {
+        if (!outputNumberUsedInCalc) {
+            listOfDouble.remove(listOfDouble.size() - 1);
+        }
+        listOfDouble.add(arithmeticAnswer);
+        return listOfDouble;
     }
 }

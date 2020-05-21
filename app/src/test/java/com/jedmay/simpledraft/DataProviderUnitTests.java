@@ -4,6 +4,7 @@ import com.jedmay.simpledraft.output.DataProvider;
 
 import org.junit.Test;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -204,5 +205,82 @@ public class DataProviderUnitTests {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void formatListAfterArithmeticBlankOutputFullList() {
+        boolean outputNumberUsedInCalc = false;
+        List<Double> listOfDouble = new ArrayList<>();
+        listOfDouble.add(11.0208);
+        listOfDouble.add(1.0204);
+        listOfDouble.add(1.0602);
+        double arithmeticAnswer = 2.0806;
+
+        List<Double> expected = new ArrayList<>();
+        expected.add(11.0208);
+        expected.add(2.0806);
+
+        List<Double> actual = DataProvider.formatListAfterArithmetic(outputNumberUsedInCalc, listOfDouble, arithmeticAnswer);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void formatListAfterArithmeticWithOutputAndFullList() {
+        boolean outputNumberUsedInCalc = true;
+        List<Double> listOfDouble = new ArrayList<>();
+        listOfDouble.add(11.0208);
+        listOfDouble.add(1.0204);
+        listOfDouble.add(1.0602);
+        double arithmeticAnswer = 2.0806;
+
+        List<Double> expected = new ArrayList<>();
+        expected.add(11.0208);
+        expected.add(1.0204);
+        expected.add(2.0806);
+
+        List<Double> actual = DataProvider.formatListAfterArithmetic(outputNumberUsedInCalc, listOfDouble, arithmeticAnswer);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void formatListAfterTrigWithOutputAndFullList() {
+        boolean outputNumberUsedInCalc = true;
+        List<Double> listOfDouble = new ArrayList<>();
+        listOfDouble.add(11.0208);
+        listOfDouble.add(1.0204);
+        listOfDouble.add(1.0602);
+        double arithmeticAnswer = 2.0806;
+
+        List<Double> expected = new ArrayList<>();
+        expected.add(11.0208);
+        expected.add(1.0204);
+        expected.add(1.0602);
+        expected.add(2.0806);
+
+        List<Double> actual = DataProvider.formatListAfterTrig(outputNumberUsedInCalc, listOfDouble, arithmeticAnswer);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void formatListAfterTrigWithBlankOutputAndFullList() {
+        boolean outputNumberUsedInCalc = false;
+        List<Double> listOfDouble = new ArrayList<>();
+        listOfDouble.add(11.0208);
+        listOfDouble.add(1.0204);
+        listOfDouble.add(1.0602);
+        double arithmeticAnswer = 2.0806;
+
+        List<Double> expected = new ArrayList<>();
+        expected.add(11.0208);
+        expected.add(1.0204);
+        expected.add(2.0806);
+
+        List<Double> actual = DataProvider.formatListAfterTrig(outputNumberUsedInCalc, listOfDouble, arithmeticAnswer);
+
+        assertEquals(expected, actual);
+    }
+
 
 }

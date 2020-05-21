@@ -3,6 +3,7 @@ package com.jedmay.simpledraft;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -18,13 +19,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
-import com.jedmay.simpledraft.helper.AlertHelper;
+import com.jedmay.simpledraft.helper.Arithmetic;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.output.ArithmeticClickHelper;
 import com.jedmay.simpledraft.output.DataProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -234,14 +236,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void setArithmeticButtonOnClickListeners() {
         minusButton.setOnClickListener(v -> {
+            List<Double> mathValues;
+            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
+
             switch (activeWindow) {
                 case 1:
-                    outputNumber1List.add(ArithmeticClickHelper.minusButtonClick(outputNumber1List,outputNumber.toString(),isDetailingMathMethod));
+                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
+                    try {
+                        outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
                     outputNumber.setLength(0);
+                    updateListView(outputListView1, outputNumber1List);
                     break;
                 case 2:
-                    outputNumber2List.add(ArithmeticClickHelper.minusButtonClick(outputNumber2List,outputNumber.toString(),isDetailingMathMethod));
+                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
+                    try {
+                        outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
                     outputNumber.setLength(0);
+                    updateListView(outputListView2, outputNumber2List);
                     break;
                 default:
                     break;
@@ -281,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         output1Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            AlertHelper.deleteOutputState(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
+            deleteOutputState(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
             return false;
         });
 
@@ -307,9 +324,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         output2Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            AlertHelper.deleteOutputState(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
+            deleteOutputState(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
             return false;
         });
+    }
+
+    private static void deleteOutputState(OutputState state, SimpleDraftDbBadCompany db, Context context) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage("Do you want to delete this entry?");
+        alertDialogBuilder.setPositiveButton("Delete",
+                (arg0, arg1) -> db.outputStateDao().delete(state));
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //do nothing
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void updateListView(ListView listView, List<Double> values) {
@@ -319,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
             listStringArray[i] = values.get(i).toString();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.list_view_layout, R.id.listViewItem, listStringArray);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_view_layout, R.id.listViewItem, listStringArray);
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
