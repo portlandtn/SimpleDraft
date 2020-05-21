@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DataProvider {
 
-    public List<Double> getValueFromEnterKeyPress(String outputNumber, List<Double> listOfDouble) {
+    public static List<Double> getValueFromEnterKeyPress(String outputNumber, List<Double> listOfDouble) {
         if (outputNumber != null) {
             try {
                 listOfDouble.add(Double.parseDouble(outputNumber));
@@ -17,5 +17,6 @@ public class DataProvider {
         }
         return listOfDouble;
     }
+
 
 }

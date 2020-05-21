@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,6 +20,7 @@ import com.jedmay.simpledraft.helper.AlertHelper;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.model.OutputState;
+import com.jedmay.simpledraft.output.ArithmeticClickHelper;
 import com.jedmay.simpledraft.output.DataProvider;
 
 import java.util.List;
@@ -90,11 +89,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSwitchOnClickListeners() {
-        mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> isDetailingMathMethod = mathMethod.isChecked());
+        mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isDetailingMathMethod = mathMethod.isChecked();
+            mathMethod.setText(mathMethod.isChecked() ? "Detailing Math" : "Standard Math");
+        });
 
         outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
-
+            outputWindowSwitch.setText(outputWindowSwitch.isChecked() ? "Output Window 2" : "Output Window 1");
         });
     }
 
@@ -211,7 +213,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void setArithmeticButtonOnClickListeners() {
         minusButton.setOnClickListener(v -> {
-
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List.add(ArithmeticClickHelper.minusButtonClick(outputNumber1List,outputNumber.toString(),isDetailingMathMethod));
+                    outputNumber = null;
+                    break;
+                case 2:
+                    outputNumber2List.add(ArithmeticClickHelper.minusButtonClick(outputNumber2List,outputNumber.toString(),isDetailingMathMethod));
+                    outputNumber = null;
+                    break;
+                default:
+                    break;
+            }
         });
         plusButton.setOnClickListener(v -> {
 
@@ -233,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 String selected = output1Spinner.getSelectedItem().toString();
 
                 if(selected.equals(Constants.newSave)){
-                    //TODO - get values currently in the output window and save them to the db
+                    //TODO - get values currently in the output window and save them to the db - will need a fragment
                 } else {
                     outputNumber1List = db.outputStateDao().getOutputStateFromName(selected).getValues();
                     updateListView(outputListView1,outputNumber1List);
@@ -258,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
                 String selected = output2Spinner.getSelectedItem().toString();
 
                 if(selected.equals(Constants.newSave)){
-                    //TODO - get values currently in the output window and save them to the db
+                    //TODO - get values currently in the output window and save them to the db - will need a fragment
                 } else {
                     outputNumber2List = db.outputStateDao().getOutputStateFromName(selected).getValues();
                     updateListView(outputListView2,outputNumber2List);
@@ -285,14 +298,8 @@ public class MainActivity extends AppCompatActivity {
             listStringArray[i] = values.get(i).toString();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listStringArray) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView tv = (TextView) super.getView(position, convertView, parent);
-                tv.setGravity(Gravity.RIGHT|Gravity.END|Gravity.CENTER_VERTICAL);
-                return tv;
-            }
-        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.list_view_layout, R.id.listViewItem, listStringArray);
+
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -324,9 +331,9 @@ public class MainActivity extends AppCompatActivity {
             stateArray[states.size()] = Constants.newSave;
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    this, android.R.layout.simple_spinner_item, stateArray
+                    this, R.layout.list_view_layout, R.id.listViewItem, stateArray
             );
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.list_view_layout);
             output1Spinner.setAdapter(adapter);
             output2Spinner.setAdapter(adapter);
         } catch (ArrayIndexOutOfBoundsException ex) {

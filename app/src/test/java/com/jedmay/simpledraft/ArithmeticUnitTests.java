@@ -138,4 +138,5 @@ public class ArithmeticUnitTests {
 
         assertEquals(expected, actual, deltaValue);
     }
+
 }

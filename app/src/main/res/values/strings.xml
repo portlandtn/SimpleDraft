@@ -15,7 +15,7 @@
     <string name="eight">8</string>
     <string name="nine">9</string>
     <string name="seven">7</string>
-    <string name="detailing_math">Detailing Math</string>
+    <string name="math_method">Standard Math</string>
     <string name="divide">/</string>
     <string name="slope_to_base">Slope to Base</string>
     <string name="slope_to_rise">Slope To Rise</string>
@@ -34,7 +34,7 @@
     <string name="on12">:12</string>
     <string name="angles">Angles</string>
     <string name="dummyRoofSlope">12.2624:12</string>
-    <string name="current_roof_slope">Current Roof Slope</string>
+    <string name="current_roof_slope">Roof Slope</string>
     <string name="set_custom_angle">Enter Angle</string>
     <string name="set_slope">Set Slope</string>
     <string name="clear">Clear</string>
@@ -43,7 +43,7 @@
     <string name="foot_to_decimal">Foot to Dec</string>
     <string name="no_saved_data">No Saved Data</string>
     <string name="calc_wgt">Calc Wgt</string>
-    <string name="output_window_1">Output Window 1</string>
+    <string name="output_window_text">Output Window 1</string>
     <string name="bksp">Bksp</string>
 
     <string-array name="stateSave">

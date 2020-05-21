@@ -17,10 +17,9 @@ public class DataProviderUnitTests {
         String outputNumber = null;
         List<Double> listOfDouble = null;
 
-        DataProvider dataProvider = new DataProvider();
 
         List<Double> expected = null;
-        List<Double> actual = dataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
+        List<Double> actual = DataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
 
         assertEquals(expected, actual);
 
@@ -33,10 +32,8 @@ public class DataProviderUnitTests {
         listOfDouble.add(1.0408);
         listOfDouble.add(16.0308);
 
-        DataProvider dataProvider = new DataProvider();
-
         List<Double> expected = listOfDouble;
-        List<Double> actual = dataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
+        List<Double> actual = DataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
 
         assertEquals(expected, actual);
     }
@@ -48,13 +45,11 @@ public class DataProviderUnitTests {
         listOfDouble.add(1.0408);
         listOfDouble.add(16.0308);
 
-        DataProvider dataProvider = new DataProvider();
-
         List<Double> expected;
         expected = listOfDouble;
         expected.add(11.0204);
 
-        List<Double> actual = dataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
+        List<Double> actual = DataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
 
         assertEquals(expected, actual);
     }
@@ -64,12 +59,10 @@ public class DataProviderUnitTests {
         String outputNumber = "11.0204";
         List<Double> listOfDouble = null;
 
-        DataProvider dataProvider = new DataProvider();
-
         List<Double> expected = new ArrayList<>();
         expected.add(11.0204);
 
-        List<Double> actual = dataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
+        List<Double> actual = DataProvider.getValueFromEnterKeyPress(outputNumber, listOfDouble);
 
         assertEquals(expected, actual);
     }
