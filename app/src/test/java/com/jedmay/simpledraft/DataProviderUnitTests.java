@@ -1,10 +1,9 @@
 package com.jedmay.simpledraft;
 
-import com.jedmay.simpledraft.output.DataProvider;
+import com.jedmay.simpledraft.helper.DataProvider;
 
 import org.junit.Test;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 

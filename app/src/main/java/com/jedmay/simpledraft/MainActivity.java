@@ -23,10 +23,8 @@ import com.jedmay.simpledraft.helper.Arithmetic;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.model.OutputState;
-import com.jedmay.simpledraft.output.ArithmeticClickHelper;
-import com.jedmay.simpledraft.output.DataProvider;
+import com.jedmay.simpledraft.helper.DataProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

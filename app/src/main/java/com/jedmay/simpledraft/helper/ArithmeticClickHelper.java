@@ -1,8 +1,7 @@
-package com.jedmay.simpledraft.output;
+package com.jedmay.simpledraft.helper;
 
 import com.jedmay.simpledraft.helper.Arithmetic;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 
 public class ArithmeticClickHelper {

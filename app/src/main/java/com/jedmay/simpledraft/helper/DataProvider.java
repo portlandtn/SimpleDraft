@@ -1,7 +1,5 @@
-package com.jedmay.simpledraft.output;
+package com.jedmay.simpledraft.helper;
 
-import java.lang.reflect.Array;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 

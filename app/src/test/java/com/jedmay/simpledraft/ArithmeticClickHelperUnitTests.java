@@ -1,6 +1,6 @@
 package com.jedmay.simpledraft;
 
-import com.jedmay.simpledraft.output.ArithmeticClickHelper;
+import com.jedmay.simpledraft.helper.ArithmeticClickHelper;
 
 import org.junit.Test;
 
