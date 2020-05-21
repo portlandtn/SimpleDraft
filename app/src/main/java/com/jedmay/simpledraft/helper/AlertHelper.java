@@ -8,7 +8,6 @@ import com.jedmay.simpledraft.model.OutputState;
 
 public class AlertHelper {
 
-    private static boolean response;
 
     public static void deleteOutputState(OutputState state, SimpleDraftDbBadCompany db, Context context) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -22,18 +21,17 @@ public class AlertHelper {
         alertDialog.show();
     }
 
-    public static boolean deleteScreen(Context context) {
+    public static void clearScreen(Context context) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setMessage("Are you sure you want to clear the entire screen?");
         alertDialogBuilder.setPositiveButton("Delete", (dialog, which) -> {
-            response =  true;
+
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-            response = false;
+
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-        return response;
     }
 
 }

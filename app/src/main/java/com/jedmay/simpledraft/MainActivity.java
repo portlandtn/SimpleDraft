@@ -2,6 +2,8 @@ package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -37,13 +39,12 @@ public class MainActivity extends AppCompatActivity {
     riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
-    TextView text1Input, text2Input;
+    TextView outputNumberTextView;
 
     Switch mathMethod, outputWindowSwitch;
 
     SimpleDraftDbBadCompany db;
     SampleDbData sampleDbData;
-    DataProvider dataProvider;
 
     StringBuilder outputNumber;
 
@@ -61,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
         db = SimpleDraftDbBadCompany.getDatabase(getApplicationContext());
         sampleDbData = new SampleDbData(getApplicationContext());
         sampleDbData.populateDbWithSampleData();
-        dataProvider = new DataProvider();
+        activeWindow = 1;
+        isDetailingMathMethod = false;
+        outputNumber = new StringBuilder();
 
         findAllViews();
 
@@ -91,24 +94,25 @@ public class MainActivity extends AppCompatActivity {
     private void setSwitchOnClickListeners() {
         mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isDetailingMathMethod = mathMethod.isChecked();
-            mathMethod.setText(mathMethod.isChecked() ? "Detailing Math" : "Standard Math");
+            mathMethod.setText(mathMethod.isChecked() ? "Detailing" : "Standard");
         });
 
         outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
-            outputWindowSwitch.setText(outputWindowSwitch.isChecked() ? "Output Window 2" : "Output Window 1");
+            outputWindowSwitch.setText(outputWindowSwitch.isChecked() ? "Window 2" : "Window 1");
         });
     }
 
     private void setDecimalButtonOnClickListener() {
         decimalButton.setOnClickListener(v -> {
-            if(outputNumber == null) {
+            if(outputNumber.length() == 0) {
                 outputNumber = new StringBuilder();
                 outputNumber.append("0.");
             } else if(outputNumber.toString().contains(".")) {
-                // do nothing, the decimal is already there, so it should be ignored
+                // do nothing, the decimal is already there, so button press should be ignored
             } else {
                 outputNumber.append(".");
+                outputNumberTextView.setText(outputNumber.toString());
             }
         });
     }
@@ -121,52 +125,69 @@ public class MainActivity extends AppCompatActivity {
                         outputNumber1List.remove(outputNumber1List.size() - 1);
                         updateListView(outputListView1, outputNumber1List);
                     }
+                    break;
                 case 2:
                     if (outputNumber2List.size() > 0) {
                         outputNumber2List.remove(outputNumber2List.size() - 1);
                         updateListView(outputListView2, outputNumber2List);
                     }
+                    break;
                 default:
                     break;
             }
         });
 
         clearButton.setOnClickListener(v -> {
-            if(AlertHelper.deleteScreen(getApplicationContext()))
-            {
-                switch (activeWindow) {
-                    case 1:
-                        outputNumber1List.clear();
-                        updateListView(outputListView1,outputNumber1List);
-                    case 2:
-                        outputNumber2List.clear();
-                        updateListView(outputListView1,outputNumber2List);
-                    default:
-                        break;
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Are you sure you want to clear the entire screen for window " + activeWindow + "?");
+            alertDialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (activeWindow) {
+                        case 1:
+                            outputNumber1List.clear();
+                            updateListView(outputListView1,outputNumber1List);
+                            break;
+                        case 2:
+                            outputNumber2List.clear();
+                            updateListView(outputListView2,outputNumber2List);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
+            });
+            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+                // do nothing
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         });
 
         backspaceButton.setOnClickListener(v -> {
             if (outputNumber.length() > 0) {
-                outputNumber.delete(0,outputNumber.length() - 1);
+                outputNumber.deleteCharAt(outputNumber.length() - 1);
             }
+            outputNumberTextView.setText(outputNumber.toString());
         });
 
         enterButton.setOnClickListener(v -> {
 
             switch (activeWindow) {
                 case 1:
-                    outputNumber1List = dataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber1List);
+                    outputNumber1List = DataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber1List);
                     updateListView(outputListView1, outputNumber1List);
                     break;
                 case 2:
-                    outputNumber2List = dataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber2List);
+                    outputNumber2List = DataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber2List);
                     updateListView(outputListView2,outputNumber2List);
                     break;
                 default:
                     break;
             }
+            outputNumber.setLength(0);
+            outputNumberTextView.setText(outputNumber.toString());
         });
     }
 
@@ -216,11 +237,11 @@ public class MainActivity extends AppCompatActivity {
             switch (activeWindow) {
                 case 1:
                     outputNumber1List.add(ArithmeticClickHelper.minusButtonClick(outputNumber1List,outputNumber.toString(),isDetailingMathMethod));
-                    outputNumber = null;
+                    outputNumber.setLength(0);
                     break;
                 case 2:
                     outputNumber2List.add(ArithmeticClickHelper.minusButtonClick(outputNumber2List,outputNumber.toString(),isDetailingMathMethod));
-                    outputNumber = null;
+                    outputNumber.setLength(0);
                     break;
                 default:
                     break;
@@ -309,11 +330,11 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < numberButtons.length; i++){
             final int finalI = i;
             numberButtons[i].setOnClickListener(v -> {
-                if (outputNumber == null) {
+                if (outputNumber.length() == 0) {
                     outputNumber = new StringBuilder();
                 }
                 outputNumber.append(finalI);
-                text1Input.setText(outputNumber);
+                outputNumberTextView.setText(outputNumber);
             });
         }
 
@@ -402,8 +423,7 @@ public class MainActivity extends AppCompatActivity {
         nineButton = findViewById(R.id.nineButton);
         zeroButton = findViewById(R.id.zeroButton);
 
-        text1Input = findViewById(R.id.window1Text);
-        text2Input = findViewById(R.id.window2Text);
+        outputNumberTextView = findViewById(R.id.outputNumberTextView);
 
     }
 

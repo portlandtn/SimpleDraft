@@ -3,4 +3,5 @@
     <dimen name="smallButtonText">7sp</dimen>
     <dimen name="smallButtonSize">46dp</dimen>
     <dimen name="doubleSmallButtonSize">92dp</dimen>
+    <dimen name="standardButtonText">14sp</dimen>
 </resources>
