@@ -27,4 +27,8 @@ public class Trig {
     public static double slopeToRise(double slopeDimension, double angle) {
         return slopeDimension * Math.sin(Math.toRadians(angle));
     }
+
+    public static double getRoofSlopeFromAngle(double angle) {
+        return (baseToRise(1, angle)) * 12;
+    }
 }

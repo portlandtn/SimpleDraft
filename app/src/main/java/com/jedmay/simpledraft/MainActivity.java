@@ -21,7 +21,9 @@ import android.widget.TextView;
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
 import com.jedmay.simpledraft.helper.Arithmetic;
 import com.jedmay.simpledraft.helper.Constants;
+import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.SampleDbData;
+import com.jedmay.simpledraft.helper.Trig;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.helper.DataProvider;
 
@@ -34,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
     RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
     Spinner output1Spinner, output2Spinner;
     ListView outputListView1, outputListView2;
-    Button calculateWeightButton, setSlopeButton, enterAngleButton, deleteButton, clearButton, backspaceButton,
+    Button calculateWeightButton, setSlopeButton, enterAngleButton, deleteButton, clearButton, backspaceButton, negativePositiveButton,
     footToDecimalButton, decimalToFootButton,
     riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
-    TextView outputNumberTextView;
+    TextView outputNumberTextView, currentRoofSlope;
 
     Switch mathMethod, outputWindowSwitch;
 
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     StringBuilder outputNumber;
 
-    List<Double> outputNumber1List, outputNumber2List;
+    List<Double> outputNumber1List, outputNumber2List, angles;
 
     int activeWindow;
 
@@ -72,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
 
         setOnClickListeners();
 
+        setSlopeText();
+
+    }
+
+    private void setSlopeText() {
+
+
     }
 
     private void setOnClickListeners() {
@@ -86,8 +95,44 @@ public class MainActivity extends AppCompatActivity {
         setTrigonometryButtonOnClickListeners();
         setFragmentButtonOnClickListeners();
         setGeneralButtonOnClickListeners();
+        setRadioButtonOnClickListeners();
 
         setSwitchOnClickListeners();
+
+    }
+
+    private void setRoofSlopeText(String angleValue) {
+        double angle = Double.parseDouble(angleValue);
+        double roofSlope = Trig.getRoofSlopeFromAngle(angle);
+        currentRoofSlope.setText(String.valueOf(Converters.round(roofSlope, 4)));
+    }
+
+    private void setRadioButtonOnClickListeners() {
+
+        angle1RadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRoofSlopeText(angle1RadioButton.getText().toString());
+            }
+        });
+        angle2RadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRoofSlopeText(angle2RadioButton.getText().toString());
+            }
+        });
+        angle3RadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRoofSlopeText(angle3RadioButton.getText().toString());
+            }
+        });
+        angle4RadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRoofSlopeText(angle4RadioButton.getText().toString());
+            }
+        });
 
     }
 
@@ -99,7 +144,15 @@ public class MainActivity extends AppCompatActivity {
 
         outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
-            outputWindowSwitch.setText(outputWindowSwitch.isChecked() ? "Window 2" : "Window 1");
+            if (activeWindow == 1) {
+                outputWindowSwitch.setText("Window 1");
+                outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
+                outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+            } else {
+                outputWindowSwitch.setText("Window 2");
+                outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
+                outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+            }
         });
     }
 
@@ -189,6 +242,26 @@ public class MainActivity extends AppCompatActivity {
             outputNumber.setLength(0);
             outputNumberTextView.setText(outputNumber.toString());
         });
+
+        negativePositiveButton.setOnClickListener(v -> {
+            double changeUp;
+            switch(activeWindow) {
+                case 1:
+                    changeUp = outputNumber1List.get(outputNumber1List.size() - 1);
+                    changeUp *= -1;
+                    outputNumber1List.set(outputNumber1List.size() -1,changeUp);
+                    updateListView(outputListView1, outputNumber1List);
+                    break;
+                case 2:
+                    changeUp = outputNumber2List.get(outputNumber2List.size() - 1);
+                    changeUp *= -1;
+                    outputNumber2List.set(outputNumber2List.size() -1,changeUp);
+                    updateListView(outputListView2, outputNumber2List);
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
 
@@ -263,13 +336,92 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         plusButton.setOnClickListener(v -> {
+            List<Double> mathValues;
+            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
+
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
+                    try {
+                        outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
+                    outputNumber.setLength(0);
+                    updateListView(outputListView1, outputNumber1List);
+                    break;
+                case 2:
+                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
+                    try {
+                        outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
+                    outputNumber.setLength(0);
+                    updateListView(outputListView2, outputNumber2List);
+                    break;
+                default:
+                    break;
+            }
 
         });
         divideButton.setOnClickListener(v -> {
+            List<Double> mathValues;
+            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
 
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
+                    try {
+                        outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
+                    outputNumber.setLength(0);
+                    updateListView(outputListView1, outputNumber1List);
+                    break;
+                case 2:
+                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
+                    try {
+                        outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
+                    outputNumber.setLength(0);
+                    updateListView(outputListView2, outputNumber2List);
+                    break;
+                default:
+                    break;
+            }
         });
         multiplyButton.setOnClickListener(v -> {
+            List<Double> mathValues;
+            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
 
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
+                    try {
+                        outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
+                    outputNumber.setLength(0);
+                    updateListView(outputListView1, outputNumber1List);
+                    break;
+                case 2:
+                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
+                    try {
+                        outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                    } catch (NullPointerException ex) {
+                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                    }
+                    outputNumber.setLength(0);
+                    updateListView(outputListView2, outputNumber2List);
+                    break;
+                default:
+                    break;
+            }
         });
     }
 
@@ -417,6 +569,7 @@ public class MainActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         clearButton = findViewById(R.id.clearButton);
         backspaceButton = findViewById(R.id.backspaceButton);
+        negativePositiveButton = findViewById(R.id.negativePositiveButton);
 
         // Conversion Buttons
         footToDecimalButton = findViewById(R.id.footToDecimal);
@@ -450,7 +603,9 @@ public class MainActivity extends AppCompatActivity {
         nineButton = findViewById(R.id.nineButton);
         zeroButton = findViewById(R.id.zeroButton);
 
+        // TextViews
         outputNumberTextView = findViewById(R.id.outputNumberTextView);
+        currentRoofSlope = findViewById(R.id.currentRoofSlopeTextView);
 
     }
 

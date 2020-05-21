@@ -7,6 +7,28 @@
     android:background="#121111"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/on12RoofslopeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/on12"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintStart_toEndOf="@+id/currentRoofSlopeTextView"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <Button
+        android:id="@+id/negativePositiveButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/neg_pos"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintBottom_toTopOf="@+id/sevenButton"
+        app:layout_constraintStart_toEndOf="@+id/clearButton" />
+
     <Button
         android:id="@+id/backspaceButton"
         android:layout_width="@dimen/smallButtonSize"
@@ -72,7 +94,7 @@
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintBottom_toTopOf="@+id/sevenButton"
-        app:layout_constraintEnd_toEndOf="@+id/riseToBaseButton" />
+        app:layout_constraintStart_toEndOf="@+id/deleteButton" />
 
     <Button
         android:id="@+id/setCustomAngleButton"
@@ -98,14 +120,14 @@
 
     <Button
         android:id="@+id/deleteButton"
-        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_width="@dimen/smallButtonSize"
         android:layout_height="@dimen/smallButtonSize"
         android:background="@mipmap/ic_button_background_round"
         android:text="@string/delete"
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintBottom_toTopOf="@+id/sevenButton"
-        app:layout_constraintEnd_toStartOf="@+id/riseToBaseButton" />
+        app:layout_constraintStart_toStartOf="@+id/footToDecimal" />
 
     <Button
         android:id="@+id/riseToSlopeButton"
@@ -471,7 +493,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:text="@string/dummyRoofSlope"
+        android:text="@string/_1"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorText"
         android:textSize="@dimen/standardButtonText"
@@ -513,7 +535,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
-            android:background="#434141"
+            android:background="@color/activeBackground"
             android:stackFromBottom="true"
             android:transcriptMode="alwaysScroll" />
 
@@ -522,7 +544,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
-            android:background="#434141"
+            android:background="@color/inactiveBackground"
             android:stackFromBottom="true"
             android:transcriptMode="alwaysScroll" />
 

@@ -23,7 +23,8 @@
     <string name="base_to_slope">Base To Slope</string>
     <string name="rise_to_slope">Rise To Slope</string>
     <string name="rise_to_base">Rise To Base</string>
-    <string name="delete">Delete</string>
+    <string name="delete">Drop</string>
+    <string name="neg_pos">+/-</string>
     <string name="angle_1">14.0623</string>
     <string name="angle_2">1.1893</string>
     <string name="angle_3">4.7623</string>

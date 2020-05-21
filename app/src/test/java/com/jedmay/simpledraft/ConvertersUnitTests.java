@@ -179,4 +179,40 @@ public class ConvertersUnitTests {
 
         assertEquals(expected, actual, deltaValue);
     }
+
+    @Test
+    public void roundTest() {
+        double numberToRound = 1.04082234089234;
+        int precision = 4;
+
+        double expected = 1.0408;
+
+        double actual = Converters.round(numberToRound, precision);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void roundTest5Decimals() {
+        double numberToRound = 1.040899934089234;
+        int precision = 5;
+
+        double expected = 1.0409;
+
+        double actual = Converters.round(numberToRound, precision);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void roundTest1Decimal() {
+        double numberToRound = -15691.790899934089234;
+        int precision = 1;
+
+        double expected = -15691.8;
+
+        double actual = Converters.round(numberToRound, precision);
+
+        assertEquals(expected, actual, deltaValue);
+    }
 }
