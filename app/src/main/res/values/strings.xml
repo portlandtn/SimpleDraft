@@ -45,6 +45,13 @@
     <string name="calc_wgt">Calc Wgt</string>
     <string name="output_window_text">Window 1</string>
     <string name="bksp">Bksp</string>
+    <string name="dummy_angle">14.0623</string>
+    <string name="dummy_roof_slope">1.2184</string>
+    <string name="angle_4_text">Angle 4</string>
+    <string name="angle_3_text">Angle 3</string>
+    <string name="angle_2_text">Angle 2</string>
+    <string name="angle_1_text">Angle 1</string>
+    <string name="save">Save</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
