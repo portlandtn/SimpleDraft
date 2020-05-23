@@ -1,5 +1,13 @@
 package com.jedmay.simpledraft.helper;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.text.InputType;
+import android.widget.EditText;
+
+import com.jedmay.simpledraft.model.OutputState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,5 +83,23 @@ public class DataProvider {
         }
         listOfDouble.add(arithmeticAnswer);
         return listOfDouble;
+    }
+
+    public static OutputState getOutputState(Context context) {
+        OutputState state = new OutputState();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Save New State");
+
+        final EditText input = new EditText(context);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", (dialog, which) -> state.setName(input.getText().toString()));
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+        return state;
+
     }
 }

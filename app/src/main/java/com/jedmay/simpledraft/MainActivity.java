@@ -5,14 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
+    Button saveState1Button, saveState2Button;
     TextView outputNumberTextView, currentRoofSlope;
 
     Switch mathMethod, outputWindowSwitch;
@@ -83,19 +87,19 @@ public class MainActivity extends AppCompatActivity {
     private void setSlopeText() {
         switch (activeAngle) {
             case 1:
-                setRoofSlopeText(angle1RadioButton.getText().toString());
+                setRoofSlopeText(Double.parseDouble(angle1RadioButton.getText().toString()));
                 break;
             case 2:
-                setRoofSlopeText(angle2RadioButton.getText().toString());
+                setRoofSlopeText(Double.parseDouble(angle2RadioButton.getText().toString()));
                 break;
             case 3:
-                setRoofSlopeText(angle3RadioButton.getText().toString());
+                setRoofSlopeText(Double.parseDouble(angle3RadioButton.getText().toString()));
                 break;
             case 4:
-                setRoofSlopeText(angle4RadioButton.getText().toString());
+                setRoofSlopeText(Double.parseDouble(angle4RadioButton.getText().toString()));
                 break;
             default:
-                setRoofSlopeText("0");
+                setRoofSlopeText(0.0);
                 break;
         }
 
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         setDecimalButtonOnClickListener();
         setOutputSpinnerOnClickListeners();
+        setOutputSpinnerSaveButtonOnClickListeners();
         setArithmeticButtonOnClickListeners();
         setTrigonometryButtonOnClickListeners();
         setActivityButtonOnClickListeners();
@@ -117,8 +122,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setRoofSlopeText(String angleValue) {
-        double angle = Double.parseDouble(angleValue);
+    private void setOutputSpinnerSaveButtonOnClickListeners() {
+        saveState1Button.setOnClickListener(v -> {
+            OutputState state;
+            boolean newSave = output1Spinner.getSelectedItem().toString().equals(Constants.newSave);
+
+            if (newSave) {
+                state = DataProvider.getOutputState(this);
+            } else {
+                state = db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString());
+            }
+            state.setAngle1(state1Angles.get(0));
+            state.setAngle2(state1Angles.get(1));
+            state.setAngle3(state1Angles.get(2));
+            state.setAngle4(state1Angles.get(3));
+            state.setValues(outputNumber1List);
+
+            if (newSave) {
+                db.outputStateDao().insert(state);
+            }
+            else {
+                db.outputStateDao().update(state);
+            }
+        });
+
+        saveState2Button.setOnClickListener(v -> {
+            OutputState state;
+            boolean newSave = output2Spinner.getSelectedItem().toString().equals(Constants.newSave);
+
+            if (newSave) {
+                state = DataProvider.getOutputState(getApplicationContext());
+            } else {
+                state = db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString());
+            }
+            state.setAngle1(state2Angles.get(0));
+            state.setAngle2(state2Angles.get(1));
+            state.setAngle3(state2Angles.get(2));
+            state.setAngle4(state2Angles.get(3));
+            state.setValues(outputNumber2List);
+
+            if (newSave) {
+                db.outputStateDao().insert(state);
+            }
+            else {
+                db.outputStateDao().update(state);
+            }
+        });
+    }
+
+    private void setRoofSlopeText(Double angle) {
         double roofSlope = Trig.getRoofSlopeFromAngle(angle);
         currentRoofSlope.setText(String.valueOf(Converters.round(roofSlope, 4)));
     }
@@ -126,19 +178,19 @@ public class MainActivity extends AppCompatActivity {
     private void setRadioButtonOnClickListeners() {
 
         angle1RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(angle1RadioButton.getText().toString());
+            setRoofSlopeText(Double.parseDouble(angle1RadioButton.getText().toString()));
             activeAngle = 1;
         });
         angle2RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(angle2RadioButton.getText().toString());
+            setRoofSlopeText(Double.parseDouble(angle2RadioButton.getText().toString()));
             activeAngle = 2;
         });
         angle3RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(angle3RadioButton.getText().toString());
+            setRoofSlopeText(Double.parseDouble(angle3RadioButton.getText().toString()));
             activeAngle = 3;
         });
         angle4RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(angle4RadioButton.getText().toString());
+            setRoofSlopeText(Double.parseDouble(angle4RadioButton.getText().toString()));
             activeAngle = 4;
         });
 
@@ -450,6 +502,38 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void saveNewState(OutputState newState, int fromWindow) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setTitle("Save New State");
+
+        final EditText input = new EditText(getApplicationContext());
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        builder.setView(input);
+
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                OutputState newState = new OutputState();
+                newState.setName(input.getText().toString());
+                newState.setValues(outputNumber1List); //TODO fix me later (should be dynamic, not just output1)
+                newState.setAngle1(state1Angles.get(0));
+                newState.setAngle2(state1Angles.get(1));
+                newState.setAngle3(state1Angles.get(2));
+                newState.setAngle4(state1Angles.get(3));
+                db.outputStateDao().insert(newState);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     private void setOutputSpinnerOnClickListeners() {
 
         output1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -459,7 +543,8 @@ public class MainActivity extends AppCompatActivity {
                 String selected = output1Spinner.getSelectedItem().toString();
 
                 if(selected.equals(Constants.newSave)){
-                    //TODO - get values currently in the output window and save them to the db - will need a fragment
+                    outputNumber1List.clear();
+
                 } else {
                     OutputState state = db.outputStateDao().getOutputStateFromName(selected);
                     outputNumber1List = state.getValues();
@@ -604,11 +689,15 @@ public class MainActivity extends AppCompatActivity {
         output1Spinner = findViewById(R.id.output1NameSpinner);
         output2Spinner = findViewById(R.id.output2NameSpinner);
 
-        //List Views
+        // List Views
         outputListView1 = findViewById(R.id.output1ListView);
         outputListView2 = findViewById(R.id.output2ListView);
 
-        //Buttons
+        // Save Buttons
+        saveState1Button = findViewById(R.id.saveState1Button);
+        saveState2Button = findViewById(R.id.saveState2Button);
+
+        // Buttons
         calculateWeightButton = findViewById(R.id.calculateWeightButton);
         anglesButton = findViewById(R.id.anglesButton);
         deleteButton = findViewById(R.id.deleteButton);
