@@ -33,12 +33,10 @@ public class SampleDbData {
         OutputState state = new OutputState();
         state.setName("K12J0208");
 
-        List<Double> angles = new ArrayList<>();
-        angles.add(14.0208);
-        angles.add(31.0809);
-        angles.add(11.0208);
-        angles.add(4.7636);
-        state.setAngles(angles);
+        state.setAngle1(14.0208);
+        state.setAngle2(31.0809);
+        state.setAngle3(11.0208);
+        state.setAngle4(4.7636);
 
         List<Double> stateList = new ArrayList<>();
         stateList.add(31.0208);
@@ -46,7 +44,6 @@ public class SampleDbData {
         stateList.add(-12.0204);
         stateList.add(-11.0001);
         stateList.add(13.0603);
-        state.setAngles(angles);
 
         state.setValues(stateList);
 
@@ -58,12 +55,10 @@ public class SampleDbData {
         OutputState state = new OutputState();
         state.setName("K12J0209");
 
-        List<Double> angles = new ArrayList<>();
-        angles.add(4.7636);
-        angles.add(14.0809);
-        angles.add(15.0208);
-        angles.add(2.3859);
-        state.setAngles(angles);
+        state.setAngle1(4.7636);
+        state.setAngle2(14.0809);
+        state.setAngle3(15.0208);
+        state.setAngle4(2.3859);
 
         List<Double> stateList = new ArrayList<>();
         stateList.add(1.0204);
@@ -80,18 +75,16 @@ public class SampleDbData {
         OutputState state = new OutputState();
         state.setName("K19L0413");
 
-        List<Double> angles = new ArrayList<>();
-        angles.add(4.7636);
-        angles.add(1.4932);
-        angles.add(14.0623);
-        angles.add(0.0);
+        state.setAngle1(4.7636);
+        state.setAngle2(1.4932);
+        state.setAngle3(14.0623);
+        state.setAngle4(0.0);
 
         List<Double> stateList = new ArrayList<>();
         stateList.add(11.0010);
         stateList.add(-15.0208);
         stateList.add(16.0005);
         stateList.add(-21.0408);
-        state.setAngles(angles);
 
         state.setValues(stateList);
 

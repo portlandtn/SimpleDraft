@@ -52,9 +52,21 @@
     <string name="angle_2_text">Angle 2</string>
     <string name="angle_1_text">Angle 1</string>
     <string name="save">Save</string>
+    <string name="choose_angle">Choose Angle</string>
+    <string name="enter_roof_slope_on_12_12">Enter roof slope on 12 (:12)</string>
+    <string name="angle">Angle</string>
+    <string name="enter_desired_angle">Enter desired Angle</string>
+    <string name="window_1">Window 1</string>
+    <string name="window_2">Window 2</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
+    </string-array>
+    <string-array name="angles">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
     </string-array>
 
 </resources>

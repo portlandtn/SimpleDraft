@@ -19,8 +19,13 @@ public class OutputState {
     @NonNull
     private String name;
 
-    @TypeConverters(Converters.class)
-    private List<Double> angles;
+    private double angle1;
+
+    private double angle2;
+
+    private double angle3;
+
+    private double angle4;
 
 
     public String getName() {
@@ -39,11 +44,35 @@ public class OutputState {
         this.values = values;
     }
 
-    public List<Double> getAngles() {
-        return angles;
+    public double getAngle1() {
+        return angle1;
     }
 
-    public void setAngles(List<Double> angles) {
-        this.angles = angles;
+    public void setAngle1(double angle1) {
+        this.angle1 = angle1;
+    }
+
+    public double getAngle2() {
+        return angle2;
+    }
+
+    public void setAngle2(double angle2) {
+        this.angle2 = angle2;
+    }
+
+    public double getAngle3() {
+        return angle3;
+    }
+
+    public void setAngle3(double angle3) {
+        this.angle3 = angle3;
+    }
+
+    public double getAngle4() {
+        return angle4;
+    }
+
+    public void setAngle4(double angle4) {
+        this.angle4 = angle4;
     }
 }

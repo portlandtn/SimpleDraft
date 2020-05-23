@@ -9,13 +9,15 @@
 
     <TextView
         android:id="@+id/on12RoofslopeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="22dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:text="@string/on12"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorText"
         android:textSize="@dimen/standardButtonText"
-        app:layout_constraintStart_toEndOf="@+id/currentRoofSlopeTextView"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <Button
@@ -53,14 +55,12 @@
         android:id="@+id/calculateWeightButton"
         android:layout_width="80dp"
         android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:background="@mipmap/ic_button_background_round"
         android:text="@string/calc_wgt"
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/anglesButton"
         app:layout_constraintTop_toBottomOf="@+id/mathMethodSwitch" />
 
     <Button
@@ -97,25 +97,16 @@
         app:layout_constraintStart_toEndOf="@+id/deleteButton" />
 
     <Button
-        android:id="@+id/setCustomAngleButton"
+        android:id="@+id/anglesButton"
         android:layout_width="@dimen/doubleSmallButtonSize"
         android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:background="@mipmap/ic_button_background_round"
-        android:text="@string/set_custom_angle"
+        android:text="@string/angles"
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
-        app:layout_constraintStart_toEndOf="@+id/setRoofSlopeButton"
-        app:layout_constraintTop_toTopOf="@+id/calculateWeightButton" />
-
-    <Button
-        android:id="@+id/setRoofSlopeButton"
-        android:layout_width="@dimen/doubleSmallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/set_slope"
-        android:textColor="@android:color/background_light"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintStart_toEndOf="@+id/calculateWeightButton"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
         app:layout_constraintTop_toTopOf="@+id/calculateWeightButton" />
 
     <Button
@@ -411,31 +402,49 @@
 
         <Spinner
             android:id="@+id/output1NameSpinner"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="1.0"
+            android:layout_weight="0.8"
             android:background="#121111"
             android:entries="@array/stateSave"
             android:popupBackground="#121111" />
 
+        <Button
+            android:layout_width="@dimen/smallButtonSize"
+            android:layout_height="@dimen/smallButtonSize"
+            android:id="@+id/saveState1Button"
+            android:background="@mipmap/ic_button_background_round"
+            android:text="@string/save"
+            android:layout_weight="0.2"
+            android:textColor="@android:color/background_light" />
+
         <Spinner
             android:id="@+id/output2NameSpinner"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="1.0"
+            android:layout_weight="0.8"
             android:background="#121111"
             android:entries="@array/stateSave"
             android:popupBackground="#121111" />
+
+        <Button
+            android:layout_width="@dimen/smallButtonSize"
+            android:layout_height="@dimen/smallButtonSize"
+            android:id="@+id/saveState2Button"
+            android:background="@mipmap/ic_button_background_round"
+            android:text="@string/save"
+            android:layout_weight="0.2"
+            android:textColor="@android:color/background_light" />
     </LinearLayout>
 
     <RadioGroup
@@ -489,28 +498,28 @@
 
     <TextView
         android:id="@+id/currentRoofSlopeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="5dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="@string/_1"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorText"
         android:textSize="@dimen/standardButtonText"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintEnd_toStartOf="@+id/on12RoofslopeTextView"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:text="@string/current_roof_slope"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorText"
-        app:layout_constraintStart_toEndOf="@+id/mathMethodSwitch"
+        app:layout_constraintEnd_toStartOf="@+id/currentRoofSlopeTextView"
         app:layout_constraintTop_toTopOf="@+id/radioGroup" />
 
     <LinearLayout

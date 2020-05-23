@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
     Spinner output1Spinner, output2Spinner;
     ListView outputListView1, outputListView2;
-    Button calculateWeightButton, setSlopeButton, enterAngleButton, deleteButton, clearButton, backspaceButton, negativePositiveButton,
+    Button calculateWeightButton, anglesButton, deleteButton, clearButton, backspaceButton, negativePositiveButton,
     footToDecimalButton, decimalToFootButton,
     riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
@@ -51,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     StringBuilder outputNumber;
 
-    List<Double> outputNumber1List, outputNumber2List, angles;
+    List<Double> outputNumber1List, outputNumber2List;
+    Double[] angles;
 
     int activeWindow, activeAngle;
 
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         setOutputSpinnerOnClickListeners();
         setArithmeticButtonOnClickListeners();
         setTrigonometryButtonOnClickListeners();
-        setFragmentButtonOnClickListeners();
+        setActivityButtonOnClickListeners();
         setGeneralButtonOnClickListeners();
         setRadioButtonOnClickListeners();
         setSwitchOnClickListeners();
@@ -125,33 +125,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void setRadioButtonOnClickListeners() {
 
-        angle1RadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRoofSlopeText(angle1RadioButton.getText().toString());
-                activeAngle = 1;
-            }
+        angle1RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(angle1RadioButton.getText().toString());
+            activeAngle = 1;
         });
-        angle2RadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRoofSlopeText(angle2RadioButton.getText().toString());
-                activeAngle = 2;
-            }
+        angle2RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(angle2RadioButton.getText().toString());
+            activeAngle = 2;
         });
-        angle3RadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRoofSlopeText(angle3RadioButton.getText().toString());
-                activeAngle = 3;
-            }
+        angle3RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(angle3RadioButton.getText().toString());
+            activeAngle = 3;
         });
-        angle4RadioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setRoofSlopeText(angle4RadioButton.getText().toString());
-                activeAngle = 4;
-            }
+        angle4RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(angle4RadioButton.getText().toString());
+            activeAngle = 4;
         });
 
     }
@@ -165,11 +153,11 @@ public class MainActivity extends AppCompatActivity {
         outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
             if (activeWindow == 1) {
-                outputWindowSwitch.setText("Window 1");
+                outputWindowSwitch.setText(R.string.window_1);
                 outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
                 outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
             } else {
-                outputWindowSwitch.setText("Window 2");
+                outputWindowSwitch.setText(R.string.window_2);
                 outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
                 outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
             }
@@ -214,21 +202,18 @@ public class MainActivity extends AppCompatActivity {
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("Are you sure you want to clear the entire screen for window " + activeWindow + "?");
-            alertDialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (activeWindow) {
-                        case 1:
-                            outputNumber1List.clear();
-                            updateListView(outputListView1,outputNumber1List);
-                            break;
-                        case 2:
-                            outputNumber2List.clear();
-                            updateListView(outputListView2,outputNumber2List);
-                            break;
-                        default:
-                            break;
-                    }
+            alertDialogBuilder.setPositiveButton("Delete", (dialog, which) -> {
+                switch (activeWindow) {
+                    case 1:
+                        outputNumber1List.clear();
+                        updateListView(outputListView1,outputNumber1List);
+                        break;
+                    case 2:
+                        outputNumber2List.clear();
+                        updateListView(outputListView2,outputNumber2List);
+                        break;
+                    default:
+                        break;
                 }
             });
             alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
@@ -285,17 +270,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setFragmentButtonOnClickListeners() {
+    private void setActivityButtonOnClickListeners() {
         calculateWeightButton.setOnClickListener(v -> {
             //TODO Must Develop fragment to display weight input
         });
 
-        setSlopeButton.setOnClickListener(v -> {
-            //TODO Must develop fragment to set slope, base on #:12
-        });
-
-        enterAngleButton.setOnClickListener(v -> {
-            //TODO Must develop fragment to let user enter angle number
+        anglesButton.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
+//            i.putExtra("angle 1", )
         });
     }
 
@@ -334,7 +316,9 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
                     try {
-                        outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -344,7 +328,9 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
                     try {
-                        outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -363,7 +349,9 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
                     try {
-                        outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -373,7 +361,9 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
                     try {
-                        outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -393,7 +383,9 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
                     try {
-                        outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -403,7 +395,9 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
                     try {
-                        outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -422,7 +416,9 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
                     try {
-                        outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -432,7 +428,9 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
                     try {
-                        outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        if (mathValues != null) {
+                            outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                        }
                     } catch (NullPointerException ex) {
                         Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
                     }
@@ -551,7 +549,7 @@ public class MainActivity extends AppCompatActivity {
             stateArray[states.size()] = Constants.newSave;
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    this, R.layout.list_view_layout, R.id.listViewItem, stateArray
+                    this, R.layout.spinner_item_layout, R.id.spinnerViewItem, stateArray
             );
             adapter.setDropDownViewResource(R.layout.list_view_layout);
             output1Spinner.setAdapter(adapter);
@@ -584,8 +582,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Buttons
         calculateWeightButton = findViewById(R.id.calculateWeightButton);
-        setSlopeButton = findViewById(R.id.setRoofSlopeButton);
-        enterAngleButton = findViewById(R.id.setCustomAngleButton);
+        anglesButton = findViewById(R.id.anglesButton);
         deleteButton = findViewById(R.id.deleteButton);
         clearButton = findViewById(R.id.clearButton);
         backspaceButton = findViewById(R.id.backspaceButton);
@@ -629,8 +626,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void goToAngle(View view) {
-        Intent intent = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
-        startActivity(intent);
-    }
 }
