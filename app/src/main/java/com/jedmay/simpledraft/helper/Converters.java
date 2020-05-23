@@ -106,4 +106,12 @@ public class Converters {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
     }
+
+    public static double[] listOfDoubleToDoubleArray(List<Double> doubleList) {
+        double[] angleArray = new double[doubleList.size()];
+        for (int i = 0; i < doubleList.size(); i++) {
+            angleArray[i] = doubleList.get(i);
+        }
+        return angleArray;
+    }
 }

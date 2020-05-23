@@ -2,6 +2,7 @@ package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -276,7 +277,14 @@ public class MainActivity extends AppCompatActivity {
 
         anglesButton.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
-//            i.putExtra("angle 1", )
+
+            Bundle extras = new Bundle();
+            extras.putDoubleArray("state1Angles", Converters.listOfDoubleToDoubleArray(state1Angles));
+            extras.putDoubleArray("state2Angles", Converters.listOfDoubleToDoubleArray(state2Angles));
+
+            i.putExtras(extras);
+            startActivity(i);
+
         });
     }
 
@@ -453,10 +461,11 @@ public class MainActivity extends AppCompatActivity {
                 if(selected.equals(Constants.newSave)){
                     //TODO - get values currently in the output window and save them to the db - will need a fragment
                 } else {
-                    outputNumber1List = db.outputStateDao().getOutputStateFromName(selected).getValues();
+                    OutputState state = db.outputStateDao().getOutputStateFromName(selected);
+                    outputNumber1List = state.getValues();
                     updateListView(outputListView1,outputNumber1List);
-                    state1Angles = db.outputStateDao().getAnglesFromStateName(selected);
-//                    updateAngleRadioButtons();
+                    state1Angles = Trig.updateAngles(state1Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
+                    updateRadioButtonValues(state1Angles);
                 }
             }
 
@@ -480,10 +489,11 @@ public class MainActivity extends AppCompatActivity {
                 if(selected.equals(Constants.newSave)){
                     //TODO - get values currently in the output window and save them to the db - will need a fragment
                 } else {
-                    outputNumber2List = db.outputStateDao().getOutputStateFromName(selected).getValues();
+                    OutputState state = db.outputStateDao().getOutputStateFromName(selected);
+                    outputNumber2List = state.getValues();
                     updateListView(outputListView2,outputNumber2List);
-                    state2Angles = db.outputStateDao().getAnglesFromStateName(selected);
-
+                    state2Angles = Trig.updateAngles(state2Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
+                    updateRadioButtonValues(state2Angles);
                 }
             }
 
@@ -498,6 +508,22 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
+
+    @SuppressLint("DefaultLocale")
+    private void updateRadioButtonValues(List<Double> angles) {
+
+        String[] angleStringArray = new String[angles.size()];
+
+        for(int i = 0; i < angles.size(); i++) {
+            angleStringArray[0] = String.format("%.4f", angles.get(i));
+        }
+        angle1RadioButton.setText(angleStringArray[0]);
+        angle2RadioButton.setText(angleStringArray[1]);
+        angle3RadioButton.setText(angleStringArray[2]);
+        angle4RadioButton.setText(angleStringArray[3]);
+
+    }
+
 
     private static void deleteOutputState(OutputState state, SimpleDraftDbBadCompany db, Context context) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -553,7 +579,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this, R.layout.spinner_view_layout, R.id.spinnerViewItem, stateArray
             );
-            adapter.setDropDownViewResource(R.layout.list_view_layout);
+            adapter.setDropDownViewResource(R.layout.spinner_view_layout);
             output1Spinner.setAdapter(adapter);
             output2Spinner.setAdapter(adapter);
         } catch (ArrayIndexOutOfBoundsException ex) {

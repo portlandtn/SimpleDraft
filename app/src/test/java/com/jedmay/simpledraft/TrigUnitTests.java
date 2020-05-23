@@ -6,6 +6,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class TrigUnitTests {
 
     private double deltaValue = 0.0001;
@@ -105,7 +109,6 @@ public class TrigUnitTests {
         double actual = Trig.getRoofSlopeFromAngle(angle);
 
         assertEquals(expected, actual, deltaValue);
-
     }
 
     @Test
@@ -116,7 +119,50 @@ public class TrigUnitTests {
         double actual = Trig.getRoofSlopeFromAngle(angle);
 
         assertEquals(expected, actual, deltaValue);
+    }
 
+    @Test
+    public void updateAngles() {
+        Double angle1 = 14.0208;
+        Double angle2 = 1.1935;
+        Double angle3 = 11.2222;
+        Double angle4 = 2.3859;
+
+        List<Double> existingAngles = new ArrayList<>();
+        existingAngles.add(2.2208);
+        existingAngles.add(13.2342);
+        existingAngles.add(1.2342);
+        existingAngles.add(3.8234);
+
+        List<Double> expectedAngles = new ArrayList<>();
+        expectedAngles.add(14.0208);
+        expectedAngles.add(1.1935);
+        expectedAngles.add(11.2222);
+        expectedAngles.add(2.3859);
+
+        List<Double> actualAngles = Trig.updateAngles(existingAngles, angle1, angle2, angle3, angle4);
+
+        assertEquals(expectedAngles, actualAngles);
+    }
+
+    @Test
+    public void updateAnglesWhenAngleListIsNull() {
+        Double angle1 = 14.0208;
+        Double angle2 = 1.1935;
+        Double angle3 = 11.2222;
+        Double angle4 = 2.3859;
+
+        List<Double> existingAngles = new ArrayList<>(4);
+
+        List<Double> expectedAngles = new ArrayList<>(4);
+        expectedAngles.add(14.0208);
+        expectedAngles.add(1.1935);
+        expectedAngles.add(11.2222);
+        expectedAngles.add(2.3859);
+
+        List<Double> actualAngles = Trig.updateAngles(existingAngles, angle1, angle2, angle3, angle4);
+
+        assertEquals(expectedAngles, actualAngles);
     }
 
 }

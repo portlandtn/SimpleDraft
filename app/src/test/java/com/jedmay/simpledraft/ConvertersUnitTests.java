@@ -5,6 +5,7 @@ import com.jedmay.simpledraft.helper.Converters;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -214,5 +215,24 @@ public class ConvertersUnitTests {
         double actual = Converters.round(numberToRound, precision);
 
         assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void convertListOfDoubleToDoubleArray() {
+        List<Double> doubleList = new ArrayList<>(4);
+        doubleList.add(14.0208);
+        doubleList.add(1.1935);
+        doubleList.add(11.2222);
+        doubleList.add(2.3859);
+
+        double[] expected = new double[doubleList.size()];
+        expected[0] = 14.0208;
+        expected[1] = 1.1935;
+        expected[2] = 11.2222;
+        expected[3] = 2.3859;
+
+        double[] actual = Converters.listOfDoubleToDoubleArray(doubleList);
+
+        assertTrue(Arrays.equals(expected, actual));
     }
 }
