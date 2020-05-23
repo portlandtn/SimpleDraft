@@ -19,13 +19,13 @@ public class OutputState {
     @NonNull
     private String name;
 
-    private double angle1;
+    private Double angle1;
 
-    private double angle2;
+    private Double angle2;
 
-    private double angle3;
+    private Double angle3;
 
-    private double angle4;
+    private Double angle4;
 
 
     public String getName() {
@@ -44,35 +44,35 @@ public class OutputState {
         this.values = values;
     }
 
-    public double getAngle1() {
+    public Double getAngle1() {
         return angle1;
     }
 
-    public void setAngle1(double angle1) {
+    public void setAngle1(Double angle1) {
         this.angle1 = angle1;
     }
 
-    public double getAngle2() {
+    public Double getAngle2() {
         return angle2;
     }
 
-    public void setAngle2(double angle2) {
+    public void setAngle2(Double angle2) {
         this.angle2 = angle2;
     }
 
-    public double getAngle3() {
+    public Double getAngle3() {
         return angle3;
     }
 
-    public void setAngle3(double angle3) {
+    public void setAngle3(Double angle3) {
         this.angle3 = angle3;
     }
 
-    public double getAngle4() {
+    public Double getAngle4() {
         return angle4;
     }
 
-    public void setAngle4(double angle4) {
+    public void setAngle4(Double angle4) {
         this.angle4 = angle4;
     }
 }

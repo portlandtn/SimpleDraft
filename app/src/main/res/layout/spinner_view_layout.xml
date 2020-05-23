@@ -13,4 +13,5 @@
         android:textAlignment="textEnd"
         android:textColor="@color/colorText"
         android:textSize="18sp" />
+
 </LinearLayout>

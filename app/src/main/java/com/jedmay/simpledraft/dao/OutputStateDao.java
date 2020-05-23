@@ -21,6 +21,9 @@ public interface OutputStateDao {
     @Query("SELECT * FROM output_state where name =:stateName")
     OutputState getOutputStateFromName(String stateName);
 
+    @Query("SELECT angle1, angle2, angle3, angle4 FROM output_state where name=:stateName")
+    List<Double> getAnglesFromStateName(String stateName);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(OutputState outputState);
 

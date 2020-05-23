@@ -50,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     StringBuilder outputNumber;
 
-    List<Double> outputNumber1List, outputNumber2List;
-    Double[] angles;
+    List<Double> outputNumber1List, outputNumber2List, state1Angles, state2Angles;
 
     int activeWindow, activeAngle;
 
@@ -456,6 +455,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     outputNumber1List = db.outputStateDao().getOutputStateFromName(selected).getValues();
                     updateListView(outputListView1,outputNumber1List);
+                    state1Angles = db.outputStateDao().getAnglesFromStateName(selected);
+//                    updateAngleRadioButtons();
                 }
             }
 
@@ -481,6 +482,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     outputNumber2List = db.outputStateDao().getOutputStateFromName(selected).getValues();
                     updateListView(outputListView2,outputNumber2List);
+                    state2Angles = db.outputStateDao().getAnglesFromStateName(selected);
 
                 }
             }
@@ -549,7 +551,7 @@ public class MainActivity extends AppCompatActivity {
             stateArray[states.size()] = Constants.newSave;
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                    this, R.layout.spinner_item_layout, R.id.spinnerViewItem, stateArray
+                    this, R.layout.spinner_view_layout, R.id.spinnerViewItem, stateArray
             );
             adapter.setDropDownViewResource(R.layout.list_view_layout);
             output1Spinner.setAdapter(adapter);
