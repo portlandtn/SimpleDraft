@@ -1,12 +1,10 @@
 package com.jedmay.simpledraft;
 
-import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.Trig;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

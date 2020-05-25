@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -41,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     Spinner output1Spinner, output2Spinner;
     ListView outputListView1, outputListView2;
     Button calculateWeightButton, anglesButton, deleteButton, clearButton, backspaceButton, negativePositiveButton,
-    footToDecimalButton, decimalToFootButton,
-    riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
+            footToDecimalButton, decimalToFootButton,
+            riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
     Button saveState1Button, saveState2Button;
@@ -56,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
     StringBuilder outputNumber;
 
     List<Double> outputNumber1List, outputNumber2List, state1Angles, state2Angles;
+    double angle1, angle2, angle3, angle4;
 
-    int activeWindow, activeAngle;
+    int activeWindow, activeAngleNumber;
 
     boolean isDetailingMathMethod;
 
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         sampleDbData = new SampleDbData(getApplicationContext());
         sampleDbData.populateDbWithSampleData();
         activeWindow = 1;
-        activeAngle = 1;
+        activeAngleNumber = 1;
         isDetailingMathMethod = false;
         outputNumber = new StringBuilder();
 
@@ -84,8 +84,121 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private double getValueForActiveWindow(double activeWindow) {
+        double value;
+        try {
+            if (activeWindow == 1) {
+                value = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber1List);
+            } else {
+                value = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber2List);
+            }
+        } catch (NullPointerException ex) {
+            Log.d("riseToBase", Objects.requireNonNull(ex.getLocalizedMessage()));
+            value = 0;
+        }
+        return value;
+    }
+
+    private void saveNewState(List<Double> numberList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setTitle("Save New State");
+
+        final EditText input = new EditText(getApplicationContext());
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        builder.setView(input);
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            OutputState newState1 = new OutputState();
+            newState1.setName(input.getText().toString());
+            newState1.setValues(numberList);
+            newState1.setAngle1(state1Angles.get(0));
+            newState1.setAngle2(state1Angles.get(1));
+            newState1.setAngle3(state1Angles.get(2));
+            newState1.setAngle4(state1Angles.get(3));
+            db.outputStateDao().insert(newState1);
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private static void deleteOutputState(OutputState state, SimpleDraftDbBadCompany db, Context context) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setMessage("Do you want to delete this entry?");
+        alertDialogBuilder.setPositiveButton("Delete",
+                (arg0, arg1) -> db.outputStateDao().delete(state));
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            //do nothing
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+
+
+    // region Update Controls
+    private void updateListView(ListView listView, List<Double> values) {
+        String[] listStringArray = new String[values.size()];
+
+        for (int i = 0; i < values.size(); i++) {
+            listStringArray[i] = values.get(i).toString();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_view_layout, R.id.listViewItem, listStringArray);
+
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        outputNumber.setLength(0);
+        outputNumberTextView.setText("");
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void updateRadioButtonValues(List<Double> angles) {
+
+        String[] angleStringArray = new String[angles.size()];
+
+        for (int i = 0; i < angles.size(); i++) {
+            angleStringArray[i] = String.format("%.4f", angles.get(i));
+        }
+        angle1RadioButton.setText(angleStringArray[0]);
+        angle2RadioButton.setText(angleStringArray[1]);
+        angle3RadioButton.setText(angleStringArray[2]);
+        angle4RadioButton.setText(angleStringArray[3]);
+
+    }
+
+    private void updateListViewWithValueFromTrig(double value) {
+        if (outputNumber.toString().isEmpty()) {
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List.set(outputNumber1List.size() - 1, value);
+                    break;
+                case 2:
+                    outputNumber2List.set(outputNumber2List.size() - 1, value);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List.add(value);
+                    break;
+                case 2:
+                    outputNumber2List.add(value);
+                    break;
+                default:
+                    break;
+            }
+        }
+        outputNumber.setLength(0);
+        updateListView(outputListView1, outputNumber1List);
+        updateListView(outputListView2, outputNumber2List);
+    }
+
     private void setSlopeText() {
-        switch (activeAngle) {
+        switch (activeAngleNumber) {
             case 1:
                 setRoofSlopeText(Double.parseDouble(angle1RadioButton.getText().toString()));
                 break;
@@ -105,9 +218,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setRoofSlopeText(Double angle) {
+        double roofSlope = Trig.getRoofSlopeFromAngle(angle);
+        currentRoofSlope.setText(String.valueOf(Converters.round(roofSlope, 4)));
+    }
+
+    // endregion
+
+    // region OnClickListeners
+
     private void setOnClickListeners() {
 
-        Button[] numberButtons = new Button[]{zeroButton,oneButton,twoButton,threeButton,fourButton,fiveButton,sixButton,sevenButton,eightButton,nineButton};
+        Button[] numberButtons = new Button[]{zeroButton, oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton};
         setNumberButtonOnClickListener(numberButtons);
 
         setDecimalButtonOnClickListener();
@@ -120,6 +242,94 @@ public class MainActivity extends AppCompatActivity {
         setRadioButtonOnClickListeners();
         setSwitchOnClickListeners();
 
+    }
+
+    private void setNumberButtonOnClickListener(Button[] numberButtons) {
+
+        for (int i = 0; i < numberButtons.length; i++) {
+            final int finalI = i;
+            numberButtons[i].setOnClickListener(v -> {
+                if (outputNumber.length() == 0) {
+                    outputNumber = new StringBuilder();
+                }
+                outputNumber.append(finalI);
+                outputNumberTextView.setText(outputNumber);
+            });
+        }
+    }
+
+    private void setDecimalButtonOnClickListener() {
+        decimalButton.setOnClickListener(v -> {
+            if (outputNumber.length() == 0) {
+                outputNumber = new StringBuilder();
+                outputNumber.append("0.");
+            } else if (outputNumber.toString().contains(".")) {
+                Log.d("decimalHitTwice","Decimal button was hit twice");
+                // do nothing, the decimal is already there, so button press should be ignored
+            } else {
+                outputNumber.append(".");
+                outputNumberTextView.setText(outputNumber.toString());
+            }
+        });
+    }
+
+    private void setOutputSpinnerOnClickListeners() {
+
+        output1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selected = output1Spinner.getSelectedItem().toString();
+
+                if (selected.equals(Constants.newSave)) {
+                    saveNewState(outputNumber1List);
+                } else {
+                    OutputState state = db.outputStateDao().getOutputStateFromName(selected);
+                    outputNumber1List = state.getValues();
+                    updateListView(outputListView1, outputNumber1List);
+                    state1Angles = Trig.updateAngles(state1Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
+                    updateRadioButtonValues(state1Angles);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // do nothing
+            }
+        });
+
+        output1Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
+            deleteOutputState(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
+            return false;
+        });
+
+        output2Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selected = output2Spinner.getSelectedItem().toString();
+
+                if (selected.equals(Constants.newSave)) {
+                    saveNewState(outputNumber2List);
+                } else {
+                    OutputState state = db.outputStateDao().getOutputStateFromName(selected);
+                    outputNumber2List = state.getValues();
+                    updateListView(outputListView2, outputNumber2List);
+                    state2Angles = Trig.updateAngles(state2Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
+                    updateRadioButtonValues(state2Angles);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //do nothing
+            }
+        });
+
+        output2Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
+            deleteOutputState(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
+            return false;
+        });
     }
 
     private void setOutputSpinnerSaveButtonOnClickListeners() {
@@ -140,8 +350,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (newSave) {
                 db.outputStateDao().insert(state);
-            }
-            else {
+            } else {
                 db.outputStateDao().update(state);
             }
         });
@@ -167,202 +376,6 @@ public class MainActivity extends AppCompatActivity {
             else {
                 db.outputStateDao().update(state);
             }
-        });
-    }
-
-    private void setRoofSlopeText(Double angle) {
-        double roofSlope = Trig.getRoofSlopeFromAngle(angle);
-        currentRoofSlope.setText(String.valueOf(Converters.round(roofSlope, 4)));
-    }
-
-    private void setRadioButtonOnClickListeners() {
-
-        angle1RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle1RadioButton.getText().toString()));
-            activeAngle = 1;
-        });
-        angle2RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle2RadioButton.getText().toString()));
-            activeAngle = 2;
-        });
-        angle3RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle3RadioButton.getText().toString()));
-            activeAngle = 3;
-        });
-        angle4RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle4RadioButton.getText().toString()));
-            activeAngle = 4;
-        });
-
-    }
-
-    private void setSwitchOnClickListeners() {
-        mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            isDetailingMathMethod = mathMethod.isChecked();
-            mathMethod.setText(mathMethod.isChecked() ? "Detailing" : "Standard");
-        });
-
-        outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
-            if (activeWindow == 1) {
-                outputWindowSwitch.setText(R.string.window_1);
-                outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
-                outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
-            } else {
-                outputWindowSwitch.setText(R.string.window_2);
-                outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
-                outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
-            }
-        });
-    }
-
-    private void setDecimalButtonOnClickListener() {
-        decimalButton.setOnClickListener(v -> {
-            if(outputNumber.length() == 0) {
-                outputNumber = new StringBuilder();
-                outputNumber.append("0.");
-            } else if(outputNumber.toString().contains(".")) {
-                // do nothing, the decimal is already there, so button press should be ignored
-            } else {
-                outputNumber.append(".");
-                outputNumberTextView.setText(outputNumber.toString());
-            }
-        });
-    }
-
-    private void setGeneralButtonOnClickListeners() {
-        deleteButton.setOnClickListener(v -> {
-            switch(activeWindow) {
-                case 1:
-                    if (outputNumber1List.size() > 0) {
-                        outputNumber1List.remove(outputNumber1List.size() - 1);
-                        updateListView(outputListView1, outputNumber1List);
-                    }
-                    break;
-                case 2:
-                    if (outputNumber2List.size() > 0) {
-                        outputNumber2List.remove(outputNumber2List.size() - 1);
-                        updateListView(outputListView2, outputNumber2List);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        clearButton.setOnClickListener(v -> {
-
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Are you sure you want to clear the entire screen for window " + activeWindow + "?");
-            alertDialogBuilder.setPositiveButton("Delete", (dialog, which) -> {
-                switch (activeWindow) {
-                    case 1:
-                        outputNumber1List.clear();
-                        updateListView(outputListView1,outputNumber1List);
-                        break;
-                    case 2:
-                        outputNumber2List.clear();
-                        updateListView(outputListView2,outputNumber2List);
-                        break;
-                    default:
-                        break;
-                }
-            });
-            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-                // do nothing
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        });
-
-        backspaceButton.setOnClickListener(v -> {
-            if (outputNumber.length() > 0) {
-                outputNumber.deleteCharAt(outputNumber.length() - 1);
-            }
-            outputNumberTextView.setText(outputNumber.toString());
-        });
-
-        enterButton.setOnClickListener(v -> {
-
-            switch (activeWindow) {
-                case 1:
-                    outputNumber1List = DataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber1List);
-                    updateListView(outputListView1, outputNumber1List);
-                    break;
-                case 2:
-                    outputNumber2List = DataProvider.getValueFromEnterKeyPress(outputNumber.toString(),outputNumber2List);
-                    updateListView(outputListView2,outputNumber2List);
-                    break;
-                default:
-                    break;
-            }
-            outputNumber.setLength(0);
-            outputNumberTextView.setText(outputNumber.toString());
-        });
-
-        negativePositiveButton.setOnClickListener(v -> {
-            double changeUp;
-            switch(activeWindow) {
-                case 1:
-                    changeUp = outputNumber1List.get(outputNumber1List.size() - 1);
-                    changeUp *= -1;
-                    outputNumber1List.set(outputNumber1List.size() -1,changeUp);
-                    updateListView(outputListView1, outputNumber1List);
-                    break;
-                case 2:
-                    changeUp = outputNumber2List.get(outputNumber2List.size() - 1);
-                    changeUp *= -1;
-                    outputNumber2List.set(outputNumber2List.size() -1,changeUp);
-                    updateListView(outputListView2, outputNumber2List);
-                    break;
-                default:
-                    break;
-            }
-        });
-    }
-
-
-    private void setActivityButtonOnClickListeners() {
-        calculateWeightButton.setOnClickListener(v -> {
-            //TODO Must Develop fragment to display weight input
-        });
-
-        anglesButton.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
-
-            Bundle extras = new Bundle();
-            extras.putDoubleArray("state1Angles", Converters.listOfDoubleToDoubleArray(state1Angles));
-            extras.putDoubleArray("state2Angles", Converters.listOfDoubleToDoubleArray(state2Angles));
-
-            i.putExtras(extras);
-            startActivity(i);
-
-        });
-    }
-
-    private void setTrigonometryButtonOnClickListeners() {
-        riseToBaseButton.setOnClickListener(v -> {
-
-        });
-
-        riseToSlopeButton.setOnClickListener(v -> {
-
-        });
-
-        baseToRiseButton.setOnClickListener(v -> {
-
-        });
-
-        baseToSlopeButton.setOnClickListener(v -> {
-
-        });
-
-        slopeToBaseButton.setOnClickListener(v -> {
-
-        });
-
-        slopeToRiseButton.setOnClickListener(v -> {
-
         });
     }
 
@@ -502,162 +515,268 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void saveNewState(OutputState newState, int fromWindow) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        builder.setTitle("Save New State");
+    private void setTrigonometryButtonOnClickListeners() {
+        riseToBaseButton.setOnClickListener(v -> {
+            double value;
+            value = getValueForActiveWindow(activeWindow);
 
-        final EditText input = new EditText(getApplicationContext());
-
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        builder.setView(input);
-
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                OutputState newState = new OutputState();
-                newState.setName(input.getText().toString());
-                newState.setValues(outputNumber1List); //TODO fix me later (should be dynamic, not just output1)
-                newState.setAngle1(state1Angles.get(0));
-                newState.setAngle2(state1Angles.get(1));
-                newState.setAngle3(state1Angles.get(2));
-                newState.setAngle4(state1Angles.get(3));
-                db.outputStateDao().insert(newState);
+            if (isDetailingMathMethod) {
+                value = Converters.footDimensionToDecimalDimension(value);
             }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+
+            Trig.riseToBase(value, activeAngleNumber);
+
+            if (isDetailingMathMethod) {
+                value = Converters.decimalDimensionToFootDimension(value);
             }
+            updateListViewWithValueFromTrig(value);
+
         });
 
-        builder.show();
+        riseToSlopeButton.setOnClickListener(v -> {
+            double value;
+            value = getValueForActiveWindow(activeWindow);
+
+            if (isDetailingMathMethod) {
+                value = Converters.footDimensionToDecimalDimension(value);
+            }
+
+            Trig.riseToSlope(value, activeAngleNumber);
+
+            if (isDetailingMathMethod) {
+                value = Converters.decimalDimensionToFootDimension(value);
+            }
+            updateListViewWithValueFromTrig(value);
+        });
+
+        baseToRiseButton.setOnClickListener(v -> {
+            double value;
+            value = getValueForActiveWindow(activeWindow);
+
+            if (isDetailingMathMethod) {
+                value = Converters.footDimensionToDecimalDimension(value);
+            }
+
+            Trig.baseToRise(value, activeAngleNumber);
+
+            if (isDetailingMathMethod) {
+                value = Converters.decimalDimensionToFootDimension(value);
+            }
+            updateListViewWithValueFromTrig(value);
+        });
+
+        baseToSlopeButton.setOnClickListener(v -> {
+            double value;
+            value = getValueForActiveWindow(activeWindow);
+
+            if (isDetailingMathMethod) {
+                value = Converters.footDimensionToDecimalDimension(value);
+            }
+
+            Trig.baseToSlope(value, activeAngleNumber);
+
+            if (isDetailingMathMethod) {
+                value = Converters.decimalDimensionToFootDimension(value);
+            }
+            updateListViewWithValueFromTrig(value);
+        });
+
+        slopeToBaseButton.setOnClickListener(v -> {
+            double value;
+            value = getValueForActiveWindow(activeWindow);
+
+            if (isDetailingMathMethod) {
+                value = Converters.footDimensionToDecimalDimension(value);
+            }
+
+            Trig.slopeToBase(value, activeAngleNumber);
+
+            if (isDetailingMathMethod) {
+                value = Converters.decimalDimensionToFootDimension(value);
+            }
+            updateListViewWithValueFromTrig(value);
+        });
+
+        slopeToRiseButton.setOnClickListener(v -> {
+            double value;
+            value = getValueForActiveWindow(activeWindow);
+
+            if (isDetailingMathMethod) {
+                value = Converters.footDimensionToDecimalDimension(value);
+            }
+
+            Trig.slopeToRise(value, activeAngleNumber);
+
+            if (isDetailingMathMethod) {
+                value = Converters.decimalDimensionToFootDimension(value);
+            }
+            updateListViewWithValueFromTrig(value);
+        });
+
+
     }
 
-    private void setOutputSpinnerOnClickListeners() {
+    private void setActivityButtonOnClickListeners() {
+        calculateWeightButton.setOnClickListener(v -> {
+            //TODO Must Develop fragment to display weight input
+        });
 
-        output1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        anglesButton.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
 
-                String selected = output1Spinner.getSelectedItem().toString();
+            Bundle extras = new Bundle();
+            extras.putDoubleArray("state1Angles", Converters.listOfDoubleToDoubleArray(state1Angles));
+            extras.putDoubleArray("state2Angles", Converters.listOfDoubleToDoubleArray(state2Angles));
 
-                if(selected.equals(Constants.newSave)){
-                    outputNumber1List.clear();
+            i.putExtras(extras);
+            startActivity(i);
 
-                } else {
-                    OutputState state = db.outputStateDao().getOutputStateFromName(selected);
-                    outputNumber1List = state.getValues();
-                    updateListView(outputListView1,outputNumber1List);
-                    state1Angles = Trig.updateAngles(state1Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
-                    updateRadioButtonValues(state1Angles);
+        });
+    }
+
+    private void setGeneralButtonOnClickListeners() {
+        deleteButton.setOnClickListener(v -> {
+            switch (activeWindow) {
+                case 1:
+                    if (outputNumber1List.size() > 0) {
+                        outputNumber1List.remove(outputNumber1List.size() - 1);
+                        updateListView(outputListView1, outputNumber1List);
+                    }
+                    break;
+                case 2:
+                    if (outputNumber2List.size() > 0) {
+                        outputNumber2List.remove(outputNumber2List.size() - 1);
+                        updateListView(outputListView2, outputNumber2List);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        clearButton.setOnClickListener(v -> {
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Are you sure you want to clear the entire screen for window " + activeWindow + "?");
+            alertDialogBuilder.setPositiveButton("Delete", (dialog, which) -> {
+                switch (activeWindow) {
+                    case 1:
+                        outputNumber1List.clear();
+                        updateListView(outputListView1, outputNumber1List);
+                        break;
+                    case 2:
+                        outputNumber2List.clear();
+                        updateListView(outputListView2, outputNumber2List);
+                        break;
+                    default:
+                        break;
                 }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // do nothing
-            }
-        });
-
-        output1Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            deleteOutputState(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
-            return false;
-        });
-
-        output2Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                String selected = output2Spinner.getSelectedItem().toString();
-
-                if(selected.equals(Constants.newSave)){
-                    //TODO - get values currently in the output window and save them to the db - will need a fragment
-                } else {
-                    OutputState state = db.outputStateDao().getOutputStateFromName(selected);
-                    outputNumber2List = state.getValues();
-                    updateListView(outputListView2,outputNumber2List);
-                    state2Angles = Trig.updateAngles(state2Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
-                    updateRadioButtonValues(state2Angles);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //do nothing
-            }
-        });
-
-        output2Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            deleteOutputState(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
-            return false;
-        });
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void updateRadioButtonValues(List<Double> angles) {
-
-        String[] angleStringArray = new String[angles.size()];
-
-        for(int i = 0; i < angles.size(); i++) {
-            angleStringArray[0] = String.format("%.4f", angles.get(i));
-        }
-        angle1RadioButton.setText(angleStringArray[0]);
-        angle2RadioButton.setText(angleStringArray[1]);
-        angle3RadioButton.setText(angleStringArray[2]);
-        angle4RadioButton.setText(angleStringArray[3]);
-
-    }
-
-
-    private static void deleteOutputState(OutputState state, SimpleDraftDbBadCompany db, Context context) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage("Do you want to delete this entry?");
-        alertDialogBuilder.setPositiveButton("Delete",
-                (arg0, arg1) -> db.outputStateDao().delete(state));
-        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-            //do nothing
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private void updateListView(ListView listView, List<Double> values) {
-        String[] listStringArray = new String[values.size()];
-
-        for(int i = 0; i < values.size(); i++) {
-            listStringArray[i] = values.get(i).toString();
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.list_view_layout, R.id.listViewItem, listStringArray);
-
-        listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
-    private void setNumberButtonOnClickListener(Button[] numberButtons) {
-
-        for(int i = 0; i < numberButtons.length; i++){
-            final int finalI = i;
-            numberButtons[i].setOnClickListener(v -> {
-                if (outputNumber.length() == 0) {
-                    outputNumber = new StringBuilder();
-                }
-                outputNumber.append(finalI);
-                outputNumberTextView.setText(outputNumber);
             });
-        }
+            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+                // do nothing
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        });
+
+        backspaceButton.setOnClickListener(v -> {
+            if (outputNumber.length() > 0) {
+                outputNumber.deleteCharAt(outputNumber.length() - 1);
+            }
+            outputNumberTextView.setText(outputNumber.toString());
+        });
+
+        enterButton.setOnClickListener(v -> {
+
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List = DataProvider.getValueFromEnterKeyPress(outputNumber.toString(), outputNumber1List);
+                    updateListView(outputListView1, outputNumber1List);
+                    break;
+                case 2:
+                    outputNumber2List = DataProvider.getValueFromEnterKeyPress(outputNumber.toString(), outputNumber2List);
+                    updateListView(outputListView2, outputNumber2List);
+                    break;
+                default:
+                    break;
+            }
+            outputNumber.setLength(0);
+            outputNumberTextView.setText(outputNumber.toString());
+        });
+
+        negativePositiveButton.setOnClickListener(v -> {
+            double changeUp;
+            switch (activeWindow) {
+                case 1:
+                    changeUp = outputNumber1List.get(outputNumber1List.size() - 1);
+                    changeUp *= -1;
+                    outputNumber1List.set(outputNumber1List.size() - 1, changeUp);
+                    updateListView(outputListView1, outputNumber1List);
+                    break;
+                case 2:
+                    changeUp = outputNumber2List.get(outputNumber2List.size() - 1);
+                    changeUp *= -1;
+                    outputNumber2List.set(outputNumber2List.size() - 1, changeUp);
+                    updateListView(outputListView2, outputNumber2List);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
+    private void setRadioButtonOnClickListeners() {
+
+        angle1RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(Double.parseDouble(angle1RadioButton.getText().toString()));
+            activeAngleNumber = 1;
+        });
+        angle2RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(Double.parseDouble(angle2RadioButton.getText().toString()));
+            activeAngleNumber = 2;
+        });
+        angle3RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(Double.parseDouble(angle3RadioButton.getText().toString()));
+            activeAngleNumber = 3;
+        });
+        angle4RadioButton.setOnClickListener(v -> {
+            setRoofSlopeText(Double.parseDouble(angle4RadioButton.getText().toString()));
+            activeAngleNumber = 4;
+        });
 
     }
 
+    private void setSwitchOnClickListeners() {
+        mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isDetailingMathMethod = mathMethod.isChecked();
+            mathMethod.setText(mathMethod.isChecked() ? "Detailing" : "Standard");
+        });
+
+        outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
+            if (activeWindow == 1) {
+                outputWindowSwitch.setText(R.string.window_1);
+                outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
+                outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+            } else {
+                outputWindowSwitch.setText(R.string.window_2);
+                outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
+                outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+            }
+        });
+    }
+
+    // endregion
+
+    // region Actions For On Create
     private void populateOutputSpinners() {
         try {
             List<OutputState> states = db.outputStateDao().getAllOutputStates();
             String[] stateArray = new String[states.size() + 1];
 
-                for(int i = 0; i < states.size(); i++) {
-                    stateArray[i] = states.get(i).getName();
-                }
+            for(int i = 0; i < states.size(); i++) {
+                stateArray[i] = states.get(i).getName();
+            }
 
             stateArray[states.size()] = Constants.newSave;
 
@@ -674,6 +793,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // endregion
+
+    // region findAllViews
     private void findAllViews() {
         // Radio buttons
         angle1RadioButton = findViewById(R.id.angle1RadioButton);
@@ -742,5 +864,9 @@ public class MainActivity extends AppCompatActivity {
         currentRoofSlope = findViewById(R.id.currentRoofSlopeTextView);
 
     }
+
+    // endregion
+
+
 
 }
