@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveNewState(List<Double> numberList, List<Double> stateAngles) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Save New State");
 
         final EditText input = new EditText(getApplicationContext());
@@ -111,16 +111,39 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setPositiveButton("Save", (dialog, which) -> {
             OutputState newState = new OutputState();
-            newState.setName(input.getText().toString());
+            String name = input.getText().toString();
+            newState.setName(name);
             newState.setValues(numberList);
             newState.setAngle1(stateAngles.get(0));
             newState.setAngle2(stateAngles.get(1));
             newState.setAngle3(stateAngles.get(2));
             newState.setAngle4(stateAngles.get(3));
             db.outputStateDao().insert(newState);
+            populateOutputSpinners();
+
+
+            switch (activeWindow) {
+                case 1:
+                    for(int i = 0; i < output1Spinner.getAdapter().getCount(); i++) {
+                        String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
+                        if(output1Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
+                            output1Spinner.setSelection(i);
+                        }
+                    }
+                    break;
+                case 2:
+                    for(int i = 0; i < output2Spinner.getAdapter().getCount(); i++) {
+                        String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
+                        if(output2Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
+                            output2Spinner.setSelection(i);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
 
