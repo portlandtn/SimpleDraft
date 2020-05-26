@@ -121,10 +121,6 @@ public class TrigUnitTests {
 
     @Test
     public void updateAngles() {
-        Double angle1 = 14.0208;
-        Double angle2 = 1.1935;
-        Double angle3 = 11.2222;
-        Double angle4 = 2.3859;
 
         List<Double> existingAngles = new ArrayList<>();
         existingAngles.add(2.2208);
@@ -132,23 +128,30 @@ public class TrigUnitTests {
         existingAngles.add(1.2342);
         existingAngles.add(3.8234);
 
+        List<Double> newAngles = new ArrayList<>();
+        newAngles.add(14.0208);
+        newAngles.add(1.1935);
+        newAngles.add(11.2222);
+        newAngles.add(2.3859);
+
         List<Double> expectedAngles = new ArrayList<>();
         expectedAngles.add(14.0208);
         expectedAngles.add(1.1935);
         expectedAngles.add(11.2222);
         expectedAngles.add(2.3859);
 
-        List<Double> actualAngles = Trig.updateAngles(existingAngles, angle1, angle2, angle3, angle4);
+        List<Double> actualAngles = Trig.updateAngles(existingAngles, newAngles);
 
         assertEquals(expectedAngles, actualAngles);
     }
 
     @Test
     public void updateAnglesWhenAngleListIsNull() {
-        Double angle1 = 14.0208;
-        Double angle2 = 1.1935;
-        Double angle3 = 11.2222;
-        Double angle4 = 2.3859;
+        List<Double> newAngles = new ArrayList<>();
+        newAngles.add(14.0208);
+        newAngles.add(1.1935);
+        newAngles.add(11.2222);
+        newAngles.add(2.3859);
 
         List<Double> existingAngles = new ArrayList<>(4);
 
@@ -158,7 +161,7 @@ public class TrigUnitTests {
         expectedAngles.add(11.2222);
         expectedAngles.add(2.3859);
 
-        List<Double> actualAngles = Trig.updateAngles(existingAngles, angle1, angle2, angle3, angle4);
+        List<Double> actualAngles = Trig.updateAngles(existingAngles, newAngles);
 
         assertEquals(expectedAngles, actualAngles);
     }

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -23,6 +22,7 @@ import android.widget.TextView;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
 import com.jedmay.simpledraft.helper.Arithmetic;
+import com.jedmay.simpledraft.helper.ArithmeticFunction;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.SampleDbData;
@@ -30,6 +30,8 @@ import com.jedmay.simpledraft.helper.Trig;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.helper.DataProvider;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     StringBuilder outputNumber;
 
     List<Double> outputNumber1List, outputNumber2List, state1Angles, state2Angles;
-    double angle1, angle2, angle3, angle4;
 
     int activeWindow, activeAngleNumber;
 
@@ -93,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
                 value = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber2List);
             }
         } catch (NullPointerException ex) {
-            Log.d("riseToBase", Objects.requireNonNull(ex.getLocalizedMessage()));
+            Log.d("trigValueForWindow", Objects.requireNonNull(ex.getLocalizedMessage()));
             value = 0;
         }
         return value;
     }
 
-    private void saveNewState(List<Double> numberList) {
+    private void saveNewState(List<Double> numberList, List<Double> stateAngles) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setTitle("Save New State");
 
@@ -109,32 +110,87 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(input);
 
         builder.setPositiveButton("Save", (dialog, which) -> {
-            OutputState newState1 = new OutputState();
-            newState1.setName(input.getText().toString());
-            newState1.setValues(numberList);
-            newState1.setAngle1(state1Angles.get(0));
-            newState1.setAngle2(state1Angles.get(1));
-            newState1.setAngle3(state1Angles.get(2));
-            newState1.setAngle4(state1Angles.get(3));
-            db.outputStateDao().insert(newState1);
+            OutputState newState = new OutputState();
+            newState.setName(input.getText().toString());
+            newState.setValues(numberList);
+            newState.setAngle1(stateAngles.get(0));
+            newState.setAngle2(stateAngles.get(1));
+            newState.setAngle3(stateAngles.get(2));
+            newState.setAngle4(stateAngles.get(3));
+            db.outputStateDao().insert(newState);
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         builder.show();
     }
 
-    private static void deleteOutputState(OutputState state, SimpleDraftDbBadCompany db, Context context) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setMessage("Do you want to delete this entry?");
-        alertDialogBuilder.setPositiveButton("Delete",
-                (arg0, arg1) -> db.outputStateDao().delete(state));
-        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-            //do nothing
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
+    private void doMath(ArithmeticFunction function) {
+        List<Double> mathValues;
+        switch (activeWindow) {
+            case 1:
+                mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
+                outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1)); // will be removed irregardless
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 2) {
+                    // if outputNumber was not used in calculation, then two numbers should be removed from the stack.
+                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
+                }
+                try {
+                    switch (function) {
+                        case ADD:
+                            outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        case SUBTRACT:
+                            outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        case MULTIPLY:
+                            outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        case DIVIDE:
+                            outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (NullPointerException ex) {
+                    Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                }
+                break;
+            case 2:
+                mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber2List);
+                outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1)); // will be removed irregardless
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 2) {
+                    // if outputNumber was not used in calculation, then two numbers should be removed from the stack.
+                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
+                }
+                try {
+                    switch (function) {
+                        case ADD:
+                            outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        case SUBTRACT:
+                            outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        case MULTIPLY:
+                            outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        case DIVIDE:
+                            outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (NullPointerException ex) {
+                    Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                }
+                break;
+            default:
+                break;
+        }
+        outputNumber.setLength(0);
+        updateListView(outputListView1, outputNumber1List);
+        updateListView(outputListView2, outputNumber2List);
 
+    }
 
 
     // region Update Controls
@@ -282,12 +338,17 @@ public class MainActivity extends AppCompatActivity {
                 String selected = output1Spinner.getSelectedItem().toString();
 
                 if (selected.equals(Constants.newSave)) {
-                    saveNewState(outputNumber1List);
+                    saveNewState(outputNumber1List, state1Angles);
                 } else {
                     OutputState state = db.outputStateDao().getOutputStateFromName(selected);
                     outputNumber1List = state.getValues();
                     updateListView(outputListView1, outputNumber1List);
-                    state1Angles = Trig.updateAngles(state1Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
+                    List<Double> newAngles = new ArrayList<>();
+                    newAngles.add(state.getAngle1());
+                    newAngles.add(state.getAngle2());
+                    newAngles.add(state.getAngle3());
+                    newAngles.add(state.getAngle4());
+                    state1Angles = Trig.updateAngles(state1Angles, newAngles);
                     updateRadioButtonValues(state1Angles);
                 }
             }
@@ -298,11 +359,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        output1Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            deleteOutputState(db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString()), db, this);
-            return false;
-        });
-
         output2Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -310,12 +366,17 @@ public class MainActivity extends AppCompatActivity {
                 String selected = output2Spinner.getSelectedItem().toString();
 
                 if (selected.equals(Constants.newSave)) {
-                    saveNewState(outputNumber2List);
+                    saveNewState(outputNumber2List, state2Angles);
                 } else {
                     OutputState state = db.outputStateDao().getOutputStateFromName(selected);
                     outputNumber2List = state.getValues();
                     updateListView(outputListView2, outputNumber2List);
-                    state2Angles = Trig.updateAngles(state2Angles, state.getAngle1(), state.getAngle2(), state.getAngle3(), state.getAngle4());
+                    List<Double> newAngles = new ArrayList<>();
+                    newAngles.add(state.getAngle1());
+                    newAngles.add(state.getAngle2());
+                    newAngles.add(state.getAngle3());
+                    newAngles.add(state.getAngle4());
+                    state2Angles = Trig.updateAngles(state2Angles, newAngles);
                     updateRadioButtonValues(state2Angles);
                 }
             }
@@ -324,11 +385,6 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 //do nothing
             }
-        });
-
-        output2Spinner.setOnItemLongClickListener((parent, view, position, id) -> {
-            deleteOutputState(db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString()), db, this);
-            return false;
         });
     }
 
@@ -380,139 +436,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setArithmeticButtonOnClickListeners() {
-        minusButton.setOnClickListener(v -> {
-            List<Double> mathValues;
-            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
-
-            switch (activeWindow) {
-                case 1:
-                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView1, outputNumber1List);
-                    break;
-                case 2:
-                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView2, outputNumber2List);
-                    break;
-                default:
-                    break;
-            }
-        });
-        plusButton.setOnClickListener(v -> {
-            List<Double> mathValues;
-            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
-
-            switch (activeWindow) {
-                case 1:
-                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView1, outputNumber1List);
-                    break;
-                case 2:
-                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView2, outputNumber2List);
-                    break;
-                default:
-                    break;
-            }
-
-        });
-        divideButton.setOnClickListener(v -> {
-            List<Double> mathValues;
-            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
-
-            switch (activeWindow) {
-                case 1:
-                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView1, outputNumber1List);
-                    break;
-                case 2:
-                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView2, outputNumber2List);
-                    break;
-                default:
-                    break;
-            }
-        });
-        multiplyButton.setOnClickListener(v -> {
-            List<Double> mathValues;
-            mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
-
-            switch (activeWindow) {
-                case 1:
-                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView1, outputNumber1List);
-                    break;
-                case 2:
-                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
-                    try {
-                        if (mathValues != null) {
-                            outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
-                        }
-                    } catch (NullPointerException ex) {
-                        Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
-                    }
-                    outputNumber.setLength(0);
-                    updateListView(outputListView2, outputNumber2List);
-                    break;
-                default:
-                    break;
-            }
-        });
+        minusButton.setOnClickListener(v -> doMath(ArithmeticFunction.SUBTRACT));
+        plusButton.setOnClickListener(v -> doMath(ArithmeticFunction.ADD));
+        divideButton.setOnClickListener(v -> doMath(ArithmeticFunction.DIVIDE));
+        multiplyButton.setOnClickListener(v -> doMath(ArithmeticFunction.MULTIPLY));
     }
 
     private void setTrigonometryButtonOnClickListeners() {
@@ -755,13 +682,31 @@ public class MainActivity extends AppCompatActivity {
         outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
             if (activeWindow == 1) {
+                String currentStateName = output1Spinner.getSelectedItem().toString();
                 outputWindowSwitch.setText(R.string.window_1);
                 outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
                 outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+                OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
+                List<Double> newAngles = new ArrayList<>();
+                newAngles.add(state.getAngle1());
+                newAngles.add(state.getAngle2());
+                newAngles.add(state.getAngle3());
+                newAngles.add(state.getAngle4());
+                state1Angles = Trig.updateAngles(state1Angles, newAngles);
+                updateRadioButtonValues(state1Angles);
             } else {
+                String currentStateName = output1Spinner.getSelectedItem().toString();
                 outputWindowSwitch.setText(R.string.window_2);
                 outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
                 outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+                OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
+                List<Double> newAngles = new ArrayList<>();
+                newAngles.add(state.getAngle1());
+                newAngles.add(state.getAngle2());
+                newAngles.add(state.getAngle3());
+                newAngles.add(state.getAngle4());
+                state2Angles = Trig.updateAngles(state2Angles, newAngles);
+                updateRadioButtonValues(state2Angles);
             }
         });
     }
@@ -866,7 +811,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // endregion
-
-
 
 }

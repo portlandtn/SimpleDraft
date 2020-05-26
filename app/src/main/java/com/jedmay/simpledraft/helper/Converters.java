@@ -1,9 +1,12 @@
 package com.jedmay.simpledraft.helper;
 
+import android.util.Log;
+
 import androidx.room.TypeConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Converters {
 
@@ -32,8 +35,13 @@ public class Converters {
         }
         String[] arrayValues = values.split(",");
         List<Double> valuesDoubleList = new ArrayList<>();
-        for (String number : arrayValues) {
-            valuesDoubleList.add(Double.parseDouble(number));
+        try {
+            for (String number : arrayValues) {
+                valuesDoubleList.add(Double.parseDouble(number));
+            }
+        } catch (NumberFormatException ex) {
+            Log.d("stringToListDouble", Objects.requireNonNull(ex.getLocalizedMessage()));
+
         }
         return valuesDoubleList;
     }

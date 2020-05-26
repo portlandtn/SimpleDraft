@@ -100,6 +100,9 @@ public class DataProvider {
 
         builder.show();
         return state;
+    }
 
+    public static int getNumberOfValuesToRemoveFromList(String outputNumber) {
+        return outputNumber.isEmpty() ? 2 : 1;
     }
 }

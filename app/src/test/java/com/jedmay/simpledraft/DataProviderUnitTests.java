@@ -281,5 +281,26 @@ public class DataProviderUnitTests {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void getNumberOfValuesToRemoveFromListShouldReturn1() {
+        String outputNumber = "11.0204";
+
+        int expected = 1;
+
+        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getNumberOfValuesToRemoveFromListShouldReturn2() {
+        String outputNumber = "";
+
+        int expected = 2;
+
+        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber);
+
+        assertEquals(expected, actual);
+    }
 
 }

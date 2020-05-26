@@ -36,20 +36,20 @@ public class Trig {
         return (baseToRise(baseDimensionOn12, angle)) * 12;
     }
 
-    public static List<Double> updateAngles(List<Double> angles, Double angle1, Double angle2, Double angle3, Double angle4) {
-        if (angles == null || angles.size() == 0) {
-            angles = new ArrayList<>(4);
-            angles.add(angle1);
-            angles.add(angle2);
-            angles.add(angle3);
-            angles.add(angle4);
+    public static List<Double> updateAngles(List<Double> originalAngles, List<Double> newAngles) {
+        if (originalAngles == null || originalAngles.size() == 0) {
+            originalAngles = new ArrayList<>(4);
+            originalAngles.add(newAngles.get(0));
+            originalAngles.add(newAngles.get(1));
+            originalAngles.add(newAngles.get(2));
+            originalAngles.add(newAngles.get(3));
         } else {
-            angles.set(0, angle1);
-            angles.set(1, angle2);
-            angles.set(2, angle3);
-            angles.set(3, angle4);
+            originalAngles.set(0, newAngles.get(0));
+            originalAngles.set(1, newAngles.get(1));
+            originalAngles.set(2, newAngles.get(2));
+            originalAngles.set(3, newAngles.get(3));
         }
 
-        return angles;
+        return originalAngles;
     }
 }
