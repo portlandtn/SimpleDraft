@@ -9,11 +9,13 @@ import android.os.Bundle;
 
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -30,7 +32,6 @@ import com.jedmay.simpledraft.helper.Trig;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.helper.DataProvider;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    // region fields
     RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
     Spinner output1Spinner, output2Spinner;
     ListView outputListView1, outputListView2;
@@ -46,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
             riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
-    Button saveState1Button, saveState2Button;
+    Button saveState1Button, saveState2Button, editStatesButton;
     TextView outputNumberTextView, currentRoofSlope;
 
-    Switch mathMethod, outputWindowSwitch;
+    Switch mathMethod;
 
     SimpleDraftDbBadCompany db;
     SampleDbData sampleDbData;
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     int activeWindow, activeAngleNumber;
 
     boolean isDetailingMathMethod;
+    // endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
             newState.setAngle4(stateAngles.get(3));
             db.outputStateDao().insert(newState);
             populateOutputSpinners();
-
 
             switch (activeWindow) {
                 case 1:
@@ -215,8 +217,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     // region Update Controls
+
+    private void updateActiveWindows(int window) {
+        if (window == 1) {
+            String currentStateName = output1Spinner.getSelectedItem().toString();
+            outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
+            outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+            OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
+            List<Double> newAngles = new ArrayList<>();
+            newAngles.add(state.getAngle1());
+            newAngles.add(state.getAngle2());
+            newAngles.add(state.getAngle3());
+            newAngles.add(state.getAngle4());
+            state1Angles = Trig.updateAngles(state1Angles, newAngles);
+            updateRadioButtonValues(state1Angles);
+        } else {
+            String currentStateName = output1Spinner.getSelectedItem().toString();
+            outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
+            outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
+            OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
+            List<Double> newAngles = new ArrayList<>();
+            newAngles.add(state.getAngle1());
+            newAngles.add(state.getAngle2());
+            newAngles.add(state.getAngle3());
+            newAngles.add(state.getAngle4());
+            state2Angles = Trig.updateAngles(state2Angles, newAngles);
+            updateRadioButtonValues(state2Angles);
+        }
+    }
+
     private void updateListView(ListView listView, List<Double> values) {
         String[] listStringArray = new String[values.size()];
 
@@ -311,6 +341,7 @@ public class MainActivity extends AppCompatActivity {
         Button[] numberButtons = new Button[]{zeroButton, oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton};
         setNumberButtonOnClickListener(numberButtons);
 
+        setListViewOnClickListeners();
         setDecimalButtonOnClickListener();
         setOutputSpinnerOnClickListeners();
         setOutputSpinnerSaveButtonOnClickListeners();
@@ -321,6 +352,40 @@ public class MainActivity extends AppCompatActivity {
         setRadioButtonOnClickListeners();
         setSwitchOnClickListeners();
 
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setListViewOnClickListeners() {
+
+        outputListView1.setOnItemClickListener((parent, view, position, id) -> {
+            //TODO Something awesome with a single click.
+        });
+
+        outputListView1.setOnItemLongClickListener((parent, view, position, id) -> {
+            // TODO option to delete the item
+            return false;
+        });
+
+        outputListView1.setOnTouchListener((v, event) -> {
+            activeWindow = 1;
+            updateActiveWindows(activeWindow);
+            return false;
+        });
+
+        outputListView2.setOnItemClickListener((parent, view, position, id) -> {
+            //TODO Something awesome with a single click.
+        });
+
+        outputListView2.setOnItemLongClickListener((parent, view, position, id) -> {
+            // TODO option to delete the item
+            return false;
+        });
+
+        outputListView2.setOnTouchListener((v, event) -> {
+            activeWindow = 2;
+            updateActiveWindows(activeWindow);
+            return false;
+        });
     }
 
     private void setNumberButtonOnClickListener(Button[] numberButtons) {
@@ -562,8 +627,6 @@ public class MainActivity extends AppCompatActivity {
             }
             updateListViewWithValueFromTrig(value);
         });
-
-
     }
 
     private void setActivityButtonOnClickListeners() {
@@ -701,37 +764,6 @@ public class MainActivity extends AppCompatActivity {
             isDetailingMathMethod = mathMethod.isChecked();
             mathMethod.setText(mathMethod.isChecked() ? "Detailing" : "Standard");
         });
-
-        outputWindowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            activeWindow = outputWindowSwitch.isChecked() ? 2 : 1;
-            if (activeWindow == 1) {
-                String currentStateName = output1Spinner.getSelectedItem().toString();
-                outputWindowSwitch.setText(R.string.window_1);
-                outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
-                outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
-                OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
-                List<Double> newAngles = new ArrayList<>();
-                newAngles.add(state.getAngle1());
-                newAngles.add(state.getAngle2());
-                newAngles.add(state.getAngle3());
-                newAngles.add(state.getAngle4());
-                state1Angles = Trig.updateAngles(state1Angles, newAngles);
-                updateRadioButtonValues(state1Angles);
-            } else {
-                String currentStateName = output1Spinner.getSelectedItem().toString();
-                outputWindowSwitch.setText(R.string.window_2);
-                outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
-                outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
-                OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
-                List<Double> newAngles = new ArrayList<>();
-                newAngles.add(state.getAngle1());
-                newAngles.add(state.getAngle2());
-                newAngles.add(state.getAngle3());
-                newAngles.add(state.getAngle4());
-                state2Angles = Trig.updateAngles(state2Angles, newAngles);
-                updateRadioButtonValues(state2Angles);
-            }
-        });
     }
 
     // endregion
@@ -773,7 +805,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Switches
         mathMethod = findViewById(R.id.mathMethodSwitch);
-        outputWindowSwitch = findViewById(R.id.outputWindowSwitch);
 
         // Spinners
         output1Spinner = findViewById(R.id.output1NameSpinner);
@@ -783,9 +814,10 @@ public class MainActivity extends AppCompatActivity {
         outputListView1 = findViewById(R.id.output1ListView);
         outputListView2 = findViewById(R.id.output2ListView);
 
-        // Save Buttons
+        // State Buttons
         saveState1Button = findViewById(R.id.saveState1Button);
         saveState2Button = findViewById(R.id.saveState2Button);
+        editStatesButton = findViewById(R.id.editStatesButton);
 
         // Buttons
         calculateWeightButton = findViewById(R.id.calculateWeightButton);

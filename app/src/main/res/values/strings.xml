@@ -55,9 +55,23 @@
     <string name="choose_angle">Choose Angle</string>
     <string name="enter_roof_slope_on_12_12">Enter roof slope on 12 (:12)</string>
     <string name="angle">Angle</string>
-    <string name="enter_desired_angle">Enter desired Angle</string>
+    <string name="enter_desired_angle">Enter angle</string>
     <string name="window_1">Window 1</string>
     <string name="window_2">Window 2</string>
+    <string name="edit_states">Edit States</string>
+    <string name="right_triangle_description">right triangle showing base, slope, rise, and angle</string>
+    <string name="rise">Rise</string>
+    <string name="enter_rise_dimension">Enter rise dimension</string>
+    <string name="job_number">Job Number</string>
+    <string name="enter_base_dimension">Enter base dimension</string>
+    <string name="base">Base</string>
+    <string name="slope">Slope</string>
+    <string name="enter_slope_dimension">Enter slope dimension</string>
+    <string name="angle_1_label">Angle 1</string>
+    <string name="angle_2_label">Angle 2</string>
+    <string name="angle_3_label">Angle 3</string>
+    <string name="angle_4_label">Angle 4</string>
+    <string name="choose_angle_to_overwrite">Choose angle to overwrite</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>

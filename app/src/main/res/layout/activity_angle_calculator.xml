@@ -8,25 +8,13 @@
     tools:context=".AngleCalculatorActivity">
 
 
-    <Button
-        android:id="@+id/cancelAnglesButton"
-        android:layout_width="@dimen/doubleSmallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@android:string/cancel"
-        android:textColor="@android:color/background_light"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/angleValueEditText" />
-
     <EditText
         android:id="@+id/angleValueEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
@@ -36,84 +24,230 @@
         android:textColor="@color/colorText"
         android:textColorHint="#489E9B9B"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/angleSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/roofSlopeEditText" />
-
-    <Button
-        android:id="@+id/saveAnglesButton"
-        android:layout_width="@dimen/doubleSmallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/save"
-        android:textColor="@android:color/background_light"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/angleValueEditText" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/angleLabelTextView2"
+        app:layout_constraintTop_toBottomOf="@+id/slopeEditText" />
 
     <TextView
-        android:id="@+id/angleLabelTextView"
+        android:id="@+id/angleLabelTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/angle"
         android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/angleValueEditText"
-        app:layout_constraintStart_toStartOf="@+id/angleIdTextView"
+        app:layout_constraintStart_toStartOf="@+id/stateNameTextView"
         app:layout_constraintTop_toTopOf="@+id/angleValueEditText" />
 
-    <Spinner
-        android:id="@+id/angleSpinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:entries="@array/angles"
-        app:layout_constraintStart_toEndOf="@+id/angleIdTextView"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/angleIdTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="@string/choose_angle"
-        android:textColor="@color/colorText"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/angleSpinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/angleSpinner" />
-
-    <TextView
-        android:id="@+id/roofSlopeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/roof_slope"
-        android:textColor="@color/colorText"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/roofSlopeEditText"
-        app:layout_constraintStart_toStartOf="@+id/angleIdTextView"
-        app:layout_constraintTop_toTopOf="@+id/roofSlopeEditText" />
-
     <EditText
-        android:id="@+id/roofSlopeEditText"
+        android:id="@+id/riseEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
-        android:hint="@string/enter_roof_slope_on_12_12"
+        android:hint="@string/enter_rise_dimension"
         android:importantForAutofill="no"
         android:inputType="numberDecimal"
+        android:paddingEnd="8dp"
         android:paddingRight="8dp"
         android:textColor="@color/colorText"
         android:textColorHint="#489E9B9B"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/angleSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/angleSpinner" />
+        app:layout_constraintStart_toStartOf="@+id/angleValueEditText"
+        app:layout_constraintTop_toBottomOf="@+id/stateNameSpinner"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/riseTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rise"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/riseEditText"
+        app:layout_constraintStart_toStartOf="@+id/stateNameTextView"
+        app:layout_constraintTop_toTopOf="@+id/riseEditText" />
+
+    <Button
+        android:id="@+id/cancelAnglesButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@android:string/cancel"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/slopeEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:ems="10"
+        android:hint="@string/enter_slope_dimension"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:textColor="@color/colorText"
+        android:textColorHint="#489E9B9B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/angleValueEditText"
+        app:layout_constraintTop_toBottomOf="@+id/baseEditText" />
+
+    <Button
+        android:id="@+id/saveAnglesButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/save"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/slopeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/slope"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/slopeEditText"
+        app:layout_constraintStart_toStartOf="@+id/stateNameTextView"
+        app:layout_constraintTop_toTopOf="@+id/slopeEditText" />
+
+    <Spinner
+        android:id="@+id/stateNameSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stateNameTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/stateNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="@string/job_number"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stateNameSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stateNameSpinner" />
+
+    <TextView
+        android:id="@+id/baseTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/base"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/baseEditText"
+        app:layout_constraintStart_toStartOf="@+id/stateNameTextView"
+        app:layout_constraintTop_toTopOf="@+id/baseEditText" />
+
+    <TextView
+        android:id="@+id/chooseAngleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/choose_angle_to_overwrite"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/stateNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/angleValueEditText" />
+
+    <EditText
+        android:id="@+id/baseEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:ems="10"
+        android:hint="@string/enter_base_dimension"
+        android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:paddingEnd="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/colorText"
+        android:textColorHint="#489E9B9B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/angleValueEditText"
+        app:layout_constraintTop_toBottomOf="@+id/riseEditText"
+        tools:ignore="RtlSymmetry" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/right_triangle_description"
+        app:layout_constraintBottom_toTopOf="@+id/cancelAnglesButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/angleRadioButtonGroup"
+        app:srcCompat="@drawable/right_triangle_landscape" />
+
+    <RadioGroup
+        android:id="@+id/angleRadioButtonGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chooseAngleTextView">
+
+        <RadioButton
+            android:id="@+id/angle1RadioButtonOnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/angle_1_label"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/angle2RadioButtonOnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_2_label"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/angle3RadioButtonOnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_3_label"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/angle4RadioButtonOnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_4_label"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
