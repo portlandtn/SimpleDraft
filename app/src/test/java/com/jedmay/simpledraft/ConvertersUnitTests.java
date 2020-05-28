@@ -5,14 +5,13 @@ import com.jedmay.simpledraft.helper.Converters;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class ConvertersUnitTests {
 
-    private double deltaValue = 0.000001;
+    private double deltaValue = 0.0001;
 
     @Test
     public void convertListDoubleToString() {
@@ -233,6 +232,30 @@ public class ConvertersUnitTests {
 
         double[] actual = Converters.listOfDoubleToDoubleArray(doubleList);
 
-        assertTrue(Arrays.equals(expected, actual));
+        assertArrayEquals(expected, actual, 0.0);
+    }
+
+    @Test
+    public void convertBaseRiseToAngle() {
+        double base = 1.0;
+        double rise = 0.0833333333;
+
+        double expected = 4.7636;
+
+        double actual = Converters.baseRiseToAngle(base, rise);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void convertBaseRiseToAngle2On12() {
+        double base = 1.0;
+        double rise = 0.166666667;
+
+        double expected = 9.4623;
+
+        double actual = Converters.baseRiseToAngle(base, rise);
+
+        assertEquals(expected, actual, deltaValue);
     }
 }

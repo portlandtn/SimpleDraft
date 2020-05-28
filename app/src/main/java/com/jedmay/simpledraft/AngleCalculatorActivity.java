@@ -26,7 +26,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
     SimpleDraftDbBadCompany db;
     Spinner jobNumberSpinner;
-    EditText riseEditText, baseEditText, slopeEditText, angleEditText;
+    EditText riseEditText, baseEditText, angleEditText;
     RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
     Button saveButton, cancelButton;
     double[] angles;
@@ -116,20 +116,36 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
     @SuppressLint("DefaultLocale")
     private void updateDimensionsEditTextView(double angle) {
-        double base = Double.parseDouble(baseEditText.getText().toString());
-        String baseText = String.format("%.4f", base);
+        baseDimension = Double.parseDouble(baseEditText.getText().toString());
+        String baseText = String.format("%.4f", baseDimension);
         baseEditText.setText(baseText);
 
-        double rise = Trig.baseToRise(base, angle);
-        String riseText = String.format("%.4f",rise);
+        riseDimension = Trig.baseToRise(baseDimension, angle);
+        String riseText = String.format("%.4f",riseDimension);
         riseEditText.setText(riseText);
 
-        double slope = Trig.baseToSlope(base, angle);
-        String slopeText = String.format("%.4f", slope);
-        slopeEditText.setText(slopeText);
+        slopeDimension = Trig.baseToSlope(baseDimension, angle);
 
         String angleText = String.format("%.4f", angle);
         angleEditText.setText(angleText);
+    }
+
+    private void updateDimensionsOnRiseDimensionChange() {
+        riseDimension = Double.parseDouble(riseEditText.getText().toString());
+        riseDimension = Converters.footDimensionToDecimalDimension(riseDimension);
+
+        baseDimension = Double.parseDouble(baseEditText.getText().toString());
+        baseDimension = Converters.footDimensionToDecimalDimension(baseDimension);
+
+        angle = Converters.baseRiseToAngle(baseDimension, riseDimension);
+    }
+
+    private void updateDimensionsOnBaseDimensionChange() {
+
+    }
+
+    private void updateDimensionsOnAngleChange() {
+
     }
 
     private void updateJobNumberSelection(String currentJobNumber) {
@@ -172,7 +188,6 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         jobNumberSpinner = findViewById(R.id.jobNumberSpinner);
         riseEditText = findViewById(R.id.riseEditText);
         baseEditText = findViewById(R.id.baseEditText);
-        slopeEditText = findViewById(R.id.slopeEditText);
         angleEditText = findViewById(R.id.angleValueEditText);
         angle1RadioButton = findViewById(R.id.angle1RadioButtonOnEdit);
         angle2RadioButton = findViewById(R.id.angle2RadioButtonOnEdit);

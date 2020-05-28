@@ -122,4 +122,10 @@ public class Converters {
         }
         return angleArray;
     }
+
+    public static double baseRiseToAngle(double base, double rise) {
+        double response = rise / base;
+        response = Math.atan(response);
+        return Math.toDegrees(response);
+    }
 }

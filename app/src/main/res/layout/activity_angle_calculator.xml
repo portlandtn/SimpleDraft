@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/angleLabelTextView2"
-        app:layout_constraintTop_toBottomOf="@+id/slopeEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/baseEditText" />
 
     <TextView
         android:id="@+id/angleLabelTextView2"
@@ -84,23 +84,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/slopeEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:ems="10"
-        android:hint="@string/enter_slope_dimension"
-        android:importantForAutofill="no"
-        android:inputType="numberDecimal"
-        android:textColor="@color/colorText"
-        android:textColorHint="#489E9B9B"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/angleValueEditText"
-        app:layout_constraintTop_toBottomOf="@+id/baseEditText" />
-
     <Button
         android:id="@+id/saveAnglesButton"
         android:layout_width="@dimen/doubleSmallButtonSize"
@@ -114,17 +97,6 @@
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/slopeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/slope"
-        android:textColor="@color/colorText"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/slopeEditText"
-        app:layout_constraintStart_toStartOf="@+id/stateNameTextView"
-        app:layout_constraintTop_toTopOf="@+id/slopeEditText" />
 
     <Spinner
         android:id="@+id/jobNumberSpinner"
