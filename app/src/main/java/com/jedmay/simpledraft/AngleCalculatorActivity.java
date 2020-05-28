@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,6 +57,72 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         populateSpinner();
         updateEditTextViews(jobNumber, angles, activeAngle);
         setOnClickListeners();
+        setTextWatchersOnEditTextFields();
+    }
+
+    private void setTextWatchersOnEditTextFields() {
+        riseEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(riseEditText.hasFocus()){
+                    if(!riseEditText.getText().toString().isEmpty()) {
+                        updateDimensionFromDimensionChange();
+                    }
+                }
+            }
+        });
+
+        baseEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(baseEditText.hasFocus()) {
+                    if (!baseEditText.getText().toString().isEmpty()){
+                        updateDimensionFromDimensionChange();
+                    }
+                }
+            }
+        });
+
+        angleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(angleEditText.hasFocus()){
+                    if(!angleEditText.getText().toString().isEmpty()) {
+                        updateDimensionsOnAngleChange();
+                    }
+                }
+            }
+        });
     }
 
     private void setOnClickListeners() {
@@ -101,11 +169,11 @@ public class AngleCalculatorActivity extends AppCompatActivity {
             }
         }
         updateDimensionsEditTextView(angle);
-        updateAngleRadioButtonsText(angles);
+        setupAngleRadioButtonText(angles);
     }
 
     @SuppressLint("DefaultLocale")
-    private void updateAngleRadioButtonsText(double[] angles) {
+    private void setupAngleRadioButtonText(double[] angles) {
         RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
         for(int i = 0; i < angles.length; i++) {
             String angleText = String.format("%.4f",angles[i]);
@@ -130,7 +198,11 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         angleEditText.setText(angleText);
     }
 
-    private void updateDimensionsOnRiseDimensionChange() {
+    @SuppressLint("DefaultLocale")
+    private void updateDimensionFromDimensionChange() {
+        // If the rise or base is changed, then the angle is changed, based on the
+        // base dimension.
+
         riseDimension = Double.parseDouble(riseEditText.getText().toString());
         riseDimension = Converters.footDimensionToDecimalDimension(riseDimension);
 
@@ -138,14 +210,47 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         baseDimension = Converters.footDimensionToDecimalDimension(baseDimension);
 
         angle = Converters.baseRiseToAngle(baseDimension, riseDimension);
+        String angleText = String.format("%.4f",angle);
+        angleEditText.setText(angleText);
+
+        updateAngleRadioButtonText(angleText);
+
     }
 
-    private void updateDimensionsOnBaseDimensionChange() {
-
-    }
-
+    @SuppressLint("DefaultLocale")
     private void updateDimensionsOnAngleChange() {
+        // If the angle is changed, the base dimension is reset to 1.0000
+        // and the rise is calculated, giving the user an 'on 12' roof slope.
 
+        baseDimension = 1.0;
+        baseEditText.setText(String.format("%.4f",baseDimension));
+
+        riseDimension = Trig.baseToRise(baseDimension, angle);
+        riseDimension = Converters.decimalDimensionToFootDimension(riseDimension);
+        riseEditText.setText(String.format("%.4f",riseDimension));
+
+        String angleText = angleEditText.getText().toString();
+        updateAngleRadioButtonText(angleText);
+    }
+
+    private void updateAngleRadioButtonText(String angleText) {
+        String angleRadioButtonText = "Angle " + activeAngle + " (" + angleText + ")";
+        switch (activeAngle) {
+            case 1:
+                angle1RadioButton.setText(angleRadioButtonText);
+                break;
+            case 2:
+                angle2RadioButton.setText(angleRadioButtonText);
+                break;
+            case 3:
+                angle3RadioButton.setText(angleRadioButtonText);
+                break;
+            case 4:
+                angle4RadioButton.setText(angleRadioButtonText);
+                break;
+            default:
+                break;
+        }
     }
 
     private void updateJobNumberSelection(String currentJobNumber) {
