@@ -9,13 +9,11 @@ import android.os.Bundle;
 
 import android.text.InputType;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     // region fields
     RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
-    Spinner output1Spinner, output2Spinner;
+    Spinner jobNumberWindow1Spinner, jobNumberWindow2Spinner;
     ListView outputListView1, outputListView2;
     Button calculateWeightButton, anglesButton, deleteButton, clearButton, backspaceButton, negativePositiveButton,
             footToDecimalButton, decimalToFootButton,
@@ -126,18 +124,18 @@ public class MainActivity extends AppCompatActivity {
 
             switch (activeWindow) {
                 case 1:
-                    for(int i = 0; i < output1Spinner.getAdapter().getCount(); i++) {
+                    for(int i = 0; i < jobNumberWindow1Spinner.getAdapter().getCount(); i++) {
                         String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
-                        if(output1Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
-                            output1Spinner.setSelection(i);
+                        if(jobNumberWindow1Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
+                            jobNumberWindow1Spinner.setSelection(i);
                         }
                     }
                     break;
                 case 2:
-                    for(int i = 0; i < output2Spinner.getAdapter().getCount(); i++) {
+                    for(int i = 0; i < jobNumberWindow2Spinner.getAdapter().getCount(); i++) {
                         String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
-                        if(output2Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
-                            output2Spinner.setSelection(i);
+                        if(jobNumberWindow2Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
+                            jobNumberWindow2Spinner.setSelection(i);
                         }
                     }
                     break;
@@ -221,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateActiveWindows(int window) {
         if (window == 1) {
-            String currentStateName = output1Spinner.getSelectedItem().toString();
+            String currentStateName = jobNumberWindow1Spinner.getSelectedItem().toString();
             outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
             outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
             OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
@@ -233,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
             state1Angles = Trig.updateAngles(state1Angles, newAngles);
             updateRadioButtonValues(state1Angles);
         } else {
-            String currentStateName = output1Spinner.getSelectedItem().toString();
+            String currentStateName = jobNumberWindow1Spinner.getSelectedItem().toString();
             outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
             outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
             OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
@@ -419,11 +417,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOutputSpinnerOnClickListeners() {
 
-        output1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        jobNumberWindow1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String selected = output1Spinner.getSelectedItem().toString();
+                String selected = jobNumberWindow1Spinner.getSelectedItem().toString();
 
                 if (selected.equals(Constants.newSave)) {
                     saveNewState(outputNumber1List, state1Angles);
@@ -447,11 +445,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        output2Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        jobNumberWindow2Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                String selected = output2Spinner.getSelectedItem().toString();
+                String selected = jobNumberWindow2Spinner.getSelectedItem().toString();
 
                 if (selected.equals(Constants.newSave)) {
                     saveNewState(outputNumber2List, state2Angles);
@@ -479,12 +477,12 @@ public class MainActivity extends AppCompatActivity {
     private void setOutputSpinnerSaveButtonOnClickListeners() {
         saveState1Button.setOnClickListener(v -> {
             OutputState state;
-            boolean newSave = output1Spinner.getSelectedItem().toString().equals(Constants.newSave);
+            boolean newSave = jobNumberWindow1Spinner.getSelectedItem().toString().equals(Constants.newSave);
 
             if (newSave) {
                 state = DataProvider.getOutputState(this);
             } else {
-                state = db.outputStateDao().getOutputStateFromName(output1Spinner.getSelectedItem().toString());
+                state = db.outputStateDao().getOutputStateFromName(jobNumberWindow1Spinner.getSelectedItem().toString());
             }
             state.setAngle1(state1Angles.get(0));
             state.setAngle2(state1Angles.get(1));
@@ -501,12 +499,12 @@ public class MainActivity extends AppCompatActivity {
 
         saveState2Button.setOnClickListener(v -> {
             OutputState state;
-            boolean newSave = output2Spinner.getSelectedItem().toString().equals(Constants.newSave);
+            boolean newSave = jobNumberWindow2Spinner.getSelectedItem().toString().equals(Constants.newSave);
 
             if (newSave) {
                 state = DataProvider.getOutputState(getApplicationContext());
             } else {
-                state = db.outputStateDao().getOutputStateFromName(output2Spinner.getSelectedItem().toString());
+                state = db.outputStateDao().getOutputStateFromName(jobNumberWindow2Spinner.getSelectedItem().toString());
             }
             state.setAngle1(state2Angles.get(0));
             state.setAngle2(state2Angles.get(1));
@@ -629,17 +627,40 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private Bundle getBundleForActiveWindow(int window) {
+        Bundle extras = new Bundle();
+        if(window == 1) {
+            extras.putDoubleArray("angles", Converters.listOfDoubleToDoubleArray(state1Angles));
+            extras.putString("jobNumber", jobNumberWindow1Spinner.getSelectedItem().toString());
+            RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
+            for(int i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].isChecked()) {
+                    extras.putInt("angleSelected", i);
+                }
+            }
+        } else {
+            extras.putDoubleArray("state2Angles", Converters.listOfDoubleToDoubleArray(state2Angles));
+            extras.putString("jobName", jobNumberWindow2Spinner.getSelectedItem().toString());
+            RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
+            for(int i = 0; i < 3; i++) {
+                if (radioButtons[i].isChecked()) {
+                    extras.putInt("angleSelected", i+1);
+                }
+            }
+        }
+        return extras;
+    }
+
     private void setActivityButtonOnClickListeners() {
         calculateWeightButton.setOnClickListener(v -> {
             //TODO Must Develop fragment to display weight input
         });
 
         anglesButton.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
 
-            Bundle extras = new Bundle();
-            extras.putDoubleArray("state1Angles", Converters.listOfDoubleToDoubleArray(state1Angles));
-            extras.putDoubleArray("state2Angles", Converters.listOfDoubleToDoubleArray(state2Angles));
+            Bundle extras = getBundleForActiveWindow(activeWindow);
+
+            Intent i = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
 
             i.putExtras(extras);
             startActivity(i);
@@ -784,8 +805,8 @@ public class MainActivity extends AppCompatActivity {
                     this, R.layout.spinner_view_layout, R.id.spinnerViewItem, stateArray
             );
             adapter.setDropDownViewResource(R.layout.spinner_view_layout);
-            output1Spinner.setAdapter(adapter);
-            output2Spinner.setAdapter(adapter);
+            jobNumberWindow1Spinner.setAdapter(adapter);
+            jobNumberWindow2Spinner.setAdapter(adapter);
         } catch (ArrayIndexOutOfBoundsException ex) {
             Log.d("pop_index", Objects.requireNonNull(ex.getLocalizedMessage()));
         } catch (Exception ex) {
@@ -807,8 +828,8 @@ public class MainActivity extends AppCompatActivity {
         mathMethod = findViewById(R.id.mathMethodSwitch);
 
         // Spinners
-        output1Spinner = findViewById(R.id.output1NameSpinner);
-        output2Spinner = findViewById(R.id.output2NameSpinner);
+        jobNumberWindow1Spinner = findViewById(R.id.jobNumberWindow1Spinner);
+        jobNumberWindow2Spinner = findViewById(R.id.jobNumberWindow2Spinner);
 
         // List Views
         outputListView1 = findViewById(R.id.output1ListView);
@@ -817,7 +838,7 @@ public class MainActivity extends AppCompatActivity {
         // State Buttons
         saveState1Button = findViewById(R.id.saveState1Button);
         saveState2Button = findViewById(R.id.saveState2Button);
-        editStatesButton = findViewById(R.id.editStatesButton);
+        editStatesButton = findViewById(R.id.editJobNumbersButton);
 
         // Buttons
         calculateWeightButton = findViewById(R.id.calculateWeightButton);

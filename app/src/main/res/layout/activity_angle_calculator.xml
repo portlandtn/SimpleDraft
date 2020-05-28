@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121111"
+    android:background="@color/darkBackground"
     tools:context=".AngleCalculatorActivity">
 
 
@@ -56,7 +56,7 @@
         android:textColorHint="#489E9B9B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/angleValueEditText"
-        app:layout_constraintTop_toBottomOf="@+id/stateNameSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/jobNumberSpinner"
         tools:ignore="RtlSymmetry" />
 
     <TextView
@@ -127,7 +127,7 @@
         app:layout_constraintTop_toTopOf="@+id/slopeEditText" />
 
     <Spinner
-        android:id="@+id/stateNameSpinner"
+        android:id="@+id/jobNumberSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -135,6 +135,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:popupBackground="@color/darkBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/stateNameTextView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -148,9 +149,9 @@
         android:text="@string/job_number"
         android:textColor="@color/colorText"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/stateNameSpinner"
+        app:layout_constraintBottom_toBottomOf="@+id/jobNumberSpinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/stateNameSpinner" />
+        app:layout_constraintTop_toTopOf="@+id/jobNumberSpinner" />
 
     <TextView
         android:id="@+id/baseTextView"

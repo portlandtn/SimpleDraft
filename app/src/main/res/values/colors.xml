@@ -6,4 +6,5 @@
     <color name="colorText">#FFFFFF</color>
     <color name="activeBackground">#434141</color>
     <color name="inactiveBackground">#BABCBC</color>
+    <color name="darkBackground">#121111</color>
 </resources>

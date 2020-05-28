@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121111"
+    android:background="@color/darkBackground"
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/editStatesButton"
+        android:id="@+id/editJobNumbersButton"
         android:layout_width="80dp"
         android:layout_height="46dp"
         android:background="@mipmap/ic_button_background_round"
-        android:text="@string/edit_states"
+        android:text="@string/edit_job_numbers"
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintBottom_toBottomOf="@+id/calculateWeightButton"
@@ -403,7 +403,7 @@
 
 
         <Spinner
-            android:id="@+id/output1NameSpinner"
+            android:id="@+id/jobNumberWindow1Spinner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
@@ -412,9 +412,9 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="0.8"
-            android:background="#121111"
+            android:background="@color/darkBackground"
             android:entries="@array/stateSave"
-            android:popupBackground="#121111" />
+            android:popupBackground="@color/darkBackground" />
 
         <Button
             android:layout_width="@dimen/smallButtonSize"
@@ -426,7 +426,7 @@
             android:textColor="@android:color/background_light" />
 
         <Spinner
-            android:id="@+id/output2NameSpinner"
+            android:id="@+id/jobNumberWindow2Spinner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
@@ -435,9 +435,9 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="0.8"
-            android:background="#121111"
+            android:background="@color/darkBackground"
             android:entries="@array/stateSave"
-            android:popupBackground="#121111" />
+            android:popupBackground="@color/darkBackground" />
 
         <Button
             android:layout_width="@dimen/smallButtonSize"

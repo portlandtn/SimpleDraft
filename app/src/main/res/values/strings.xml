@@ -29,36 +29,18 @@
     <string name="angle_2">1.1893</string>
     <string name="angle_3">4.7623</string>
     <string name="angle_4">14.0623</string>
-    <string name="roof_slope">Roof Slope</string>
     <string name="_1">1</string>
     <string name="on12">:12</string>
     <string name="angles">Angles</string>
-    <string name="dummyRoofSlope">12.2624:12</string>
     <string name="current_roof_slope">Slope</string>
-    <string name="set_custom_angle">Set Angle</string>
-    <string name="set_slope">Set Slope</string>
     <string name="clear">Clear</string>
-    <string name="weight">Weight</string>
     <string name="dec_to_foot">Decimal to Foot</string>
     <string name="foot_to_decimal">Foot to Decimal</string>
-    <string name="no_saved_data">No Saved Data</string>
     <string name="calc_wgt">Calc Wgt</string>
-    <string name="output_window_text">Window 1</string>
     <string name="bksp">Bksp</string>
-    <string name="dummy_angle">14.0623</string>
-    <string name="dummy_roof_slope">1.2184</string>
-    <string name="angle_4_text">Angle 4</string>
-    <string name="angle_3_text">Angle 3</string>
-    <string name="angle_2_text">Angle 2</string>
-    <string name="angle_1_text">Angle 1</string>
     <string name="save">Save</string>
-    <string name="choose_angle">Choose Angle</string>
-    <string name="enter_roof_slope_on_12_12">Enter roof slope on 12 (:12)</string>
     <string name="angle">Angle</string>
     <string name="enter_desired_angle">Enter angle</string>
-    <string name="window_1">Window 1</string>
-    <string name="window_2">Window 2</string>
-    <string name="edit_states">Edit States</string>
     <string name="right_triangle_description">right triangle showing base, slope, rise, and angle</string>
     <string name="rise">Rise</string>
     <string name="enter_rise_dimension">Enter rise dimension</string>
@@ -72,15 +54,10 @@
     <string name="angle_3_label">Angle 3</string>
     <string name="angle_4_label">Angle 4</string>
     <string name="choose_angle_to_overwrite">Choose angle to overwrite</string>
+    <string name="edit_job_numbers">Edit Job Numbers</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
-    </string-array>
-    <string-array name="angles">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
     </string-array>
 
 </resources>
