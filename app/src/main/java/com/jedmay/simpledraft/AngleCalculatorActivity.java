@@ -15,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.Trig;
 import com.jedmay.simpledraft.model.OutputState;
 
@@ -31,14 +32,18 @@ public class AngleCalculatorActivity extends AppCompatActivity {
     double[] angles;
     String jobNumber;
     int activeAngle;
+    double baseDimension, riseDimension, slopeDimension, angle;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_angle_calculator);
         db = SimpleDraftDbBadCompany.getDatabase(getApplicationContext());
         findAllViews();
-
+        //Set base to 1.0000 for :12 default
+        baseDimension = 1.0;
+        baseEditText.setText(String.format("%.4f", baseDimension));
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if(extras != null) {
@@ -71,6 +76,19 @@ public class AngleCalculatorActivity extends AppCompatActivity {
             }
         });
 
+        angle1RadioButton.setOnClickListener(v -> {
+            updateEditTextViews(jobNumber, angles, activeAngle = 0);
+        });
+        angle2RadioButton.setOnClickListener(v -> {
+            updateEditTextViews(jobNumber, angles, activeAngle = 1);
+        });
+        angle3RadioButton.setOnClickListener(v -> {
+            updateEditTextViews(jobNumber, angles, activeAngle = 2);
+        });
+        angle4RadioButton.setOnClickListener(v -> {
+            updateEditTextViews(jobNumber, angles, activeAngle = 3);
+        });
+
     }
 
     private void updateEditTextViews(String jobNumber, double[] angles, int activeAngle) {
@@ -98,15 +116,15 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
     @SuppressLint("DefaultLocale")
     private void updateDimensionsEditTextView(double angle) {
-        double rise = 1.0000;
-        String riseText = String.format("%.4f",rise);
-        riseEditText.setText(riseText);
-
-        double base = Trig.riseToBase(rise, angle);
+        double base = Double.parseDouble(baseEditText.getText().toString());
         String baseText = String.format("%.4f", base);
         baseEditText.setText(baseText);
 
-        double slope = Trig.riseToSlope(rise, angle);
+        double rise = Trig.baseToRise(base, angle);
+        String riseText = String.format("%.4f",rise);
+        riseEditText.setText(riseText);
+
+        double slope = Trig.baseToSlope(base, angle);
         String slopeText = String.format("%.4f", slope);
         slopeEditText.setText(slopeText);
 
