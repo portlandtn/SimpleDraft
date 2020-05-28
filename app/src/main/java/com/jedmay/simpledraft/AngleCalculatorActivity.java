@@ -34,7 +34,14 @@ public class AngleCalculatorActivity extends AppCompatActivity {
     double[] angles;
     String jobNumber;
     int activeAngle;
-    double baseDimension, riseDimension, slopeDimension, angle;
+    double baseDimension, riseDimension, angle;
+    OutputState state;
+
+    @Override
+    public void onBackPressed() {
+        saveAngle();
+        finish();
+    }
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -130,7 +137,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String jobNumber = jobNumberSpinner.getSelectedItem().toString();
-                OutputState state = db.outputStateDao().getOutputStateFromName(jobNumber);
+                state = db.outputStateDao().getOutputStateFromName(jobNumber);
                 angles[0] = state.getAngle1();
                 angles[1] = state.getAngle2();
                 angles[2] = state.getAngle3();
@@ -168,7 +175,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
                 angle = angles[i];
             }
         }
-        updateDimensionsEditTextView(angle);
+        setupEditTextDimensions(angle);
         setupAngleRadioButtonText(angles);
     }
 
@@ -183,16 +190,15 @@ public class AngleCalculatorActivity extends AppCompatActivity {
     }
 
     @SuppressLint("DefaultLocale")
-    private void updateDimensionsEditTextView(double angle) {
-        baseDimension = Double.parseDouble(baseEditText.getText().toString());
+    private void setupEditTextDimensions(double angle) {
+        baseDimension = 1.0;
         String baseText = String.format("%.4f", baseDimension);
         baseEditText.setText(baseText);
 
         riseDimension = Trig.baseToRise(baseDimension, angle);
+        riseDimension = Converters.decimalDimensionToFootDimension(riseDimension);
         String riseText = String.format("%.4f",riseDimension);
         riseEditText.setText(riseText);
-
-        slopeDimension = Trig.baseToSlope(baseDimension, angle);
 
         String angleText = String.format("%.4f", angle);
         angleEditText.setText(angleText);
@@ -267,6 +273,9 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         }
     }
 
+    private void saveAngle() {
+        db.outputStateDao().update(state);
+    }
 
     private void populateSpinner() {
         try {
