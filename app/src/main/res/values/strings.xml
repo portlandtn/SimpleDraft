@@ -23,7 +23,7 @@
     <string name="base_to_slope">Base To Slope</string>
     <string name="rise_to_slope">Rise To Slope</string>
     <string name="rise_to_base">Rise To Base</string>
-    <string name="delete">Drop</string>
+    <string name="drop">Drop</string>
     <string name="neg_pos">+/-</string>
     <string name="angle_1">14.0623</string>
     <string name="angle_2">1.1893</string>
@@ -31,7 +31,7 @@
     <string name="angle_4">14.0623</string>
     <string name="_1">1</string>
     <string name="on12">:12</string>
-    <string name="angles">Angles</string>
+    <string name="angles">Set Angles</string>
     <string name="current_roof_slope">Slope</string>
     <string name="clear">Clear</string>
     <string name="dec_to_foot">Decimal to Foot</string>
@@ -54,7 +54,10 @@
     <string name="angle_3_label">Angle 3</string>
     <string name="angle_4_label">Angle 4</string>
     <string name="choose_angle_to_overwrite">Choose angle to overwrite</string>
-    <string name="edit_job_numbers">Edit Job Numbers</string>
+    <string name="edit_job_numbers">Edit Jobs</string>
+    <string name="saved_jobs">Saved Jobs</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
