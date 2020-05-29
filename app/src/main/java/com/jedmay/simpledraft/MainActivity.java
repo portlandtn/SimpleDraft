@@ -421,6 +421,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                activeWindow = 1;
+                updateActiveWindows(activeWindow);
+
                 String selected = jobNumberWindow1Spinner.getSelectedItem().toString();
 
                 if (selected.equals(Constants.newSave)) {
@@ -449,6 +452,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                activeWindow = 2;
+                updateActiveWindows(activeWindow);
                 String selected = jobNumberWindow2Spinner.getSelectedItem().toString();
 
                 if (selected.equals(Constants.newSave)) {
@@ -639,12 +644,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            extras.putDoubleArray("state2Angles", Converters.listOfDoubleToDoubleArray(state2Angles));
-            extras.putString("jobName", jobNumberWindow2Spinner.getSelectedItem().toString());
+            extras.putDoubleArray(Constants.anglesBundle, Converters.listOfDoubleToDoubleArray(state2Angles));
+            extras.putString(Constants.jobNumberBundle, jobNumberWindow2Spinner.getSelectedItem().toString());
             RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < radioButtons.length; i++) {
                 if (radioButtons[i].isChecked()) {
-                    extras.putInt("angleSelected", i+1);
+                    extras.putInt(Constants.selectedAngleBundle, i);
                 }
             }
         }

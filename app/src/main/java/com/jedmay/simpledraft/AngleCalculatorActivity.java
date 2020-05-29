@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
 import com.jedmay.simpledraft.helper.Constants;
@@ -195,6 +196,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
             setAngles();
             db.outputStateDao().update(state);
+            Toast.makeText(getApplicationContext(),"Save successful", Toast.LENGTH_SHORT).show();
         });
 
         cancelButton.setOnClickListener(v -> {
