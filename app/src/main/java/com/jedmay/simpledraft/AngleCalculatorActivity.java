@@ -3,6 +3,7 @@ package com.jedmay.simpledraft;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.Trig;
 import com.jedmay.simpledraft.model.OutputState;
@@ -39,7 +41,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        saveAngle();
+        setAngles();
         finish();
     }
 
@@ -53,18 +55,39 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         //Set base to 1.0000 for :12 default
         baseDimension = 1.0;
         baseEditText.setText(String.format("%.4f", baseDimension));
+
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if(extras != null) {
-            jobNumber = extras.getString("jobName");
-            angles = extras.getDoubleArray("angles");
-            activeAngle = extras.getInt("angleSelected");
+            jobNumber = extras.getString(Constants.jobNumberBundle);
+            angles = extras.getDoubleArray(Constants.anglesBundle);
+            activeAngle = extras.getInt(Constants.selectedAngleBundle);
         }
 
         populateSpinner();
-        updateEditTextViews(jobNumber, angles, activeAngle);
+        updateEditTextViews();
+        setSelectedAngleOnCreate();
         setOnClickListeners();
         setTextWatchersOnEditTextFields();
+    }
+
+    private void setSelectedAngleOnCreate() {
+        switch (activeAngle) {
+            case 0:
+                angle1RadioButton.setChecked(true);
+                break;
+            case 1:
+                angle2RadioButton.setChecked(true);
+                break;
+            case 2:
+                angle3RadioButton.setChecked(true);
+                break;
+            case 3:
+                angle4RadioButton.setChecked(true);
+                break;
+            default:
+                break;
+        }
     }
 
     private void setTextWatchersOnEditTextFields() {
@@ -142,7 +165,8 @@ public class AngleCalculatorActivity extends AppCompatActivity {
                 angles[1] = state.getAngle2();
                 angles[2] = state.getAngle3();
                 angles[3] = state.getAngle4();
-                updateEditTextViews(jobNumber, angles, activeAngle = 0);
+                activeAngle = 0;
+                updateEditTextViews();
             }
 
             @Override
@@ -152,35 +176,61 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         });
 
         angle1RadioButton.setOnClickListener(v -> {
-            updateEditTextViews(jobNumber, angles, activeAngle = 0);
+            activeAngle = 0;
+            updateEditTextViews();
         });
         angle2RadioButton.setOnClickListener(v -> {
-            updateEditTextViews(jobNumber, angles, activeAngle = 1);
+            activeAngle = 1;
+            updateEditTextViews();
         });
         angle3RadioButton.setOnClickListener(v -> {
-            updateEditTextViews(jobNumber, angles, activeAngle = 2);
+            activeAngle = 2;
+            updateEditTextViews();
         });
         angle4RadioButton.setOnClickListener(v -> {
-            updateEditTextViews(jobNumber, angles, activeAngle = 3);
+            activeAngle = 3;
+            updateEditTextViews();
+        });
+
+        saveButton.setOnClickListener(v -> {
+            setAngles();
+            db.outputStateDao().update(state);
+        });
+
+        cancelButton.setOnClickListener(v -> {
+            android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Are you sure you want to abandon changes and return to the calculator?");
+            alertDialogBuilder.setPositiveButton("Return to Calculator", (dialog, which) -> {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                });
+            alertDialogBuilder.setNegativeButton("No", (dialog, which) -> {
+                // do nothing
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         });
 
     }
 
-    private void updateEditTextViews(String jobNumber, double[] angles, int activeAngle) {
+    private void updateEditTextViews() {
 
-        updateJobNumberSelection(jobNumber);
-        double angle = 0.0;
+        updateJobNumberSelection();
+        angle = 0.0;
         for(int i = 0; i < angles.length; i++){
             if(i == activeAngle) {
                 angle = angles[i];
+                break;
             }
         }
-        setupEditTextDimensions(angle);
-        setupAngleRadioButtonText(angles);
+        setupEditTextDimensions();
+        setupAngleRadioButtonText();
     }
 
     @SuppressLint("DefaultLocale")
-    private void setupAngleRadioButtonText(double[] angles) {
+    private void setupAngleRadioButtonText() {
         RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
         for(int i = 0; i < angles.length; i++) {
             String angleText = String.format("%.4f",angles[i]);
@@ -190,7 +240,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
     }
 
     @SuppressLint("DefaultLocale")
-    private void setupEditTextDimensions(double angle) {
+    private void setupEditTextDimensions() {
         baseDimension = 1.0;
         String baseText = String.format("%.4f", baseDimension);
         baseEditText.setText(baseText);
@@ -220,6 +270,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         angleEditText.setText(angleText);
 
         updateAngleRadioButtonText(angleText);
+        angles[activeAngle] = angle;
 
     }
 
@@ -237,21 +288,22 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
         String angleText = angleEditText.getText().toString();
         updateAngleRadioButtonText(angleText);
+        angles[activeAngle] = angle;
     }
 
     private void updateAngleRadioButtonText(String angleText) {
-        String angleRadioButtonText = "Angle " + activeAngle + " (" + angleText + ")";
+        String angleRadioButtonText = "Angle " + (activeAngle + 1) + " (" + angleText + ")";
         switch (activeAngle) {
-            case 1:
+            case 0:
                 angle1RadioButton.setText(angleRadioButtonText);
                 break;
-            case 2:
+            case 1:
                 angle2RadioButton.setText(angleRadioButtonText);
                 break;
-            case 3:
+            case 2:
                 angle3RadioButton.setText(angleRadioButtonText);
                 break;
-            case 4:
+            case 3:
                 angle4RadioButton.setText(angleRadioButtonText);
                 break;
             default:
@@ -259,12 +311,12 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         }
     }
 
-    private void updateJobNumberSelection(String currentJobNumber) {
+    private void updateJobNumberSelection() {
 
         List<OutputState> states = db.outputStateDao().getAllOutputStates();
         try {
             for (int i = 0; i < states.size(); i++) {
-                if (jobNumberSpinner.getAdapter().getItem(i).toString().contains(currentJobNumber)) {
+                if (jobNumberSpinner.getAdapter().getItem(i).toString().contains(jobNumber)) {
                     jobNumberSpinner.setSelection(i);
                 }
             }
@@ -273,8 +325,11 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         }
     }
 
-    private void saveAngle() {
-        db.outputStateDao().update(state);
+    private void setAngles() {
+        state.setAngle1(angles[0]);
+        state.setAngle2(angles[1]);
+        state.setAngle3(angles[2]);
+        state.setAngle4(angles[3]);
     }
 
     private void populateSpinner() {

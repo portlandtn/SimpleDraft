@@ -630,12 +630,12 @@ public class MainActivity extends AppCompatActivity {
     private Bundle getBundleForActiveWindow(int window) {
         Bundle extras = new Bundle();
         if(window == 1) {
-            extras.putDoubleArray("angles", Converters.listOfDoubleToDoubleArray(state1Angles));
-            extras.putString("jobNumber", jobNumberWindow1Spinner.getSelectedItem().toString());
+            extras.putDoubleArray(Constants.anglesBundle, Converters.listOfDoubleToDoubleArray(state1Angles));
+            extras.putString(Constants.jobNumberBundle, jobNumberWindow1Spinner.getSelectedItem().toString());
             RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
             for(int i = 0; i < radioButtons.length; i++) {
                 if (radioButtons[i].isChecked()) {
-                    extras.putInt("angleSelected", i);
+                    extras.putInt(Constants.selectedAngleBundle, i);
                 }
             }
         } else {
