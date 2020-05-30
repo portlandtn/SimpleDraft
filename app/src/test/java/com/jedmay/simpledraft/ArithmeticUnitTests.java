@@ -141,12 +141,24 @@ public class ArithmeticUnitTests {
 
     @Test
     public void calculateWeightWithAllValues() {
-        double length = 126.5;
-        double width = 14;
+        double length = 18;
+        double width = 5;
         double thickness = 0.25;
-        double expected = 125.5639;
+        double expected = 6.381;
 
-        double actual = Arithmetic.calculateWeight(length, width, thickness);
+        double actual = Arithmetic.calculateWeightUsingInchDimensions(length, width, thickness);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void calculateWeightWithGreaterValues() {
+        double length = 317.5;
+        double width = 6;
+        double thickness = 0.5;
+        double expected = 270.09566;
+
+        double actual = Arithmetic.calculateWeightUsingInchDimensions(length, width, thickness);
 
         assertEquals(expected, actual, deltaValue);
     }
@@ -158,7 +170,7 @@ public class ArithmeticUnitTests {
         double thickness = 0.25;
         double expected = 0;
 
-        double actual = Arithmetic.calculateWeight(length, width, thickness);
+        double actual = Arithmetic.calculateWeightUsingInchDimensions(length, width, thickness);
 
         assertEquals(expected, actual, deltaValue);
     }

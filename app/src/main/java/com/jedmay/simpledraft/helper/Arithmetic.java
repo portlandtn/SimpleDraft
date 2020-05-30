@@ -45,7 +45,7 @@ public class Arithmetic {
         }
     }
 
-    public static double calculateWeight(double length, double width, double thickness) {
+    public static double calculateWeightUsingInchDimensions(double length, double width, double thickness) {
         return length * width * thickness * Constants.inchWeightOfSteel;
     }
 }
