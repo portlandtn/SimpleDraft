@@ -9,15 +9,15 @@
 
     <Button
         android:id="@+id/editJobNumbersButton"
-        android:layout_width="80dp"
-        android:layout_height="46dp"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginTop="8dp"
         android:background="@mipmap/ic_button_background_round"
         android:text="@string/edit_job_numbers"
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
-        app:layout_constraintBottom_toBottomOf="@+id/calculateWeightButton"
-        app:layout_constraintEnd_toStartOf="@+id/calculateWeightButton"
-        app:layout_constraintTop_toTopOf="@+id/calculateWeightButton" />
+        app:layout_constraintStart_toStartOf="@+id/mathMethodSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/mathMethodSwitch" />
 
     <TextView
         android:id="@+id/on12RoofSlopeTextView"
@@ -55,15 +55,16 @@
 
     <Button
         android:id="@+id/calculateWeightButton"
-        android:layout_width="80dp"
+        android:layout_width="0dp"
         android:layout_height="46dp"
         android:layout_marginTop="8dp"
         android:background="@mipmap/ic_button_background_round"
         android:text="@string/calc_wgt"
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
-        app:layout_constraintEnd_toStartOf="@+id/anglesButton"
-        app:layout_constraintTop_toBottomOf="@+id/mathMethodSwitch" />
+        app:layout_constraintEnd_toEndOf="@+id/anglesButton"
+        app:layout_constraintStart_toStartOf="@+id/anglesButton"
+        app:layout_constraintTop_toBottomOf="@+id/anglesButton" />
 
     <Button
         android:id="@+id/footToDecimal"
@@ -102,6 +103,7 @@
         android:id="@+id/anglesButton"
         android:layout_width="@dimen/doubleSmallButtonSize"
         android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="@mipmap/ic_button_background_round"
@@ -109,14 +111,14 @@
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintEnd_toStartOf="@+id/radioGroup"
-        app:layout_constraintTop_toTopOf="@+id/calculateWeightButton" />
+        app:layout_constraintTop_toBottomOf="@+id/on12RoofSlopeTextView" />
 
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="@dimen/smallButtonSize"
         android:layout_height="@dimen/smallButtonSize"
         android:background="@mipmap/ic_button_background_round"
-        android:text="@string/delete"
+        android:text="@string/del"
         android:textColor="@android:color/background_light"
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintBottom_toTopOf="@+id/sevenButton"
