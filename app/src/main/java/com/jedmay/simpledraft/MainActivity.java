@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             riseToSlopeButton, riseToBaseButton, baseToSlopeButton, baseToRiseButton, slopeToBaseButton, slopeToRiseButton;
     Button divideButton, multiplyButton, minusButton, plusButton, enterButton, decimalButton;
     Button oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, sevenButton, eightButton, nineButton, zeroButton;
-    Button saveState1Button, saveState2Button, editStatesButton;
+    Button saveState1Button, saveState2Button, editJobsButton;
     TextView outputNumberTextView, currentRoofSlope;
 
     Switch mathMethod;
@@ -356,11 +356,11 @@ public class MainActivity extends AppCompatActivity {
     private void setListViewOnClickListeners() {
 
         outputListView1.setOnItemClickListener((parent, view, position, id) -> {
-            //TODO Something awesome with a single click.
+
         });
 
         outputListView1.setOnItemLongClickListener((parent, view, position, id) -> {
-            // TODO option to delete the item
+
             return false;
         });
 
@@ -371,11 +371,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         outputListView2.setOnItemClickListener((parent, view, position, id) -> {
-            //TODO Something awesome with a single click.
+
         });
 
         outputListView2.setOnItemLongClickListener((parent, view, position, id) -> {
-            // TODO option to delete the item
+
             return false;
         });
 
@@ -665,11 +665,15 @@ public class MainActivity extends AppCompatActivity {
 
             Bundle extras = getBundleForActiveWindow(activeWindow);
 
-            Intent i = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
+            Intent intent = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
 
-            i.putExtras(extras);
-            startActivity(i);
+            intent.putExtras(extras);
+            startActivity(intent);
 
+        });
+        editJobsButton.setOnClickListener(v-> {
+            Intent intent = new Intent(getApplicationContext(), EditJobsActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -712,7 +716,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-                // do nothing
+                dialog.cancel();
             });
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
@@ -843,7 +847,7 @@ public class MainActivity extends AppCompatActivity {
         // State Buttons
         saveState1Button = findViewById(R.id.saveState1Button);
         saveState2Button = findViewById(R.id.saveState2Button);
-        editStatesButton = findViewById(R.id.editJobNumbersButton);
+        editJobsButton = findViewById(R.id.editJobNumbersButton);
 
         // Buttons
         calculateWeightButton = findViewById(R.id.calculateWeightButton);

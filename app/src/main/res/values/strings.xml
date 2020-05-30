@@ -58,6 +58,8 @@
     <string name="saved_jobs">Saved Jobs</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="delete_all">Delete All</string>
+    <string name="jobs_to_delete">Jobs to be deleted: </string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
