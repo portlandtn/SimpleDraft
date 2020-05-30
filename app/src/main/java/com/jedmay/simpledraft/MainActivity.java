@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
     // endregion
 
     @Override
+    public void onResume() {
+        super.onResume();
+        populateOutputSpinners();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -658,7 +664,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setActivityButtonOnClickListeners() {
         calculateWeightButton.setOnClickListener(v -> {
-            //TODO Must Develop fragment to display weight input
+            Intent intent = new Intent(getApplicationContext(), WeightCalculatorActivity.class);
+            intent.putExtra(Constants.activeWindow, activeWindow);
+            startActivity(intent);
         });
 
         anglesButton.setOnClickListener(v -> {

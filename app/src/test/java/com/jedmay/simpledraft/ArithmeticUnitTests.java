@@ -139,4 +139,28 @@ public class ArithmeticUnitTests {
         assertEquals(expected, actual, deltaValue);
     }
 
+    @Test
+    public void calculateWeightWithAllValues() {
+        double length = 126.5;
+        double width = 14;
+        double thickness = 0.25;
+        double expected = 125.5639;
+
+        double actual = Arithmetic.calculateWeight(length, width, thickness);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void calculateWeightWithA0Value() {
+        double length = 126.5;
+        double width = 0;
+        double thickness = 0.25;
+        double expected = 0;
+
+        double actual = Arithmetic.calculateWeight(length, width, thickness);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
 }

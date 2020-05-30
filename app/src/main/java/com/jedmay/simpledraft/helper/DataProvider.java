@@ -2,7 +2,6 @@ package com.jedmay.simpledraft.helper;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.InputType;
 import android.widget.EditText;
 

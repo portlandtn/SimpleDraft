@@ -44,4 +44,8 @@ public class Arithmetic {
             return Converters.decimalDimensionToFootDimension(response);
         }
     }
+
+    public static double calculateWeight(double length, double width, double thickness) {
+        return length * width * thickness * Constants.inchWeightOfSteel;
+    }
 }

@@ -64,6 +64,7 @@
     <string name="enter_width">Enter Width</string>
     <string name="enter_thickness">Enter Thickness</string>
     <string name="push_to_calc">Push To Calc</string>
+    <string name="_0_00">0.00#</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
