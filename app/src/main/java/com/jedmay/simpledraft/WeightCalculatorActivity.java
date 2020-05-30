@@ -2,16 +2,17 @@ package com.jedmay.simpledraft;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.jedmay.simpledraft.helper.Arithmetic;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.Converters;
 
@@ -22,7 +23,7 @@ public class WeightCalculatorActivity extends AppCompatActivity {
     TextView weightTextView;
     Button cancelButton, pushButton;
     int activeWindow;
-    boolean lengthUsesDetailingMethod, widthUsesDetailingMethod, thicknessUsesDetailingMethod;
+    double weight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +32,11 @@ public class WeightCalculatorActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         activeWindow = intent.getIntExtra(Constants.activeWindow, 1);
+        weight = 0;
         findAllViews();
         setTextWatchers();
         setSwitchListeners();
-
+        setButtonListeners();
     }
 
     private void setTextWatchers() {
@@ -51,7 +53,7 @@ public class WeightCalculatorActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-//                calculateWeight();
+                updateWeightTextView();
             }
         });
         widthEditText.addTextChangedListener(new TextWatcher() {
@@ -67,7 +69,7 @@ public class WeightCalculatorActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                updateWeightTextView();
             }
         });
         thicknessEditText.addTextChangedListener(new TextWatcher() {
@@ -83,46 +85,59 @@ public class WeightCalculatorActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                updateWeightTextView();
             }
         });
     }
 
-    private double calculateWeight(double length, double width, double thickness) {
+    @SuppressLint("DefaultLocale")
+    private void updateWeightTextView() {
+        double length, width, thickness;
+        try {
+            length = Double.parseDouble(lengthEditText.getText().toString());
+            width = Double.parseDouble(widthEditText.getText().toString());
+            thickness = Double.parseDouble(thicknessEditText.getText().toString());
+        } catch (NumberFormatException ex) {
+            return;
+        }
         double response = 0;
         if(!lengthEditText.getText().toString().isEmpty() &&
                 !widthEditText.getText().toString().isEmpty() &&
                 !thicknessEditText.getText().toString().isEmpty()
         ) {
-            if (lengthUsesDetailingMethod) {
+            if (lengthSwitch.isChecked()) {
                 length = Converters.footDimensionToDecimalDimension(Double.parseDouble(lengthEditText.getText().toString()));
             }
-            if (widthUsesDetailingMethod) {
+            if (widthSwitch.isChecked()) {
                 width = Converters.footDimensionToDecimalDimension(Double.parseDouble(widthEditText.getText().toString()));
             }
-            if (thicknessUsesDetailingMethod) {
+            if (thicknessSwitch.isChecked()) {
                 thickness = Converters.footDimensionToDecimalDimension(Double.parseDouble(thicknessEditText.getText().toString()));
             }
-            response = (length * 12) * (width * 12) * (thickness * 12);
+            response = Arithmetic.calculateWeightUsingInchDimensions(length * 12, width * 12, thickness * 12);
         }
-        return response;
+        weightTextView.setText(String.format("%.4f",response));
     }
 
     private void setSwitchListeners() {
         lengthSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            lengthUsesDetailingMethod = lengthSwitch.isChecked();
             lengthSwitch.setText(lengthSwitch.isChecked() ? "Detailing" : "Standard");
+            updateWeightTextView();
         });
 
         widthSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            widthUsesDetailingMethod = widthSwitch.isChecked();
             widthSwitch.setText(widthSwitch.isChecked() ? "Detailing" : "Standard");
+            updateWeightTextView();
         });
 
         thicknessSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            thicknessUsesDetailingMethod = thicknessSwitch.isChecked();
             thicknessSwitch.setText(thicknessSwitch.isChecked() ? "Detailing" : "Standard");
+            updateWeightTextView();
         });
+    }
+
+    private void setButtonListeners() {
+
     }
 
     private void findAllViews() {
