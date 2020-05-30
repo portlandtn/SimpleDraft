@@ -15,7 +15,7 @@
     <string name="eight">8</string>
     <string name="nine">9</string>
     <string name="seven">7</string>
-    <string name="math_method">Standard</string>
+    <string name="math_method">Detailing</string>
     <string name="divide">/</string>
     <string name="slope_to_base">Slope to Base</string>
     <string name="slope_to_rise">Slope To Rise</string>
@@ -60,6 +60,10 @@
     <string name="cancel">Cancel</string>
     <string name="delete_all">Delete All</string>
     <string name="jobs_to_delete">Jobs to be deleted: </string>
+    <string name="enter_length">Enter Length</string>
+    <string name="enter_width">Enter Width</string>
+    <string name="enter_thickness">Enter Thickness</string>
+    <string name="push_to_calc">Push To Calc</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>

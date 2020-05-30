@@ -58,13 +58,13 @@ public class DataProvider {
         return response;
     }
 
-    public static Double getValueForTrig(String outputNumber, List<Double> listOfDouble) {
+    public static double getValueForTrig(String outputNumber, List<Double> listOfDouble) {
         if (outputNumber.length() > 0) {
             return Double.parseDouble(outputNumber);
         } else if (listOfDouble.size() > 0) {
             return listOfDouble.get(listOfDouble.size() - 1);
         } else {
-            return null;
+            return 0;
         }
     }
 

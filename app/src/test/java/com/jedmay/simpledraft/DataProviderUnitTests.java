@@ -11,6 +11,8 @@ import static org.junit.Assert.*;
 
 public class DataProviderUnitTests {
 
+    double deltaValue = 0.0001;
+
     @Test
     public void getValueFromEnterKeyPressNullOutputNumberBlank() {
 
@@ -160,11 +162,11 @@ public class DataProviderUnitTests {
         String outputNumber = "";
         List<Double> listOfDouble = new ArrayList<>();
 
-        Double expected = null;
+        double expected = 0;
 
-        Double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
+        double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
 
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, deltaValue);
     }
 
     @Test
@@ -173,11 +175,11 @@ public class DataProviderUnitTests {
         List<Double> listOfDouble = new ArrayList<>();
         listOfDouble.add(13.0204);
 
-        Double expected = 13.0204;
+        double expected = 13.0204;
 
-        Double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
+        double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
 
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, deltaValue);
     }
 
     @Test
@@ -186,11 +188,11 @@ public class DataProviderUnitTests {
         List<Double> listOfDouble = new ArrayList<>();
         listOfDouble.add(13.0204);
 
-        Double expected = 11.0505;
+        double expected = 11.0505;
 
-        Double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
+        double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
 
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, deltaValue);
     }
 
     @Test
@@ -198,11 +200,11 @@ public class DataProviderUnitTests {
         String outputNumber = "11.0505";
         List<Double> listOfDouble = new ArrayList<>();
 
-        Double expected = 11.0505;
+        double expected = 11.0505;
 
-        Double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
+        double actual = DataProvider.getValueForTrig(outputNumber, listOfDouble);
 
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, deltaValue);
     }
 
     @Test

@@ -7,4 +7,5 @@
     <color name="activeBackground">#434141</color>
     <color name="inactiveBackground">#BABCBC</color>
     <color name="darkBackground">#121111</color>
+    <color name="text_color_hint">#489E9B9B</color>
 </resources>
