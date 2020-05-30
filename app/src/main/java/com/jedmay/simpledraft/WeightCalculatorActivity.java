@@ -1,5 +1,6 @@
 package com.jedmay.simpledraft;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -137,7 +138,27 @@ public class WeightCalculatorActivity extends AppCompatActivity {
     }
 
     private void setButtonListeners() {
-
+        pushButton.setOnClickListener(v-> {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra(Constants.weight,weight);
+            intent.putExtra(Constants.activeWindow, activeWindow);
+            startActivity(intent);
+            finish();
+        });
+        cancelButton.setOnClickListener(v-> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Cancel and return to Calculator?");
+            builder.setMessage("Are you sure you want to leave the weight calculator screen and return to the calculator?");
+            builder.setPositiveButton("Yes",((dialog, which) -> {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra(Constants.activeWindow, activeWindow);
+                startActivity(intent);
+                finish();
+            }));
+            builder.setNegativeButton("No",((dialog, which) -> {
+                dialog.cancel();
+            }));
+        });
     }
 
     private void findAllViews() {

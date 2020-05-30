@@ -90,6 +90,24 @@ public class MainActivity extends AppCompatActivity {
 
         setSlopeText();
 
+        Intent intent = getIntent();
+        double weight = intent.getDoubleExtra(Constants.weight, 0);
+        activeWindow = intent.getIntExtra(Constants.activeWindow, 1);
+        if (weight > 0) {
+            switch (activeWindow) {
+                case 1:
+                    outputNumber1List.add(weight);
+                    updateListView(outputListView1,outputNumber1List);
+                    break;
+                case 2:
+                    outputNumber2List.add(weight);
+                    updateListView(outputListView2,outputNumber2List);
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
     private double getValueForActiveWindow(double activeWindow) {
