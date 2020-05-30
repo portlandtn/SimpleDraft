@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.drm.DrmConvertedStatus;
 import android.os.Bundle;
 
 import android.text.InputType;
@@ -270,13 +271,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateListView(ListView listView, List<Double> values) {
-        String[] listStringArray = new String[values.size()];
+        Double[] listOfDouble = new Double[values.size()];
 
         for (int i = 0; i < values.size(); i++) {
-            listStringArray[i] = values.get(i).toString();
+            listOfDouble[i] = Converters.round(values.get(i),4);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_view_layout, R.id.listViewItem, listStringArray);
+        ArrayAdapter<Double> adapter = new ArrayAdapter<>(this, R.layout.list_view_layout, R.id.listViewItem, listOfDouble);
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

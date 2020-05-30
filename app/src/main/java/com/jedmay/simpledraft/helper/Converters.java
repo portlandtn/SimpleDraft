@@ -112,7 +112,10 @@ public class Converters {
 
     public static double round(double value, int precision) {
         int scale = (int) Math.pow(10, precision);
-        return (double) Math.round(value * scale) / scale;
+        double result = Math.round(value*scale + Math.signum(value)*0.1);
+        result = result / scale;
+        return result;
+
     }
 
     public static double[] listOfDoubleToDoubleArray(List<Double> doubleList) {

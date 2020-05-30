@@ -217,6 +217,18 @@ public class ConvertersUnitTests {
     }
 
     @Test
+    public void roundTest4Decimals() {
+        double numberToRound = 9.03085;
+        int precision = 4;
+
+        double expected = 9.0309;
+
+        double actual = Converters.round(numberToRound, precision);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
     public void convertListOfDoubleToDoubleArray() {
         List<Double> doubleList = new ArrayList<>(4);
         doubleList.add(14.0208);
