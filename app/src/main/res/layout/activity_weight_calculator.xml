@@ -7,6 +7,17 @@
     android:background="@color/darkBackground"
     tools:context=".WeightCalculatorActivity">
 
+    <TextView
+        android:id="@+id/weightTotalTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_0_00"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/cancelWeightButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Switch
         android:id="@+id/lengthMathMethod"
         android:layout_width="wrap_content"
@@ -113,29 +124,56 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/pushWeightButton"
+        android:id="@+id/clearAllWeightsButton"
         android:layout_width="@dimen/doubleSmallButtonSize"
         android:layout_height="@dimen/smallButtonSize"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:background="@mipmap/ic_button_background_round"
-        android:text="@string/push_to_calc"
+        android:text="@string/clear"
         android:textColor="@color/colorText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/pushToWeightListViewButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginTop="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/push_to_calc"
+        android:textColor="@color/colorText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/weightTextView"
+        app:layout_constraintTop_toBottomOf="@+id/thicknessEditText" />
 
     <TextView
         android:id="@+id/weightTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/_0_00"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/colorText"
+        app:layout_constraintBottom_toBottomOf="@+id/pushToWeightListViewButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thicknessEditText" />
+        app:layout_constraintTop_toTopOf="@+id/pushToWeightListViewButton" />
+
+    <ListView
+        android:id="@+id/weightListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/weightTotalTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pushToWeightListViewButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
