@@ -1,5 +1,6 @@
 package com.jedmay.simpledraft;
 
+import com.jedmay.simpledraft.helper.DataProvider;
 import com.jedmay.simpledraft.helper.Trig;
 import static org.junit.Assert.*;
 
@@ -140,7 +141,7 @@ public class TrigUnitTests {
         expectedAngles.add(11.2222);
         expectedAngles.add(2.3859);
 
-        List<Double> actualAngles = Trig.updateAngles(existingAngles, newAngles);
+        List<Double> actualAngles = DataProvider.updateAngles(existingAngles, newAngles);
 
         assertEquals(expectedAngles, actualAngles);
     }
@@ -161,9 +162,43 @@ public class TrigUnitTests {
         expectedAngles.add(11.2222);
         expectedAngles.add(2.3859);
 
-        List<Double> actualAngles = Trig.updateAngles(existingAngles, newAngles);
+        List<Double> actualAngles = DataProvider.updateAngles(existingAngles, newAngles);
 
         assertEquals(expectedAngles, actualAngles);
+    }
+
+    @Test
+    public void getAngleFromListOfAngles() {
+        List<Double> listOfAngles = new ArrayList<>();
+        listOfAngles.add(4.7636);
+        listOfAngles.add(9.4623);
+        listOfAngles.add(14.0623);
+        listOfAngles.add(18.4349);
+
+        int activeAngle = 1;
+
+        double expected = 4.7636;
+
+        double actual = Trig.getAngleForTrig(listOfAngles, activeAngle);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
+    public void getAngleFromListOfAnglesWhereAngleGreaterThan1() {
+        List<Double> listOfAngles = new ArrayList<>();
+        listOfAngles.add(4.7636);
+        listOfAngles.add(9.4623);
+        listOfAngles.add(14.0623);
+        listOfAngles.add(18.4349);
+
+        int activeAngle = 3;
+
+        double expected = 14.0623;
+
+        double actual = Trig.getAngleForTrig(listOfAngles, activeAngle);
+
+        assertEquals(expected, actual, deltaValue);
     }
 
 }

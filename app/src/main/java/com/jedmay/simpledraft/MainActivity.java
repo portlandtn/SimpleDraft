@@ -27,6 +27,7 @@ import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.helper.Trig;
+import com.jedmay.simpledraft.helper.TrigFunction;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.helper.DataProvider;
 
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         populateOutputSpinners();
+        populateListOfAngles(jobNumberWindow1Spinner.getSelectedItem().toString(), 1);
+        populateListOfAngles(jobNumberWindow2Spinner.getSelectedItem().toString(), 2);
     }
 
     @Override
@@ -107,22 +110,22 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-
+        populateListOfAngles(jobNumberWindow1Spinner.getSelectedItem().toString(), 1);
+        populateListOfAngles(jobNumberWindow2Spinner.getSelectedItem().toString(), 2);
     }
 
-    private double getValueForActiveWindow(double activeWindow) {
-        double value;
-        try {
-            if (activeWindow == 1) {
-                value = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber1List);
-            } else {
-                value = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber2List);
-            }
-        } catch (NullPointerException ex) {
-            Log.d("trigValueForWindow", Objects.requireNonNull(ex.getLocalizedMessage()));
-            value = 0;
+    private void populateListOfAngles(String stateName, int window) {
+        List<Double> angles = new ArrayList<>();
+        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle1());
+        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle2());
+        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle3());
+        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle4());
+
+        if (window == 1) {
+            state1Angles = angles;
+        } else {
+            state2Angles = angles;
         }
-        return value;
     }
 
     private void saveNewState(List<Double> numberList, List<Double> stateAngles) {
@@ -169,6 +172,106 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
+    }
+
+    private void doTrig(TrigFunction function) {
+        double mathValue;
+        double angle = 0;
+        double answer = 0;
+        switch (activeWindow) {
+            case 1:
+                angle = Trig.getAngleForTrig(state1Angles, activeAngleNumber);
+                mathValue = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber1List);
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 1) {
+                     // if outputNumber was not used in calculation, the last number should be removed from the stack.
+                    outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
+                }
+
+                if (mathMethod.isChecked()) {
+                    mathValue = Converters.footDimensionToDecimalDimension(mathValue);
+                }
+
+                try {
+                    switch (function) {
+                        case B2R:
+                            answer = Trig.baseToRise(mathValue, angle);
+                            break;
+                        case B2S:
+                            answer = Trig.baseToSlope(mathValue, angle);
+                            break;
+                        case S2B:
+                            answer = Trig.slopeToBase(mathValue, angle);
+                            break;
+                        case S2R:
+                            answer = Trig.slopeToRise(mathValue, angle);
+                            break;
+                        case R2B:
+                            answer = Trig.riseToBase(mathValue, angle);
+                            break;
+                        case R2S:
+                            answer = Trig.riseToSlope(mathValue, angle);
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (NullPointerException ex) {
+                    Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                }
+                if (mathMethod.isChecked()) {
+                    answer = Converters.decimalDimensionToFootDimension(answer);
+                }
+                outputNumber1List.add(answer);
+                break;
+            case 2:
+                angle = Trig.getAngleForTrig(state2Angles, activeAngleNumber);
+                mathValue = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber2List);
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 1) {
+                    // if outputNumber was not used in calculation, then the last number should be removed from the stack.
+                    outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
+                }
+
+                if (mathMethod.isChecked()) {
+                    mathValue = Converters.footDimensionToDecimalDimension(mathValue);
+                }
+
+                try {
+                    switch (function) {
+                        case B2R:
+                            answer = Trig.baseToRise(mathValue, angle);
+                            break;
+                        case B2S:
+                            answer = Trig.baseToSlope(mathValue, angle);
+                            break;
+                        case S2B:
+                            answer = Trig.slopeToBase(mathValue, angle);
+                            break;
+                        case S2R:
+                            answer = Trig.slopeToRise(mathValue, angle);
+                            break;
+                        case R2B:
+                            answer = Trig.riseToBase(mathValue, angle);
+                            break;
+                        case R2S:
+                            answer = Trig.riseToSlope(mathValue, angle);
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (NullPointerException ex) {
+                    Log.d("mathValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+                }
+                if (mathMethod.isChecked()) {
+                    answer = Converters.decimalDimensionToFootDimension(answer);
+                }
+                outputNumber2List.add(answer);
+                break;
+            default:
+                break;
+        }
+        outputNumber.setLength(0);
+        updateListView(outputListView1, outputNumber1List);
+        updateListView(outputListView2, outputNumber2List);
+
     }
 
     private void doMath(ArithmeticFunction function) {
@@ -260,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
             newAngles.add(state.getAngle2());
             newAngles.add(state.getAngle3());
             newAngles.add(state.getAngle4());
-            state1Angles = Trig.updateAngles(state1Angles, newAngles);
+            state1Angles = DataProvider.updateAngles(state1Angles, newAngles);
             updateRadioButtonValues(state1Angles);
         } else {
             String currentStateName = jobNumberWindow1Spinner.getSelectedItem().toString();
@@ -272,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
             newAngles.add(state.getAngle2());
             newAngles.add(state.getAngle3());
             newAngles.add(state.getAngle4());
-            state2Angles = Trig.updateAngles(state2Angles, newAngles);
+            state2Angles = DataProvider.updateAngles(state2Angles, newAngles);
             updateRadioButtonValues(state2Angles);
         }
     }
@@ -478,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
                     newAngles.add(state.getAngle2());
                     newAngles.add(state.getAngle3());
                     newAngles.add(state.getAngle4());
-                    state1Angles = Trig.updateAngles(state1Angles, newAngles);
+                    state1Angles = DataProvider.updateAngles(state1Angles, newAngles);
                     updateRadioButtonValues(state1Angles);
                 }
             }
@@ -508,7 +611,7 @@ public class MainActivity extends AppCompatActivity {
                     newAngles.add(state.getAngle2());
                     newAngles.add(state.getAngle3());
                     newAngles.add(state.getAngle4());
-                    state2Angles = Trig.updateAngles(state2Angles, newAngles);
+                    state2Angles = DataProvider.updateAngles(state2Angles, newAngles);
                     updateRadioButtonValues(state2Angles);
                 }
             }
@@ -576,100 +679,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTrigonometryButtonOnClickListeners() {
         riseToBaseButton.setOnClickListener(v -> {
-            double value;
-            value = getValueForActiveWindow(activeWindow);
-
-            if (isDetailingMathMethod) {
-                value = Converters.footDimensionToDecimalDimension(value);
-            }
-
-            Trig.riseToBase(value, activeAngleNumber);
-
-            if (isDetailingMathMethod) {
-                value = Converters.decimalDimensionToFootDimension(value);
-            }
-            updateListViewWithValueFromTrig(value);
-
+            doTrig(TrigFunction.R2B);
         });
 
         riseToSlopeButton.setOnClickListener(v -> {
-            double value;
-            value = getValueForActiveWindow(activeWindow);
-
-            if (isDetailingMathMethod) {
-                value = Converters.footDimensionToDecimalDimension(value);
-            }
-
-            Trig.riseToSlope(value, activeAngleNumber);
-
-            if (isDetailingMathMethod) {
-                value = Converters.decimalDimensionToFootDimension(value);
-            }
-            updateListViewWithValueFromTrig(value);
+            doTrig(TrigFunction.R2S);
         });
 
         baseToRiseButton.setOnClickListener(v -> {
-            double value;
-            value = getValueForActiveWindow(activeWindow);
-
-            if (isDetailingMathMethod) {
-                value = Converters.footDimensionToDecimalDimension(value);
-            }
-
-            Trig.baseToRise(value, activeAngleNumber);
-
-            if (isDetailingMathMethod) {
-                value = Converters.decimalDimensionToFootDimension(value);
-            }
-            updateListViewWithValueFromTrig(value);
+            doTrig(TrigFunction.B2R);
         });
 
         baseToSlopeButton.setOnClickListener(v -> {
-            double value;
-            value = getValueForActiveWindow(activeWindow);
-
-            if (isDetailingMathMethod) {
-                value = Converters.footDimensionToDecimalDimension(value);
-            }
-
-            Trig.baseToSlope(value, activeAngleNumber);
-
-            if (isDetailingMathMethod) {
-                value = Converters.decimalDimensionToFootDimension(value);
-            }
-            updateListViewWithValueFromTrig(value);
+            doTrig(TrigFunction.B2S);
         });
 
         slopeToBaseButton.setOnClickListener(v -> {
-            double value;
-            value = getValueForActiveWindow(activeWindow);
-
-            if (isDetailingMathMethod) {
-                value = Converters.footDimensionToDecimalDimension(value);
-            }
-
-            Trig.slopeToBase(value, activeAngleNumber);
-
-            if (isDetailingMathMethod) {
-                value = Converters.decimalDimensionToFootDimension(value);
-            }
-            updateListViewWithValueFromTrig(value);
+            doTrig(TrigFunction.S2B);
         });
 
         slopeToRiseButton.setOnClickListener(v -> {
-            double value;
-            value = getValueForActiveWindow(activeWindow);
-
-            if (isDetailingMathMethod) {
-                value = Converters.footDimensionToDecimalDimension(value);
-            }
-
-            Trig.slopeToRise(value, activeAngleNumber);
-
-            if (isDetailingMathMethod) {
-                value = Converters.decimalDimensionToFootDimension(value);
-            }
-            updateListViewWithValueFromTrig(value);
+            doTrig(TrigFunction.S2R);
         });
     }
 

@@ -63,7 +63,7 @@ public class DataProvider {
         } else if (listOfDouble.size() > 0) {
             return listOfDouble.get(listOfDouble.size() - 1);
         } else {
-            return 0;
+            return 0.0;
         }
     }
 
@@ -103,5 +103,22 @@ public class DataProvider {
 
     public static int getNumberOfValuesToRemoveFromList(String outputNumber) {
         return outputNumber.isEmpty() ? 2 : 1;
+    }
+
+    public static List<Double> updateAngles(List<Double> originalAngles, List<Double> newAngles) {
+        if (originalAngles == null || originalAngles.size() == 0) {
+            originalAngles = new ArrayList<>(4);
+            originalAngles.add(newAngles.get(0));
+            originalAngles.add(newAngles.get(1));
+            originalAngles.add(newAngles.get(2));
+            originalAngles.add(newAngles.get(3));
+        } else {
+            originalAngles.set(0, newAngles.get(0));
+            originalAngles.set(1, newAngles.get(1));
+            originalAngles.set(2, newAngles.get(2));
+            originalAngles.set(3, newAngles.get(3));
+        }
+
+        return originalAngles;
     }
 }
