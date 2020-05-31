@@ -115,7 +115,6 @@ public class Converters {
         double result = Math.round(value*scale + Math.signum(value)*0.1);
         result = result / scale;
         return result;
-
     }
 
     public static double[] listOfDoubleToDoubleArray(List<Double> doubleList) {

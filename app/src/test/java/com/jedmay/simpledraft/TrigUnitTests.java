@@ -102,7 +102,7 @@ public class TrigUnitTests {
     @Test
     public void getRoofSlopeFromAngle() {
         double angle = 9.4623;
-        double expected = 2;
+        double expected = 0.16667;
 
         double actual = Trig.getRoofSlopeFromAngle(angle);
 
@@ -112,7 +112,7 @@ public class TrigUnitTests {
     @Test
     public void getRoofSlopeFromAngleWith1On12() {
         double angle = 4.7636;
-        double expected = 1;
+        double expected = 0.0833333;
 
         double actual = Trig.getRoofSlopeFromAngle(angle);
 

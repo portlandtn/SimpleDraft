@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.drm.DrmConvertedStatus;
 import android.os.Bundle;
 
 import android.text.InputType;
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         setOnClickListeners();
 
-        setSlopeText();
+        setRoofSlopeTextOnStartup();
 
         Intent intent = getIntent();
         double weight = intent.getDoubleExtra(Constants.weight, 0);
@@ -185,15 +184,19 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     switch (function) {
                         case ADD:
+                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         case SUBTRACT:
+                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         case MULTIPLY:
+                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         case DIVIDE:
+                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         default:
@@ -213,15 +216,19 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     switch (function) {
                         case ADD:
+                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         case SUBTRACT:
+                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         case MULTIPLY:
+                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         case DIVIDE:
+                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
                             break;
                         default:
@@ -329,30 +336,39 @@ public class MainActivity extends AppCompatActivity {
         updateListView(outputListView2, outputNumber2List);
     }
 
-    private void setSlopeText() {
+    private void setRoofSlopeTextOnStartup() {
+        String name = jobNumberWindow1Spinner.getAdapter().getItem(0).toString();
+        OutputState state = db.outputStateDao().getOutputStateFromName(name);
+        state1Angles = new ArrayList<>();
+        state1Angles.add(state.getAngle1());
+        state1Angles.add(state.getAngle2());
+        state1Angles.add(state.getAngle3());
+        state1Angles.add(state.getAngle4());
         switch (activeAngleNumber) {
             case 1:
-                setRoofSlopeText(Double.parseDouble(angle1RadioButton.getText().toString()));
+                updateRoofSlopeText(state1Angles.get(0));
                 break;
             case 2:
-                setRoofSlopeText(Double.parseDouble(angle2RadioButton.getText().toString()));
+                updateRoofSlopeText(state1Angles.get(1));
                 break;
             case 3:
-                setRoofSlopeText(Double.parseDouble(angle3RadioButton.getText().toString()));
+                updateRoofSlopeText(state1Angles.get(2));
                 break;
             case 4:
-                setRoofSlopeText(Double.parseDouble(angle4RadioButton.getText().toString()));
+                updateRoofSlopeText(state1Angles.get(3));
                 break;
             default:
-                setRoofSlopeText(0.0);
+                updateRoofSlopeText(0.0);
                 break;
         }
 
     }
 
-    private void setRoofSlopeText(Double angle) {
+    private void updateRoofSlopeText(Double angle) {
         double roofSlope = Trig.getRoofSlopeFromAngle(angle);
-        currentRoofSlope.setText(String.valueOf(Converters.round(roofSlope, 4)));
+        roofSlope *= 12;
+        roofSlope = Converters.round(roofSlope, 4);
+        currentRoofSlope.setText(String.valueOf(roofSlope));
     }
 
     // endregion
@@ -385,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         outputListView1.setOnItemLongClickListener((parent, view, position, id) -> {
-
+            //May do something here one day
             return false;
         });
 
@@ -400,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         outputListView2.setOnItemLongClickListener((parent, view, position, id) -> {
-
+            //May do something here one day
             return false;
         });
 
@@ -742,9 +758,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             });
-            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-                dialog.cancel();
-            });
+            alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         });
@@ -798,19 +812,55 @@ public class MainActivity extends AppCompatActivity {
     private void setRadioButtonOnClickListeners() {
 
         angle1RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle1RadioButton.getText().toString()));
+            switch (activeWindow) {
+                case 1:
+                    updateRoofSlopeText(state1Angles.get(0));
+                    break;
+                case 2:
+                    updateRoofSlopeText(state2Angles.get(0));
+                    break;
+                default:
+                    break;
+            }
             activeAngleNumber = 1;
         });
         angle2RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle2RadioButton.getText().toString()));
+            switch (activeWindow) {
+                case 1:
+                    updateRoofSlopeText(state1Angles.get(1));
+                    break;
+                case 2:
+                    updateRoofSlopeText(state2Angles.get(1));
+                    break;
+                default:
+                    break;
+            }
             activeAngleNumber = 2;
         });
         angle3RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle3RadioButton.getText().toString()));
+            switch (activeWindow) {
+                case 1:
+                    updateRoofSlopeText(state1Angles.get(2));
+                    break;
+                case 2:
+                    updateRoofSlopeText(state2Angles.get(2));
+                    break;
+                default:
+                    break;
+            }
             activeAngleNumber = 3;
         });
         angle4RadioButton.setOnClickListener(v -> {
-            setRoofSlopeText(Double.parseDouble(angle4RadioButton.getText().toString()));
+            switch (activeWindow) {
+                case 1:
+                    updateRoofSlopeText(state1Angles.get(3));
+                    break;
+                case 2:
+                    updateRoofSlopeText(state2Angles.get(3));
+                    break;
+                default:
+                    break;
+            }
             activeAngleNumber = 4;
         });
 

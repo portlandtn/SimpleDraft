@@ -33,7 +33,7 @@ public class Trig {
 
     public static double getRoofSlopeFromAngle(double angle) {
         final double baseDimensionOn12 = 1;
-        return (baseToRise(baseDimensionOn12, angle)) * 12;
+        return (baseToRise(baseDimensionOn12, angle));
     }
 
     public static List<Double> updateAngles(List<Double> originalAngles, List<Double> newAngles) {
