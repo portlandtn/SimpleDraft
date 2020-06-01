@@ -37,7 +37,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
     double[] angles;
     String jobNumber;
     int activeAngle;
-    double baseDimension, riseDimension, angle;
+    double baseDimension, riseDimension, angleForCalc;
     OutputState state;
 
     @Override
@@ -142,7 +142,11 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(angleEditText.hasFocus()) {
+                    if(!angleEditText.getText().toString().isEmpty()) {
+                        angleForCalc = Double.parseDouble(angleEditText.getText().toString());
+                    }
+                }
             }
 
             @Override
@@ -178,18 +182,26 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
         angle1RadioButton.setOnClickListener(v -> {
             activeAngle = 0;
+            angleForCalc = angles[0];
+            clearEditTextViews();
             updateEditTextViews();
         });
         angle2RadioButton.setOnClickListener(v -> {
             activeAngle = 1;
+            angleForCalc = angles[1];
+            clearEditTextViews();
             updateEditTextViews();
         });
         angle3RadioButton.setOnClickListener(v -> {
             activeAngle = 2;
+            angleForCalc = angles[2];
+            clearEditTextViews();
             updateEditTextViews();
         });
         angle4RadioButton.setOnClickListener(v -> {
             activeAngle = 3;
+            angleForCalc = angles[3];
+            clearEditTextViews();
             updateEditTextViews();
         });
 
@@ -217,13 +229,19 @@ public class AngleCalculatorActivity extends AppCompatActivity {
 
     }
 
+    private void clearEditTextViews() {
+        baseEditText.setText("");
+        riseEditText.setText("");
+        angleEditText.setText("");
+    }
+
     private void updateEditTextViews() {
 
         updateJobNumberSelection();
-        angle = 0.0;
+        angleForCalc = 0.0;
         for(int i = 0; i < angles.length; i++){
             if(i == activeAngle) {
-                angle = angles[i];
+                angleForCalc = angles[i];
                 break;
             }
         }
@@ -247,12 +265,12 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         String baseText = String.format("%.4f", baseDimension);
         baseEditText.setText(baseText);
 
-        riseDimension = Trig.baseToRise(baseDimension, angle);
+        riseDimension = Trig.baseToRise(baseDimension, angleForCalc);
         riseDimension = Converters.decimalDimensionToFootDimension(riseDimension);
         String riseText = String.format("%.4f",riseDimension);
         riseEditText.setText(riseText);
 
-        String angleText = String.format("%.4f", angle);
+        String angleText = String.format("%.4f", angleForCalc);
         angleEditText.setText(angleText);
     }
 
@@ -267,12 +285,12 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         baseDimension = Double.parseDouble(baseEditText.getText().toString());
         baseDimension = Converters.footDimensionToDecimalDimension(baseDimension);
 
-        angle = Converters.baseRiseToAngle(baseDimension, riseDimension);
-        String angleText = String.format("%.4f",angle);
+        angleForCalc = Converters.baseRiseToAngle(baseDimension, riseDimension);
+        String angleText = String.format("%.4f", angleForCalc);
         angleEditText.setText(angleText);
 
         updateAngleRadioButtonText(angleText);
-        angles[activeAngle] = angle;
+        angles[activeAngle] = angleForCalc;
 
     }
 
@@ -281,16 +299,16 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         // If the angle is changed, the base dimension is reset to 1.0000
         // and the rise is calculated, giving the user an 'on 12' roof slope.
 
+        String angleText = angleEditText.getText().toString();
+        updateAngleRadioButtonText(angleText);
+        angles[activeAngle] = angleForCalc;
+
         baseDimension = 1.0;
         baseEditText.setText(String.format("%.4f",baseDimension));
 
-        riseDimension = Trig.baseToRise(baseDimension, angle);
+        riseDimension = Trig.baseToRise(baseDimension, angleForCalc);
         riseDimension = Converters.decimalDimensionToFootDimension(riseDimension);
         riseEditText.setText(String.format("%.4f",riseDimension));
-
-        String angleText = angleEditText.getText().toString();
-        updateAngleRadioButtonText(angleText);
-        angles[activeAngle] = angle;
     }
 
     private void updateAngleRadioButtonText(String angleText) {
@@ -320,6 +338,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
             for (int i = 0; i < states.size(); i++) {
                 if (jobNumberSpinner.getAdapter().getItem(i).toString().contains(jobNumber)) {
                     jobNumberSpinner.setSelection(i);
+                    return;
                 }
             }
         } catch (NullPointerException ex) {
