@@ -144,7 +144,7 @@ public class ArithmeticUnitTests {
         double length = 18;
         double width = 5;
         double thickness = 0.25;
-        double expected = 6.381;
+        double expected = 6.3802;
 
         double actual = Arithmetic.calculateWeightUsingInchDimensions(length, width, thickness);
 

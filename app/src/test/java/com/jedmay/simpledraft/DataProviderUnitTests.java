@@ -1,6 +1,7 @@
 package com.jedmay.simpledraft;
 
 import com.jedmay.simpledraft.helper.DataProvider;
+import com.jedmay.simpledraft.helper.MathType;
 
 import org.junit.Test;
 
@@ -284,23 +285,49 @@ public class DataProviderUnitTests {
     }
 
     @Test
-    public void getNumberOfValuesToRemoveFromListShouldReturn1() {
+    public void getNumberOfValuesToRemoveFromListWithArithmeticShouldReturn1() {
         String outputNumber = "11.0204";
+        MathType type = MathType.ARITHMETIC;
 
         int expected = 1;
 
-        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber);
+        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber, type);
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void getNumberOfValuesToRemoveFromListShouldReturn2() {
+    public void getNumberOfValuesToRemoveFromListWithArithmeticShouldReturn2() {
         String outputNumber = "";
+        MathType type = MathType.ARITHMETIC;
 
         int expected = 2;
 
-        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber);
+        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber, type);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getNumberOfValuesToRemoveFromListWithTrigShouldReturn1() {
+        String outputNumber = "";
+        MathType type = MathType.TRIG;
+
+        int expected = 1;
+
+        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber, type);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getNumberOfValuesToRemoveFromListWithTrigShouldReturn0() {
+        String outputNumber = "1.0408";
+        MathType type = MathType.TRIG;
+
+        int expected = 0;
+
+        int actual = DataProvider.getNumberOfValuesToRemoveFromList(outputNumber, type);
 
         assertEquals(expected, actual);
     }

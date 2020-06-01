@@ -101,8 +101,13 @@ public class DataProvider {
         return state;
     }
 
-    public static int getNumberOfValuesToRemoveFromList(String outputNumber) {
-        return outputNumber.isEmpty() ? 2 : 1;
+    public static int getNumberOfValuesToRemoveFromList(String outputNumber, MathType type) {
+        if (type == MathType.TRIG) {
+            return outputNumber.isEmpty() ? 1 : 0;
+        } else if (type == MathType.ARITHMETIC) {
+            return outputNumber.isEmpty() ? 2 : 1;
+        }
+        return 0;
     }
 
     public static List<Double> updateAngles(List<Double> originalAngles, List<Double> newAngles) {

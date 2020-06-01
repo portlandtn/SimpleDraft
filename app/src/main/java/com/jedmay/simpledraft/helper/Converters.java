@@ -107,7 +107,9 @@ public class Converters {
         sixteenths *= 16;
         sixteenths /= 10000;
 
-        return feet + inches + sixteenths;
+        double answer =  feet + inches + sixteenths;
+        // this method MUST return 4-digit decimal because of the way the conversions take place later.
+        return round(answer, 4);
     }
 
     public static double round(double value, int precision) {

@@ -19,18 +19,21 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
 import com.jedmay.simpledraft.helper.Arithmetic;
 import com.jedmay.simpledraft.helper.ArithmeticFunction;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.Converters;
+import com.jedmay.simpledraft.helper.MathType;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.helper.Trig;
 import com.jedmay.simpledraft.helper.TrigFunction;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.helper.DataProvider;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
     List<Double> outputNumber1List, outputNumber2List, state1Angles, state2Angles;
 
     int activeWindow, activeAngleNumber;
-
-    boolean isDetailingMathMethod;
     // endregion
 
     @Override
@@ -82,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
         sampleDbData.populateDbWithSampleData();
         activeWindow = 1;
         activeAngleNumber = 1;
-        isDetailingMathMethod = false;
         outputNumber = new StringBuilder();
 
         findAllViews();
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 angle = Trig.getAngleForTrig(state1Angles, activeAngleNumber);
                 mathValue = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber1List);
-                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 1) {
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.TRIG) == 1) {
                      // if outputNumber was not used in calculation, the last number should be removed from the stack.
                     outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
                 }
@@ -225,11 +225,10 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 angle = Trig.getAngleForTrig(state2Angles, activeAngleNumber);
                 mathValue = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber2List);
-                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 1) {
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.TRIG) == 1) {
                     // if outputNumber was not used in calculation, then the last number should be removed from the stack.
                     outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
                 }
-
                 if (mathMethod.isChecked()) {
                     mathValue = Converters.footDimensionToDecimalDimension(mathValue);
                 }
@@ -280,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
                 outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1)); // will be removed irregardless
-                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 2) {
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.ARITHMETIC) == 2) {
                     // if outputNumber was not used in calculation, then two numbers should be removed from the stack.
                     outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
                 }
@@ -288,19 +287,19 @@ public class MainActivity extends AppCompatActivity {
                     switch (function) {
                         case ADD:
                             assert mathValues != null;
-                            outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case SUBTRACT:
                             assert mathValues != null;
-                            outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case MULTIPLY:
                             assert mathValues != null;
-                            outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case DIVIDE:
                             assert mathValues != null;
-                            outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         default:
                             break;
@@ -312,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber2List);
                 outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1)); // will be removed irregardless
-                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString()) == 2) {
+                if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.ARITHMETIC) == 2) {
                     // if outputNumber was not used in calculation, then two numbers should be removed from the stack.
                     outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
                 }
@@ -320,19 +319,19 @@ public class MainActivity extends AppCompatActivity {
                     switch (function) {
                         case ADD:
                             assert mathValues != null;
-                            outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case SUBTRACT:
                             assert mathValues != null;
-                            outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case MULTIPLY:
                             assert mathValues != null;
-                            outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case DIVIDE:
                             assert mathValues != null;
-                            outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), isDetailingMathMethod));
+                            outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         default:
                             break;
@@ -679,27 +678,57 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTrigonometryButtonOnClickListeners() {
         riseToBaseButton.setOnClickListener(v -> {
-            doTrig(TrigFunction.R2B);
+            try {
+                doTrig(TrigFunction.R2B);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Toast.makeText(getApplicationContext(), "You must either have a number in the window or a number entered.", Toast.LENGTH_LONG).show();
+                Log.d("NoValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+            }
         });
 
         riseToSlopeButton.setOnClickListener(v -> {
-            doTrig(TrigFunction.R2S);
+            try {
+                doTrig(TrigFunction.R2S);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Toast.makeText(getApplicationContext(), "You must either have a number in the window or a number entered.", Toast.LENGTH_LONG).show();
+                Log.d("NoValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+            }
         });
 
         baseToRiseButton.setOnClickListener(v -> {
-            doTrig(TrigFunction.B2R);
+            try {
+                doTrig(TrigFunction.B2R);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Toast.makeText(getApplicationContext(), "You must either have a number in the window or a number entered.", Toast.LENGTH_LONG).show();
+                Log.d("NoValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+            }
         });
 
         baseToSlopeButton.setOnClickListener(v -> {
-            doTrig(TrigFunction.B2S);
+            try {
+               doTrig(TrigFunction.B2S);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Toast.makeText(getApplicationContext(), "You must either have a number in the window or a number entered.", Toast.LENGTH_LONG).show();
+                Log.d("NoValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+            }
         });
 
         slopeToBaseButton.setOnClickListener(v -> {
-            doTrig(TrigFunction.S2B);
+            try {
+                doTrig(TrigFunction.S2B);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Toast.makeText(getApplicationContext(), "You must either have a number in the window or a number entered.", Toast.LENGTH_LONG).show();
+                Log.d("NoValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+            }
         });
 
         slopeToRiseButton.setOnClickListener(v -> {
-            doTrig(TrigFunction.S2R);
+            try {
+                doTrig(TrigFunction.S2R);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Toast.makeText(getApplicationContext(), "You must either have a number in the window or a number entered.", Toast.LENGTH_LONG).show();
+                Log.d("NoValues", Objects.requireNonNull(ex.getLocalizedMessage()));
+            }
         });
     }
 
@@ -898,7 +927,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setSwitchOnClickListeners() {
         mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            isDetailingMathMethod = mathMethod.isChecked();
             mathMethod.setText(mathMethod.isChecked() ? "Detailing" : "Standard");
         });
     }
@@ -973,8 +1001,8 @@ public class MainActivity extends AppCompatActivity {
         riseToBaseButton = findViewById(R.id.riseToBaseButton);
         baseToSlopeButton = findViewById(R.id.baseToSlopeButton);
         baseToRiseButton = findViewById(R.id.baseToRiseButton);
-        slopeToBaseButton = findViewById(R.id.slopeToRiseButton);
-        slopeToRiseButton = findViewById(R.id.slopeToBaseButton);
+        slopeToBaseButton = findViewById(R.id.slopeToBaseButton);
+        slopeToRiseButton = findViewById(R.id.slopeToRiseButton);
 
         // Math Buttons
         divideButton = findViewById(R.id.divideButton);
