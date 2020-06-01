@@ -390,35 +390,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void updateListViewWithValueFromTrig(double value) {
-        if (outputNumber.toString().isEmpty()) {
-            switch (activeWindow) {
-                case 1:
-                    outputNumber1List.set(outputNumber1List.size() - 1, value);
-                    break;
-                case 2:
-                    outputNumber2List.set(outputNumber2List.size() - 1, value);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            switch (activeWindow) {
-                case 1:
-                    outputNumber1List.add(value);
-                    break;
-                case 2:
-                    outputNumber2List.add(value);
-                    break;
-                default:
-                    break;
-            }
-        }
-        outputNumber.setLength(0);
-        updateListView(outputListView1, outputNumber1List);
-        updateListView(outputListView2, outputNumber2List);
-    }
-
     private void setRoofSlopeTextOnStartup() {
         String name = jobNumberWindow1Spinner.getAdapter().getItem(0).toString();
         if (name.equals(Constants.newSave)) return;
@@ -601,26 +572,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void newOutputStateDialog(Context context) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Save New State");
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-        builder.setView(input);
-
-        builder.setPositiveButton("OK", (dialog, which) -> jobNumber = input.getText().toString());
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
-    }
     private void saveNewState(List<Double> numberList, List<Double> stateAngles) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Save New State");
 
         final EditText input = new EditText(getApplicationContext());
 
-        input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
         builder.setView(input);
 
         builder.setPositiveButton("Save", (dialog, which) -> {
