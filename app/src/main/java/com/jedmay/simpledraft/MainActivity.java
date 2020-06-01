@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,13 +28,13 @@ import com.jedmay.simpledraft.helper.ArithmeticFunction;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.MathType;
+//import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.helper.SampleDbData;
 import com.jedmay.simpledraft.helper.Trig;
 import com.jedmay.simpledraft.helper.TrigFunction;
 import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.helper.DataProvider;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,9 +55,10 @@ public class MainActivity extends AppCompatActivity {
     TextView outputNumberTextView, currentRoofSlope;
 
     Switch mathMethod;
+    String jobNumber;
 
     SimpleDraftDbBadCompany db;
-//    SampleDbData sampleDbData;
+    SampleDbData sampleDbData;
 
     StringBuilder outputNumber;
 
@@ -116,62 +118,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateListOfAngles(String stateName, int window) {
         List<Double> angles = new ArrayList<>();
-        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle1());
-        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle2());
-        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle3());
-        angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle4());
+        if (stateName.equals(Constants.newSave)) {
+            angles.add(0.0);
+            angles.add(0.0);
+            angles.add(0.0);
+            angles.add(0.0);
+        } else {
+            angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle1());
+            angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle2());
+            angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle3());
+            angles.add(db.outputStateDao().getOutputStateFromName(stateName).getAngle4());
+        }
 
         if (window == 1) {
             state1Angles = angles;
         } else {
             state2Angles = angles;
         }
-    }
-
-    private void saveNewState(List<Double> numberList, List<Double> stateAngles) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Save New State");
-
-        final EditText input = new EditText(getApplicationContext());
-
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        builder.setView(input);
-
-        builder.setPositiveButton("Save", (dialog, which) -> {
-            OutputState newState = new OutputState();
-            String name = input.getText().toString();
-            newState.setName(name);
-            newState.setValues(numberList);
-            newState.setAngle1(stateAngles.get(0));
-            newState.setAngle2(stateAngles.get(1));
-            newState.setAngle3(stateAngles.get(2));
-            newState.setAngle4(stateAngles.get(3));
-            db.outputStateDao().insert(newState);
-            populateOutputSpinners();
-
-            switch (activeWindow) {
-                case 1:
-                    for(int i = 0; i < jobNumberWindow1Spinner.getAdapter().getCount(); i++) {
-                        String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
-                        if(jobNumberWindow1Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
-                            jobNumberWindow1Spinner.setSelection(i);
-                        }
-                    }
-                    break;
-                case 2:
-                    for(int i = 0; i < jobNumberWindow2Spinner.getAdapter().getCount(); i++) {
-                        String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
-                        if(jobNumberWindow2Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
-                            jobNumberWindow2Spinner.setSelection(i);
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-        });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
     }
 
     private void doTrig(TrigFunction function) {
@@ -356,7 +319,16 @@ public class MainActivity extends AppCompatActivity {
             String currentStateName = jobNumberWindow1Spinner.getSelectedItem().toString();
             outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
             outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
-            OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
+            OutputState state;
+            if (currentStateName.equals(Constants.newSave)) {
+                state = new OutputState();
+                state.setAngle1(0.0);
+                state.setAngle2(0.0);
+                state.setAngle3(0.0);
+                state.setAngle4(0.0);
+            } else {
+                state = db.outputStateDao().getOutputStateFromName(currentStateName);
+            }
             List<Double> newAngles = new ArrayList<>();
             newAngles.add(state.getAngle1());
             newAngles.add(state.getAngle2());
@@ -368,7 +340,16 @@ public class MainActivity extends AppCompatActivity {
             String currentStateName = jobNumberWindow1Spinner.getSelectedItem().toString();
             outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
             outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
-            OutputState state = db.outputStateDao().getOutputStateFromName(currentStateName);
+            OutputState state;
+            if (currentStateName.equals(Constants.newSave)) {
+                state = new OutputState();
+                state.setAngle1(0.0);
+                state.setAngle2(0.0);
+                state.setAngle3(0.0);
+                state.setAngle4(0.0);
+            } else {
+                state = db.outputStateDao().getOutputStateFromName(currentStateName);
+            }
             List<Double> newAngles = new ArrayList<>();
             newAngles.add(state.getAngle1());
             newAngles.add(state.getAngle2());
@@ -440,6 +421,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setRoofSlopeTextOnStartup() {
         String name = jobNumberWindow1Spinner.getAdapter().getItem(0).toString();
+        if (name.equals(Constants.newSave)) return;
+
         OutputState state = db.outputStateDao().getOutputStateFromName(name);
         state1Angles = new ArrayList<>();
         state1Angles.add(state.getAngle1());
@@ -569,9 +552,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String selected = jobNumberWindow1Spinner.getSelectedItem().toString();
 
-                if (selected.equals(Constants.newSave)) {
-                    saveNewState(outputNumber1List, state1Angles);
-                } else {
+                if (!selected.equals(Constants.newSave)) {
                     OutputState state = db.outputStateDao().getOutputStateFromName(selected);
                     outputNumber1List = state.getValues();
                     updateListView(outputListView1, outputNumber1List);
@@ -599,9 +580,7 @@ public class MainActivity extends AppCompatActivity {
                 updateActiveWindows(activeWindow);
                 String selected = jobNumberWindow2Spinner.getSelectedItem().toString();
 
-                if (selected.equals(Constants.newSave)) {
-                    saveNewState(outputNumber2List, state2Angles);
-                } else {
+                if (!selected.equals(Constants.newSave)) {
                     OutputState state = db.outputStateDao().getOutputStateFromName(selected);
                     outputNumber2List = state.getValues();
                     updateListView(outputListView2, outputNumber2List);
@@ -622,50 +601,105 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void newOutputStateDialog(Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save New State");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", (dialog, which) -> jobNumber = input.getText().toString());
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+    private void saveNewState(List<Double> numberList, List<Double> stateAngles) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save New State");
+
+        final EditText input = new EditText(getApplicationContext());
+
+        input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        builder.setView(input);
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            OutputState newState = new OutputState();
+            String name = input.getText().toString();
+            newState.setName(name);
+            newState.setValues(numberList);
+            newState.setAngle1(stateAngles.get(0));
+            newState.setAngle2(stateAngles.get(1));
+            newState.setAngle3(stateAngles.get(2));
+            newState.setAngle4(stateAngles.get(3));
+            db.outputStateDao().insert(newState);
+            populateOutputSpinners();
+
+            switch (activeWindow) {
+                case 1:
+                    for(int i = 0; i < jobNumberWindow1Spinner.getAdapter().getCount(); i++) {
+                        String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
+                        if(jobNumberWindow1Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
+                            jobNumberWindow1Spinner.setSelection(i);
+                        }
+                    }
+                    break;
+                case 2:
+                    for(int i = 0; i < jobNumberWindow2Spinner.getAdapter().getCount(); i++) {
+                        String currentName = db.outputStateDao().getOutputStateFromName(name).getName();
+                        if(jobNumberWindow2Spinner.getAdapter().getItem(i).toString().contains(currentName)) {
+                            jobNumberWindow2Spinner.setSelection(i);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
     private void setOutputSpinnerSaveButtonOnClickListeners() {
         saveState1Button.setOnClickListener(v -> {
-            OutputState state;
             boolean newSave = jobNumberWindow1Spinner.getSelectedItem().toString().equals(Constants.newSave);
 
             if (newSave) {
-                state = DataProvider.getOutputState(this);
+                saveNewState(outputNumber1List,state1Angles);
+                Toast.makeText(getApplicationContext(), jobNumber, Toast.LENGTH_SHORT).show();
             } else {
-                state = db.outputStateDao().getOutputStateFromName(jobNumberWindow1Spinner.getSelectedItem().toString());
-            }
-            state.setAngle1(state1Angles.get(0));
-            state.setAngle2(state1Angles.get(1));
-            state.setAngle3(state1Angles.get(2));
-            state.setAngle4(state1Angles.get(3));
-            state.setValues(outputNumber1List);
 
-            if (newSave) {
-                db.outputStateDao().insert(state);
-            } else {
+                OutputState state;
+                state = db.outputStateDao().getOutputStateFromName(jobNumberWindow1Spinner.getSelectedItem().toString());
+                state.setAngle1(state1Angles.get(0));
+                state.setAngle2(state1Angles.get(1));
+                state.setAngle3(state1Angles.get(2));
+                state.setAngle4(state1Angles.get(3));
+                state.setValues(outputNumber1List);
                 db.outputStateDao().update(state);
             }
+            populateOutputSpinners();
         });
 
         saveState2Button.setOnClickListener(v -> {
-            OutputState state;
             boolean newSave = jobNumberWindow2Spinner.getSelectedItem().toString().equals(Constants.newSave);
 
             if (newSave) {
-                state = DataProvider.getOutputState(getApplicationContext());
+                saveNewState(outputNumber2List,state2Angles);
             } else {
-                state = db.outputStateDao().getOutputStateFromName(jobNumberWindow2Spinner.getSelectedItem().toString());
-            }
-            state.setAngle1(state2Angles.get(0));
-            state.setAngle2(state2Angles.get(1));
-            state.setAngle3(state2Angles.get(2));
-            state.setAngle4(state2Angles.get(3));
-            state.setValues(outputNumber2List);
+                OutputState state;
 
-            if (newSave) {
-                db.outputStateDao().insert(state);
-            }
-            else {
+                state = db.outputStateDao().getOutputStateFromName(jobNumberWindow2Spinner.getSelectedItem().toString());
+                state.setAngle1(state2Angles.get(0));
+                state.setAngle2(state2Angles.get(1));
+                state.setAngle3(state2Angles.get(2));
+                state.setAngle4(state2Angles.get(3));
+                state.setValues(outputNumber2List);
                 db.outputStateDao().update(state);
             }
+
+            populateOutputSpinners();
+
         });
     }
 

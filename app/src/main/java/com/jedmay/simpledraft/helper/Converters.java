@@ -14,15 +14,20 @@ public class Converters {
     public static String doubleToString(List<Double> values) {
         StringBuilder returnValue = new StringBuilder();
 
-        if (values.size() == 0) return "";
-
-        if (values.size() > 1) {
-            for(int i = 0; i < values.size() - 1; i++) {
-                returnValue.append(values.get(i)).append(",");
+        if (values.size() <= 0) {
+            returnValue.append("0.0");
+        };
+        try {
+            if (values.size() > 1) {
+                for (int i = 0; i < values.size() - 1; i++) {
+                    returnValue.append(values.get(i)).append(",");
+                }
+                returnValue.append(values.get(values.size() - 1));
+            } else {
+                returnValue.append(values.get(0));
             }
-            returnValue.append(values.get(values.size()-1));
-        } else {
-            returnValue.append(values.get(0));
+        } catch (NullPointerException ex) {
+            returnValue.append("0.0");
         }
 
         return returnValue.toString();

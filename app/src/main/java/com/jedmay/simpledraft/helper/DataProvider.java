@@ -84,7 +84,7 @@ public class DataProvider {
         return listOfDouble;
     }
 
-    public static OutputState getOutputState(Context context) {
+    public static OutputState getNewOutputStateFromDialog(Context context) {
         OutputState state = new OutputState();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -96,7 +96,6 @@ public class DataProvider {
 
         builder.setPositiveButton("OK", (dialog, which) -> state.setName(input.getText().toString()));
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
         return state;
     }

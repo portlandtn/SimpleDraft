@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.icu.util.Output;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -91,7 +94,12 @@ public class EditJobsActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Nuke The World?");
             builder.setMessage("Are you sure you want to delete all jobs? There's no turning back if you do this.");
-            builder.setPositiveButton("Wipe Them Out", (dialog, which) -> db.outputStateDao().deleteAll());
+            builder.setPositiveButton("Wipe Them Out", (dialog, which) -> {
+
+                db.outputStateDao().deleteAll();
+                updateJobsToDeleteTextView();
+                updateListView();
+            });
             builder.setNegativeButton("Don't do it.", (dialog, which) -> dialog.cancel());
             builder.show();
         });
@@ -110,6 +118,24 @@ public class EditJobsActivity extends AppCompatActivity {
             updateJobsToDeleteTextView();
         });
 
+        jobsListListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            builder.setTitle("Rename job number");
+            builder.setMessage("Enter the new job number");
+            builder.setPositiveButton("OK",((dialog, which) -> {
+                String currentName = jobsListListView.getAdapter().getItem(position).toString();
+                OutputState state = db.outputStateDao().getOutputStateFromName(currentName);
+                state.setName(input.getText().toString());
+                db.outputStateDao().update(state);
+            }));
+            builder.setNegativeButton("Cancel", ((dialog, which) -> {
+                dialog.cancel();
+            }));
+            return false;
+        });
     }
 
     private void updateJobsToDeleteTextView() {
