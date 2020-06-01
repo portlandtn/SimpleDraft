@@ -736,21 +736,18 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = new Bundle();
         if(window == 1) {
             extras.putDoubleArray(Constants.anglesBundle, Converters.listOfDoubleToDoubleArray(state1Angles));
-            extras.putString(Constants.jobNumberBundle, jobNumberWindow1Spinner.getSelectedItem().toString());
-            RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
-            for(int i = 0; i < radioButtons.length; i++) {
-                if (radioButtons[i].isChecked()) {
-                    extras.putInt(Constants.selectedAngleBundle, i);
-                }
-            }
+            String jobNumber = jobNumberWindow1Spinner.getSelectedItem().toString();
+            extras.putString(Constants.jobNumberBundle, jobNumber);
         } else {
             extras.putDoubleArray(Constants.anglesBundle, Converters.listOfDoubleToDoubleArray(state2Angles));
-            extras.putString(Constants.jobNumberBundle, jobNumberWindow2Spinner.getSelectedItem().toString());
-            RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
-            for(int i = 0; i < radioButtons.length; i++) {
-                if (radioButtons[i].isChecked()) {
-                    extras.putInt(Constants.selectedAngleBundle, i);
-                }
+            String jobNumber = jobNumberWindow2Spinner.getSelectedItem().toString();
+            extras.putString(Constants.jobNumberBundle, jobNumber);
+        }
+        RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
+        for(int i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].isChecked()) {
+                extras.putInt(Constants.selectedAngleBundle, i);
+                return extras;
             }
         }
         return extras;
