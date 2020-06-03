@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.room.TypeConverter;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -148,5 +149,9 @@ public class Converters {
         double response = rise / base;
         response = Math.atan(response);
         return Math.toDegrees(response);
+    }
+
+    public static String formatDate(Date date) {
+        return date != null ? DateFormat.getDateInstance(DateFormat.SHORT).format(date) : "";
     }
 }

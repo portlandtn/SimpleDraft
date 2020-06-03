@@ -96,6 +96,32 @@ public class ConvertersUnitTests {
     }
 
     @Test
+    public void formatDateUnitTest() {
+        Calendar c = Calendar.getInstance();
+        c.set(2020,5,22,8,5,8);
+        c.set(Calendar.MILLISECOND,0);
+        Date date = new Date();
+        date.setTime(c.getTimeInMillis());
+
+        String expected = "6/22/20";
+
+        String actual = Converters.formatDate(date);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void formatDateUnitTestWithNull() {
+        Date date = null;
+
+        String expected = "";
+
+        String actual = Converters.formatDate(date);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void extractFeetFromDimension() {
         double dimension = 14.0204;
 

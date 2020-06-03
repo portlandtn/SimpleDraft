@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jedmay.simpledraft.db.SimpleDraftDb;
+import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.model.OutputState;
 
 import java.util.ArrayList;
@@ -157,7 +158,10 @@ public class EditJobsActivity extends AppCompatActivity {
         String[] jobNamesArray = new String[states.size()];
 
         for (int i = 0; i < states.size(); i++) {
-            jobNamesArray[i] = states.get(i).getName();
+            String rowOfData = states.get(i).getName() +
+                    " | " +
+                    Converters.formatDate(states.get(i).getModifiedDate());
+            jobNamesArray[i] = rowOfData;
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.jobs_view_layout,R.id.jobsViewItem,jobNamesArray);
