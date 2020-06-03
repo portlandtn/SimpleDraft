@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void doTrig(TrigFunction function) {
         double mathValue;
-        double angle = 0;
+        double angle;
         double answer = 0;
         switch (activeWindow) {
             case 1:
@@ -922,9 +922,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSwitchOnClickListeners() {
-        mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mathMethod.setText(mathMethod.isChecked() ? "Detailing" : "Standard");
-        });
+        mathMethod.setOnCheckedChangeListener((buttonView, isChecked) -> mathMethod.setText(mathMethod.isChecked() ? "Detailing" : "Standard"));
     }
 
     // endregion

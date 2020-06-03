@@ -19,7 +19,6 @@ import com.jedmay.simpledraft.db.SimpleDraftDb;
 import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.model.OutputState;
 
-import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -188,9 +187,7 @@ public class EditJobsActivity extends AppCompatActivity {
                 state.setName(input.getText().toString());
                 db.outputStateDao().update(state);
             }));
-            builder.setNegativeButton("Cancel", ((dialog, which) -> {
-                dialog.cancel();
-            }));
+            builder.setNegativeButton("Cancel", ((dialog, which) -> dialog.cancel()));
             return false;
         });
     }
