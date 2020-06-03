@@ -7,6 +7,7 @@ import androidx.room.TypeConverters;
 
 import com.jedmay.simpledraft.helper.Converters;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "output_state")
@@ -18,6 +19,12 @@ public class OutputState {
     @PrimaryKey
     @NonNull
     private String name;
+
+    @TypeConverters(Converters.class)
+    private Date createDate;
+
+    @TypeConverters(Converters.class)
+    private Date modifiedDate;
 
     private Double angle1;
 
@@ -34,6 +41,22 @@ public class OutputState {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public List<Double> getValues() {

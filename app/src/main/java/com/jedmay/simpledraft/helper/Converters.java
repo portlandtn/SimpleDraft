@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.room.TypeConverter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +17,8 @@ public class Converters {
 
         if (values.size() <= 0) {
             returnValue.append("0.0");
-        };
+        }
+        ;
         try {
             if (values.size() > 1) {
                 for (int i = 0; i < values.size() - 1; i++) {
@@ -49,6 +51,16 @@ public class Converters {
 
         }
         return valuesDoubleList;
+    }
+
+    @TypeConverter
+    public static Date timestampToDate(Long timestamp) {
+        return timestamp == null ? null : new Date(timestamp);
+    }
+
+    @TypeConverter
+    public static Long dateToTimestamp(Date date) {
+        return date == null ? null : date.getTime();
     }
 
     public static double extractWholeNumberFromDimension(double dimension) {

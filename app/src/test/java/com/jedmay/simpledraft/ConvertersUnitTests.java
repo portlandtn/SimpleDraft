@@ -5,6 +5,8 @@ import com.jedmay.simpledraft.helper.Converters;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -40,6 +42,57 @@ public class ConvertersUnitTests {
 
         assertEquals(doubleValues,actual);
 
+    }
+
+    @Test
+    public void timeStampToDateUnitTest() {
+        Calendar c = Calendar.getInstance();
+        c.set(2020,5,22,8,5,8);
+        c.set(Calendar.MILLISECOND,0);
+        Date date = new Date();
+        date.setTime(c.getTimeInMillis());
+
+        long expected = 1592831108000L;
+
+        long actual = Converters.dateToTimestamp(date);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void timeStampToDateUnitTestWithNullDate() {
+        Date date = null;
+        Long expected = null;
+
+        Long actual = Converters.dateToTimestamp(date);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void dateToTimeStampUnitTest() {
+
+        long timeInMills = 1592831108000L;
+
+        Calendar c = Calendar.getInstance();
+        c.set(2020,5,22,8,5,8);
+        c.set(Calendar.MILLISECOND,0);
+        Date expected = new Date();
+        expected.setTime(c.getTimeInMillis());
+
+        Date actual = Converters.timestampToDate(timeInMills);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void dateToTimeStampUnitTestWithNull() {
+        Long timeInMills = null;
+        Date expected = null;
+
+        Date actual = Converters.timestampToDate(timeInMills);
+
+        assertEquals(expected, actual);
     }
 
     @Test
