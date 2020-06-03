@@ -66,9 +66,19 @@
     <string name="push_to_calc">Push</string>
     <string name="_0_00">0.00#</string>
     <string name="del">Del</string>
+    <string name="time_frame">Time Frame:</string>
+    <string name="edit_jobs_explanation">Choose a time frame of jobs, shown by last date saved. Click a job to have it selected to be deleted. Delete All will erase all jobs in the list.</string>
 
     <string-array name="stateSave">
         <item> - New Save - </item>
+    </string-array>
+
+    <string-array name="time_period">
+        <item>All</item>
+        <item>Greater than 30 Days</item>
+        <item>Greater than 60 Days</item>
+        <item>Greater than 90 Days</item>
+        <item></item>
     </string-array>
 
 </resources>
