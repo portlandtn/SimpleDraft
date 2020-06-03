@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -22,7 +21,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.db.SimpleDraftDb;
 import com.jedmay.simpledraft.helper.Arithmetic;
 import com.jedmay.simpledraft.helper.ArithmeticFunction;
 import com.jedmay.simpledraft.helper.Constants;
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     Switch mathMethod;
     String jobNumber;
 
-    SimpleDraftDbBadCompany db;
+    SimpleDraftDb db;
     SampleDbData sampleDbData;
 
     StringBuilder outputNumber;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = SimpleDraftDbBadCompany.getDatabase(getApplicationContext());
+        db = SimpleDraftDb.getDatabase(getApplicationContext());
 //        sampleDbData = new SampleDbData(getApplicationContext());
 //        sampleDbData.populateDbWithSampleData();
         activeWindow = 1;
@@ -96,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
         setRoofSlopeTextOnStartup();
 
         Intent intent = getIntent();
-        double weight = intent.getDoubleExtra(Constants.weight, 0);
-        activeWindow = intent.getIntExtra(Constants.activeWindow, 1);
+        double weight = intent.getDoubleExtra(Constants.WEIGHT, 0);
+        activeWindow = intent.getIntExtra(Constants.ACTIVE_WINDOW, 1);
         if (weight > 0) {
             switch (activeWindow) {
                 case 1:
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void populateListOfAngles(String stateName, int window) {
         List<Double> angles = new ArrayList<>();
-        if (stateName.equals(Constants.newSave)) {
+        if (stateName.equals(Constants.NEW_SAVE)) {
             angles.add(0.0);
             angles.add(0.0);
             angles.add(0.0);
@@ -320,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
             outputListView1.setBackgroundColor(getResources().getColor(R.color.activeBackground));
             outputListView2.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
             OutputState state;
-            if (currentStateName.equals(Constants.newSave)) {
+            if (currentStateName.equals(Constants.NEW_SAVE)) {
                 state = new OutputState();
                 state.setAngle1(0.0);
                 state.setAngle2(0.0);
@@ -341,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
             outputListView2.setBackgroundColor(getResources().getColor(R.color.activeBackground));
             outputListView1.setBackgroundColor(getResources().getColor(R.color.inactiveBackground));
             OutputState state;
-            if (currentStateName.equals(Constants.newSave)) {
+            if (currentStateName.equals(Constants.NEW_SAVE)) {
                 state = new OutputState();
                 state.setAngle1(0.0);
                 state.setAngle2(0.0);
@@ -392,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setRoofSlopeTextOnStartup() {
         String name = jobNumberWindow1Spinner.getAdapter().getItem(0).toString();
-        if (name.equals(Constants.newSave)) return;
+        if (name.equals(Constants.NEW_SAVE)) return;
 
         OutputState state = db.outputStateDao().getOutputStateFromName(name);
         state1Angles = new ArrayList<>();
@@ -523,7 +522,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String selected = jobNumberWindow1Spinner.getSelectedItem().toString();
 
-                if (!selected.equals(Constants.newSave)) {
+                if (!selected.equals(Constants.NEW_SAVE)) {
                     OutputState state = db.outputStateDao().getOutputStateFromName(selected);
                     outputNumber1List = state.getValues();
                     updateListView(outputListView1, outputNumber1List);
@@ -551,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
                 updateActiveWindows(activeWindow);
                 String selected = jobNumberWindow2Spinner.getSelectedItem().toString();
 
-                if (!selected.equals(Constants.newSave)) {
+                if (!selected.equals(Constants.NEW_SAVE)) {
                     OutputState state = db.outputStateDao().getOutputStateFromName(selected);
                     outputNumber2List = state.getValues();
                     updateListView(outputListView2, outputNumber2List);
@@ -620,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOutputSpinnerSaveButtonOnClickListeners() {
         saveState1Button.setOnClickListener(v -> {
-            boolean newSave = jobNumberWindow1Spinner.getSelectedItem().toString().equals(Constants.newSave);
+            boolean newSave = jobNumberWindow1Spinner.getSelectedItem().toString().equals(Constants.NEW_SAVE);
 
             if (newSave) {
                 saveNewState(outputNumber1List,state1Angles);
@@ -640,7 +639,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         saveState2Button.setOnClickListener(v -> {
-            boolean newSave = jobNumberWindow2Spinner.getSelectedItem().toString().equals(Constants.newSave);
+            boolean newSave = jobNumberWindow2Spinner.getSelectedItem().toString().equals(Constants.NEW_SAVE);
 
             if (newSave) {
                 saveNewState(outputNumber2List,state2Angles);
@@ -727,18 +726,18 @@ public class MainActivity extends AppCompatActivity {
     private Bundle getBundleForActiveWindow(int window) {
         Bundle extras = new Bundle();
         if(window == 1) {
-            extras.putDoubleArray(Constants.anglesBundle, Converters.listOfDoubleToDoubleArray(state1Angles));
+            extras.putDoubleArray(Constants.ANGLES_BUNDLE, Converters.listOfDoubleToDoubleArray(state1Angles));
             String jobNumber = jobNumberWindow1Spinner.getSelectedItem().toString();
-            extras.putString(Constants.jobNumberBundle, jobNumber);
+            extras.putString(Constants.JOB_NUMBER_BUNDLE, jobNumber);
         } else {
-            extras.putDoubleArray(Constants.anglesBundle, Converters.listOfDoubleToDoubleArray(state2Angles));
+            extras.putDoubleArray(Constants.ANGLES_BUNDLE, Converters.listOfDoubleToDoubleArray(state2Angles));
             String jobNumber = jobNumberWindow2Spinner.getSelectedItem().toString();
-            extras.putString(Constants.jobNumberBundle, jobNumber);
+            extras.putString(Constants.JOB_NUMBER_BUNDLE, jobNumber);
         }
         RadioButton[] radioButtons = {angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton};
         for(int i = 0; i < radioButtons.length; i++) {
             if (radioButtons[i].isChecked()) {
-                extras.putInt(Constants.selectedAngleBundle, i);
+                extras.putInt(Constants.SELECTED_ANGLE_BUNDLE, i);
                 return extras;
             }
         }
@@ -748,7 +747,7 @@ public class MainActivity extends AppCompatActivity {
     private void setActivityButtonOnClickListeners() {
         calculateWeightButton.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), WeightCalculatorActivity.class);
-            intent.putExtra(Constants.activeWindow, activeWindow);
+            intent.putExtra(Constants.ACTIVE_WINDOW, activeWindow);
             startActivity(intent);
         });
 
@@ -932,7 +931,7 @@ public class MainActivity extends AppCompatActivity {
                 stateArray[i] = states.get(i).getName();
             }
 
-            stateArray[states.size()] = Constants.newSave;
+            stateArray[states.size()] = Constants.NEW_SAVE;
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                     this, R.layout.spinner_view_layout, R.id.spinnerViewItem, stateArray

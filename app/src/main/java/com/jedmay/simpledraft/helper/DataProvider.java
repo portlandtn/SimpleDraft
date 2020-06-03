@@ -84,22 +84,6 @@ public class DataProvider {
         return listOfDouble;
     }
 
-    public static OutputState getNewOutputStateFromDialog(Context context) {
-        OutputState state = new OutputState();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Save New State");
-
-        final EditText input = new EditText(context);
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-        builder.setView(input);
-
-        builder.setPositiveButton("OK", (dialog, which) -> state.setName(input.getText().toString()));
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
-        return state;
-    }
-
     public static int getNumberOfValuesToRemoveFromList(String outputNumber, MathType type) {
         if (type == MathType.TRIG) {
             return outputNumber.isEmpty() ? 1 : 0;

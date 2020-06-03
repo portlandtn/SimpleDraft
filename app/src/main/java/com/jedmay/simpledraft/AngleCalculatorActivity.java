@@ -18,7 +18,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.db.SimpleDraftDb;
 import com.jedmay.simpledraft.helper.Constants;
 import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.helper.Trig;
@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class AngleCalculatorActivity extends AppCompatActivity {
 
-    SimpleDraftDbBadCompany db;
+    SimpleDraftDb db;
     Spinner jobNumberSpinner;
     EditText riseEditText, baseEditText, angleEditText;
     RadioButton angle1RadioButton, angle2RadioButton, angle3RadioButton, angle4RadioButton;
@@ -51,7 +51,7 @@ public class AngleCalculatorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_angle_calculator);
-        db = SimpleDraftDbBadCompany.getDatabase(getApplicationContext());
+        db = SimpleDraftDb.getDatabase(getApplicationContext());
         findAllViews();
         //Set base to 1.0000 for :12 default
         baseDimension = 1.0;
@@ -60,9 +60,9 @@ public class AngleCalculatorActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if(extras != null) {
-            jobNumber = extras.getString(Constants.jobNumberBundle);
-            angles = extras.getDoubleArray(Constants.anglesBundle);
-            activeAngle = extras.getInt(Constants.selectedAngleBundle);
+            jobNumber = extras.getString(Constants.JOB_NUMBER_BUNDLE);
+            angles = extras.getDoubleArray(Constants.ANGLES_BUNDLE);
+            activeAngle = extras.getInt(Constants.SELECTED_ANGLE_BUNDLE);
         }
 
         populateSpinner();

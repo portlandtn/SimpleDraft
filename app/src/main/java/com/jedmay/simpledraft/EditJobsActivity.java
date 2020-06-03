@@ -4,18 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.icu.util.Output;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.db.SimpleDraftDb;
 import com.jedmay.simpledraft.model.OutputState;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class EditJobsActivity extends AppCompatActivity {
 
     TextView jobsToDeleteTextView;
 
-    SimpleDraftDbBadCompany db;
+    SimpleDraftDb db;
 
     @Override
     public void onBackPressed() {
@@ -47,7 +44,7 @@ public class EditJobsActivity extends AppCompatActivity {
         jobsListListView = findViewById(R.id.jobsListListView);
         jobsToDeleteTextView = findViewById(R.id.jobsToDeleteTextView);
         jobsToDelete = new ArrayList<>();
-        db = SimpleDraftDbBadCompany.getDatabase(getApplicationContext());
+        db = SimpleDraftDb.getDatabase(getApplicationContext());
 
         updateListView();
         setOnClickListeners();

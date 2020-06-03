@@ -3,7 +3,7 @@ package com.jedmay.simpledraft.helper;
 import android.content.Context;
 import android.util.Log;
 
-import com.jedmay.simpledraft.db.SimpleDraftDbBadCompany;
+import com.jedmay.simpledraft.db.SimpleDraftDb;
 import com.jedmay.simpledraft.model.OutputState;
 
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import java.util.Objects;
 
 public class SampleDbData {
 
-    private SimpleDraftDbBadCompany db;
+    private SimpleDraftDb db;
 
     public SampleDbData(Context context) {
-        db = SimpleDraftDbBadCompany.getDatabase(context);
+        db = SimpleDraftDb.getDatabase(context);
     }
 
     public void populateDbWithSampleData() {

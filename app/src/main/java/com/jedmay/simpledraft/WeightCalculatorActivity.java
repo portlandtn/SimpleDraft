@@ -8,15 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jedmay.simpledraft.helper.Arithmetic;
 import com.jedmay.simpledraft.helper.Constants;
@@ -24,7 +21,6 @@ import com.jedmay.simpledraft.helper.Converters;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class WeightCalculatorActivity extends AppCompatActivity {
 
@@ -45,7 +41,7 @@ public class WeightCalculatorActivity extends AppCompatActivity {
         weightListValues = new ArrayList<>();
 
         Intent intent = getIntent();
-        activeWindow = intent.getIntExtra(Constants.activeWindow, 1);
+        activeWindow = intent.getIntExtra(Constants.ACTIVE_WINDOW, 1);
         currentWeight = 0;
         findAllViews();
         updateWeightListView();
@@ -175,7 +171,7 @@ public class WeightCalculatorActivity extends AppCompatActivity {
             builder.setMessage("Are you sure you want to leave the weight calculator screen and return to the calculator?");
             builder.setPositiveButton("Yes",((dialog, which) -> {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra(Constants.activeWindow, activeWindow);
+                intent.putExtra(Constants.ACTIVE_WINDOW, activeWindow);
                 startActivity(intent);
                 finish();
             }));
