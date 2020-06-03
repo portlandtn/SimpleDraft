@@ -75,10 +75,9 @@
 
     <string-array name="time_period">
         <item>All</item>
-        <item>Greater than 30 Days</item>
-        <item>Greater than 60 Days</item>
-        <item>Greater than 90 Days</item>
-        <item></item>
+        <item>Unchanged in 30 Days Or less</item>
+        <item>Unchanged 30 – 60 days</item>
+        <item>Unchanged more than 90 days</item>
     </string-array>
 
 </resources>

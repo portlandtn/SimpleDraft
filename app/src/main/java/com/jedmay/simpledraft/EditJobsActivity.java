@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.jedmay.simpledraft.db.SimpleDraftDb;
@@ -24,6 +25,7 @@ public class EditJobsActivity extends AppCompatActivity {
     Button cancelButton, deleteButton, deleteAllButton;
     ListView jobsListListView;
     List<OutputState> jobsToDelete;
+    Spinner timeFrameSpinner;
 
     TextView jobsToDeleteTextView;
 
@@ -39,6 +41,7 @@ public class EditJobsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_jobs);
 
+        timeFrameSpinner = findViewById(R.id.timeFrameSpinner);
         cancelButton = findViewById(R.id.cancelJobsButton);
         deleteButton = findViewById(R.id.deleteJobsButton);
         deleteAllButton = findViewById(R.id.deleteAllButton);
@@ -47,8 +50,23 @@ public class EditJobsActivity extends AppCompatActivity {
         jobsToDelete = new ArrayList<>();
         db = SimpleDraftDb.getDatabase(getApplicationContext());
 
+        setupTimeFrameSpinner();
+
         updateListView();
         setOnClickListeners();
+        setOnClickListenersForSpinner();
+
+    }
+
+    private void setupTimeFrameSpinner() {
+        String[] timeFrames = getResources().getStringArray(R.array.time_period);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_view_layout, R.id.spinnerViewItem, timeFrames);
+        adapter.setDropDownViewResource(R.layout.spinner_view_layout);
+        timeFrameSpinner.setAdapter(adapter);
+    }
+
+    private void setOnClickListenersForSpinner() {
 
     }
 
