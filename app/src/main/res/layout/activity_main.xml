@@ -48,7 +48,7 @@
         android:layout_width="@dimen/smallButtonSize"
         android:layout_height="@dimen/smallButtonSize"
         android:background="@mipmap/ic_button_background_round"
-        android:text="@string/bksp"
+        android:text="@string/backspace"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="@+id/multiplyButton"
         app:layout_constraintEnd_toStartOf="@+id/eightButton" />
