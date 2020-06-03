@@ -35,6 +35,7 @@ import com.jedmay.simpledraft.model.OutputState;
 import com.jedmay.simpledraft.helper.DataProvider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -589,6 +590,9 @@ public class MainActivity extends AppCompatActivity {
             newState.setAngle2(stateAngles.get(1));
             newState.setAngle3(stateAngles.get(2));
             newState.setAngle4(stateAngles.get(3));
+            Calendar c = Calendar.getInstance();
+            newState.setCreateDate(c.getTime());
+            newState.setModifiedDate(c.getTime());
             db.outputStateDao().insert(newState);
             populateOutputSpinners();
 
@@ -633,6 +637,8 @@ public class MainActivity extends AppCompatActivity {
                 state.setAngle3(state1Angles.get(2));
                 state.setAngle4(state1Angles.get(3));
                 state.setValues(outputNumber1List);
+                Calendar c = Calendar.getInstance();
+                state.setModifiedDate(c.getTime());
                 db.outputStateDao().update(state);
             }
             populateOutputSpinners();
@@ -652,6 +658,8 @@ public class MainActivity extends AppCompatActivity {
                 state.setAngle3(state2Angles.get(2));
                 state.setAngle4(state2Angles.get(3));
                 state.setValues(outputNumber2List);
+                Calendar c = Calendar.getInstance();
+                state.setModifiedDate(c.getTime());
                 db.outputStateDao().update(state);
             }
 
