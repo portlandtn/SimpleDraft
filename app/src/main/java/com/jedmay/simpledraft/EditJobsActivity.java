@@ -103,16 +103,26 @@ public class EditJobsActivity extends AppCompatActivity {
         });
 
         jobsListListView.setOnItemClickListener((parent, view, position, id) -> {
-            String stateName = jobsListListView.getAdapter().getItem(position).toString();
-            OutputState state = db.outputStateDao().getOutputStateFromName(stateName);
-            for (int i = 0; i < jobsToDelete.size(); i++) {
-                if (jobsToDelete.get(i).getName().equals(stateName)) {
-                    jobsToDelete.remove(i);
-                    updateJobsToDeleteTextView();
-                    return;
-                }
+            String stateName = jobsListListView.getAdapter().getItem(position).toString();// full file name
+            int delimiter = stateName.indexOf(" | "); //this finds the first occurrence of "."
+            String subString = "";
+            if (delimiter != -1)
+            {
+                subString= stateName.substring(0 , delimiter); //this will give abc
             }
-            jobsToDelete.add(state);
+
+
+            if (!subString.equals("") ) {
+                OutputState state = db.outputStateDao().getOutputStateFromName(subString);
+                for (int i = 0; i < jobsToDelete.size(); i++) {
+                    if (jobsToDelete.get(i).getName().equals(stateName)) {
+                        jobsToDelete.remove(i);
+                        updateJobsToDeleteTextView();
+                        return;
+                    }
+                }
+                jobsToDelete.add(state);
+            }
             updateJobsToDeleteTextView();
         });
 
