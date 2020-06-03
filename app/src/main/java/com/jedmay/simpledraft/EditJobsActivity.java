@@ -212,7 +212,7 @@ public class EditJobsActivity extends AppCompatActivity {
     }
 
     private void updateListView(int timeFrame) {
-        List<OutputState> states = null;
+        List<OutputState> states;
 
         Calendar c = Calendar.getInstance();
 
