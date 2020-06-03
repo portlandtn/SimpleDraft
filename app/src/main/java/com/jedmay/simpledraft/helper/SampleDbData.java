@@ -7,6 +7,7 @@ import com.jedmay.simpledraft.db.SimpleDraftDb;
 import com.jedmay.simpledraft.model.OutputState;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +31,11 @@ public class SampleDbData {
     }
 
     private OutputState setupState1() {
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -1);
+        c.add(Calendar.DATE, 4);
+
         OutputState state = new OutputState();
         state.setName("K12J0208");
 
@@ -45,6 +51,9 @@ public class SampleDbData {
         stateList.add(-11.0001);
         stateList.add(13.0603);
 
+        state.setCreateDate(c.getTime());
+        state.setModifiedDate(c.getTime());
+
         state.setValues(stateList);
 
         return state;
@@ -52,6 +61,9 @@ public class SampleDbData {
     }
 
     private OutputState setupState2() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -2);
+        c.add(Calendar.DATE, 4);
         OutputState state = new OutputState();
         state.setName("K12J0209");
 
@@ -65,6 +77,9 @@ public class SampleDbData {
         stateList.add(1.0204);
         stateList.add(-2.0408);
 
+        state.setCreateDate(c.getTime());
+        state.setModifiedDate(c.getTime());
+
         state.setValues(stateList);
 
         return state;
@@ -72,6 +87,10 @@ public class SampleDbData {
     }
 
     private OutputState setupState3() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -4);
+        c.add(Calendar.DATE, 4);
+
         OutputState state = new OutputState();
         state.setName("K19L0413");
 
@@ -85,6 +104,9 @@ public class SampleDbData {
         stateList.add(-15.0208);
         stateList.add(16.0005);
         stateList.add(-21.0408);
+
+        state.setCreateDate(c.getTime());
+        state.setModifiedDate(c.getTime());
 
         state.setValues(stateList);
 

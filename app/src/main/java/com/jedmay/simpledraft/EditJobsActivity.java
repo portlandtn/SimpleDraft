@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +19,9 @@ import com.jedmay.simpledraft.db.SimpleDraftDb;
 import com.jedmay.simpledraft.helper.Converters;
 import com.jedmay.simpledraft.model.OutputState;
 
+import java.security.AllPermission;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class EditJobsActivity extends AppCompatActivity {
@@ -52,7 +56,7 @@ public class EditJobsActivity extends AppCompatActivity {
 
         setupTimeFrameSpinner();
 
-        updateListView();
+        updateListView(0);
         setOnClickListeners();
         setOnClickListenersForSpinner();
 
@@ -67,6 +71,33 @@ public class EditJobsActivity extends AppCompatActivity {
     }
 
     private void setOnClickListenersForSpinner() {
+
+        timeFrameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String timePeriod = timeFrameSpinner.getAdapter().getItem(position).toString();
+
+                switch (timePeriod) {
+                    case "Unchanged in 30 Days Or less":
+                        updateListView(1);
+                        break;
+                    case "Unchanged 30 – 60 days":
+                        updateListView(2);
+                        break;
+                    case "Unchanged more than 90 days":
+                        updateListView(3);
+                        break;
+                    default: // All
+                        updateListView(0);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 
@@ -98,7 +129,7 @@ public class EditJobsActivity extends AppCompatActivity {
                 for(OutputState state : jobsToDelete){
                     db.outputStateDao().delete(state);
                 }
-                updateListView();
+                updateListView(0);
                 jobsToDelete.clear();
                 updateJobsToDeleteTextView();
             });
@@ -114,7 +145,7 @@ public class EditJobsActivity extends AppCompatActivity {
 
                 db.outputStateDao().deleteAll();
                 updateJobsToDeleteTextView();
-                updateListView();
+                updateListView(0);
             });
             builder.setNegativeButton("Don't do it.", (dialog, which) -> dialog.cancel());
             builder.show();
@@ -180,8 +211,28 @@ public class EditJobsActivity extends AppCompatActivity {
         jobsToDeleteTextView.setText(jobsToDeleteStringBuilder.toString());
     }
 
-    private void updateListView() {
-        List<OutputState> states = db.outputStateDao().getAllOutputStates();
+    private void updateListView(int timeFrame) {
+        List<OutputState> states = null;
+
+        Calendar c = Calendar.getInstance();
+
+        switch (timeFrame) {
+            case 1:
+                c.add(Calendar.MONTH, -1);
+                states = db.outputStateDao().getOutputStateFromDateRange(c.getTimeInMillis());
+                break;
+            case 2:
+                c.add(Calendar.MONTH, -2);
+                states = db.outputStateDao().getOutputStateFromDateRange(c.getTimeInMillis());
+                break;
+            case 3:
+                c.add(Calendar.MONTH, -3);
+                states = db.outputStateDao().getOutputStateFromDateRange(c.getTimeInMillis());
+                break;
+            default: // All
+                states = db.outputStateDao().getAllOutputStates();
+                break;
+        }
 
         String[] jobNamesArray = new String[states.size()];
 

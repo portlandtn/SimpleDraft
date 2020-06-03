@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db = SimpleDraftDb.getDatabase(getApplicationContext());
-//        sampleDbData = new SampleDbData(getApplicationContext());
-//        sampleDbData.populateDbWithSampleData();
+        sampleDbData = new SampleDbData(getApplicationContext());
+        sampleDbData.populateDbWithSampleData();
         activeWindow = 1;
         activeAngleNumber = 1;
         outputNumber = new StringBuilder();
