@@ -15,7 +15,7 @@ public class ArithmeticUnitTests {
         double num2 = 3.0615;
         boolean isDetailingMath = true;
 
-        double expected = 5.1107;
+        double expected = 5.1102;
 
         double actual = Arithmetic.add(num1, num2, isDetailingMath);
 
