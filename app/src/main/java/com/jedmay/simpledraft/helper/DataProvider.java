@@ -51,12 +51,15 @@ public class DataProvider {
     }
 
     public static double getValueForTrig(String outputNumber, List<Double> listOfDouble) {
+
+        if (listOfDouble == null || listOfDouble.size() < 1 && outputNumber.length() == 0) {
+            return 0.0;
+        }
+
         if (outputNumber.length() > 0) {
             return Double.parseDouble(outputNumber);
-        } else if (listOfDouble.size() > 0) {
-            return listOfDouble.get(listOfDouble.size() - 1);
         } else {
-            return 0.0;
+            return listOfDouble.get(listOfDouble.size() - 1);
         }
     }
 

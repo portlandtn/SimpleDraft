@@ -144,7 +144,12 @@ public class MainActivity extends AppCompatActivity {
         switch (activeWindow) {
             case 1:
                 angle = Trig.getAngleForTrig(state1Angles, activeAngleNumber);
+                if (angle == 0) {
+                    Toast.makeText(getApplicationContext(), "Angle must be greater than 0",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mathValue = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber1List);
+                if (mathValue == 0) return;
                 if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.TRIG) == 1) {
                      // if outputNumber was not used in calculation, the last number should be removed from the stack.
                     outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1));
@@ -187,7 +192,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 angle = Trig.getAngleForTrig(state2Angles, activeAngleNumber);
+                if (angle == 0) {
+                    Toast.makeText(getApplicationContext(), "Angle must be greater than 0",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mathValue = DataProvider.getValueForTrig(outputNumber.toString(), outputNumber2List);
+                if (mathValue == 0) return;
                 if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.TRIG) == 1) {
                     // if outputNumber was not used in calculation, then the last number should be removed from the stack.
                     outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1));
@@ -231,8 +241,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         outputNumber.setLength(0);
-        updateListView(outputListView1, outputNumber1List);
-        updateListView(outputListView2, outputNumber2List);
+        switch (activeWindow) {
+            case 1:
+                updateListView(outputListView1, outputNumber1List);
+                break;
+            case 2:
+                updateListView(outputListView2, outputNumber2List);
+                break;
+            default:
+                break;
+        }
 
     }
 
