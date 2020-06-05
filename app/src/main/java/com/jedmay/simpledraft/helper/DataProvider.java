@@ -1,8 +1,6 @@
 package com.jedmay.simpledraft.helper;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DataProvider {
@@ -33,11 +31,11 @@ public class DataProvider {
 
     public static List<Double> getValuesForArithmetic(String outputNumber, List<Double> listOfDouble) {
 
-        List<Double> response = new ArrayList<>();
-
-        if (listOfDouble.size() < 1 || listOfDouble.size() == 1 && outputNumber.length() == 0) {
+        if (listOfDouble == null || listOfDouble.size() < 1 || listOfDouble.size() == 1 && outputNumber.length() == 0) {
             return null;
         }
+
+        List<Double> response = new ArrayList<>();
 
         if (outputNumber.length() == 0) {
             response.add(listOfDouble.get(listOfDouble.size() - 2));
@@ -53,12 +51,15 @@ public class DataProvider {
     }
 
     public static double getValueForTrig(String outputNumber, List<Double> listOfDouble) {
+
+        if (listOfDouble == null || listOfDouble.size() < 1 && outputNumber.length() == 0) {
+            return 0.0;
+        }
+
         if (outputNumber.length() > 0) {
             return Double.parseDouble(outputNumber);
-        } else if (listOfDouble.size() > 0) {
-            return listOfDouble.get(listOfDouble.size() - 1);
         } else {
-            return 0.0;
+            return listOfDouble.get(listOfDouble.size() - 1);
         }
     }
 
