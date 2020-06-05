@@ -7,17 +7,44 @@
     android:background="@color/darkBackground"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/editJobNumbersButton"
-        android:layout_width="@dimen/doubleSmallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:layout_marginTop="8dp"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/edit_job_numbers"
-        android:textColor="@android:color/background_light"
+    <Switch
+        android:id="@+id/mathMethodSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:text="@string/math_method"
+        android:textColor="@color/colorText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/slopeNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/current_roof_slope"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/colorText"
+        app:layout_constraintEnd_toStartOf="@+id/currentRoofSlopeTextView"
+        app:layout_constraintTop_toTopOf="@+id/radioGroup" />
+
+    <TextView
+        android:id="@+id/currentRoofSlopeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/_1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/standardButtonText"
-        app:layout_constraintStart_toStartOf="@+id/mathMethodSwitch"
-        app:layout_constraintTop_toBottomOf="@+id/mathMethodSwitch" />
+        app:layout_constraintEnd_toStartOf="@+id/on12RoofSlopeTextView"
+        app:layout_constraintTop_toTopOf="@+id/slopeNameTextView" />
 
     <TextView
         android:id="@+id/on12RoofSlopeTextView"
@@ -30,7 +57,255 @@
         android:textColor="@color/colorText"
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintEnd_toStartOf="@+id/radioGroup"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/slopeNameTextView" />
+
+    <Button
+        android:id="@+id/editJobNumbersButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginTop="8dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/edit_job_numbers"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintStart_toStartOf="@+id/mathMethodSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/mathMethodSwitch" />
+
+    <Button
+        android:id="@+id/anglesButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/angles"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/on12RoofSlopeTextView" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="96dp"
+        android:layout_height="145dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/angleTitleSection"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/angles"
+            android:textAlignment="center"
+            android:textColor="@color/colorText" />
+
+        <RadioButton
+            android:id="@+id/angle1RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/angle_1"
+            android:textColor="@color/colorText" />
+
+        <RadioButton
+            android:id="@+id/angle2RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_2"
+            android:textColor="@color/colorText" />
+
+        <RadioButton
+            android:id="@+id/angle3RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_3"
+            android:textColor="@color/colorText" />
+
+        <RadioButton
+            android:id="@+id/angle4RadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/angle_4"
+            android:textColor="@color/colorText" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/calculateWeightButton"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="8dp"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/calc_wgt"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintEnd_toEndOf="@+id/anglesButton"
+        app:layout_constraintStart_toStartOf="@+id/anglesButton"
+        app:layout_constraintTop_toBottomOf="@+id/anglesButton" />
+
+    <LinearLayout
+        android:id="@+id/spinnerLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:paddingLeft="4.0dip"
+        android:paddingTop="5.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingBottom="1.0dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+
+        <Spinner
+            android:id="@+id/jobNumberWindow1Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0.8"
+            android:background="@color/darkBackground"
+            android:entries="@array/stateSave"
+            android:popupBackground="@color/darkBackground" />
+
+        <Button
+            android:id="@+id/saveState1Button"
+            android:layout_width="@dimen/smallButtonSize"
+            android:layout_height="@dimen/smallButtonSize"
+            android:layout_weight="0.2"
+            android:background="@mipmap/ic_button_background_round"
+            android:text="@string/save"
+            android:textColor="@android:color/background_light" />
+
+        <Spinner
+            android:id="@+id/jobNumberWindow2Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0.8"
+            android:background="@color/darkBackground"
+            android:entries="@array/stateSave"
+            android:popupBackground="@color/darkBackground" />
+
+        <Button
+            android:id="@+id/saveState2Button"
+            android:layout_width="@dimen/smallButtonSize"
+            android:layout_height="@dimen/smallButtonSize"
+            android:layout_weight="0.2"
+            android:background="@mipmap/ic_button_background_round"
+            android:text="@string/save"
+            android:textColor="@android:color/background_light" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/outputListLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:baselineAligned="false"
+        android:minHeight="150dp"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerLayout">
+
+        <ListView
+            android:id="@+id/output1ListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@color/activeBackground"
+            android:stackFromBottom="true"
+            android:transcriptMode="alwaysScroll" />
+
+        <ListView
+            android:id="@+id/output2ListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@color/inactiveBackground"
+            android:stackFromBottom="true"
+            android:transcriptMode="alwaysScroll" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:paddingLeft="4.0dip"
+        android:paddingTop="5.0dip"
+        android:paddingRight="4.0dip"
+        android:paddingBottom="1.0dip"
+        app:layout_constraintBottom_toTopOf="@+id/deleteButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outputListLayout">
+
+        <TextView
+            android:id="@+id/outputNumberTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1.0"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorText"
+            android:transcriptMode="alwaysScroll" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/del"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintBottom_toTopOf="@+id/sevenButton"
+        app:layout_constraintStart_toStartOf="@+id/footToDecimal" />
+
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="@dimen/doubleSmallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/clear"
+        android:textColor="@android:color/background_light"
+        android:textSize="@dimen/standardButtonText"
+        app:layout_constraintBottom_toTopOf="@+id/sevenButton"
+        app:layout_constraintStart_toEndOf="@+id/deleteButton" />
 
     <Button
         android:id="@+id/negativePositiveButton"
@@ -54,17 +329,34 @@
         app:layout_constraintEnd_toStartOf="@+id/eightButton" />
 
     <Button
-        android:id="@+id/calculateWeightButton"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/divideButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
         android:background="@mipmap/ic_button_background_round"
-        android:text="@string/calc_wgt"
+        android:text="@string/divide"
         android:textColor="@android:color/background_light"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintEnd_toEndOf="@+id/anglesButton"
-        app:layout_constraintStart_toStartOf="@+id/anglesButton"
-        app:layout_constraintTop_toBottomOf="@+id/anglesButton" />
+        app:layout_constraintBottom_toTopOf="@+id/eightButton"
+        app:layout_constraintEnd_toStartOf="@+id/multiplyButton" />
+
+    <Button
+        android:id="@+id/multiplyButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background_round"
+        android:text="@string/multiply"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintEnd_toStartOf="@+id/minusButton" />
+
+    <Button
+        android:id="@+id/minusButton"
+        android:layout_width="@dimen/smallButtonSize"
+        android:layout_height="@dimen/smallButtonSize"
+        android:background="@mipmap/ic_button_background"
+        android:text="@string/minus"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/plusButton"
+        app:layout_constraintEnd_toEndOf="@+id/enterButton" />
 
     <Button
         android:id="@+id/footToDecimal"
@@ -87,42 +379,6 @@
         android:textSize="@dimen/standardButtonText"
         app:layout_constraintBottom_toTopOf="@+id/fourButton"
         app:layout_constraintEnd_toEndOf="@+id/riseToBaseButton" />
-
-    <Button
-        android:id="@+id/clearButton"
-        android:layout_width="@dimen/doubleSmallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/clear"
-        android:textColor="@android:color/background_light"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintBottom_toTopOf="@+id/sevenButton"
-        app:layout_constraintStart_toEndOf="@+id/deleteButton" />
-
-    <Button
-        android:id="@+id/anglesButton"
-        android:layout_width="@dimen/doubleSmallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/angles"
-        android:textColor="@android:color/background_light"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
-        app:layout_constraintTop_toBottomOf="@+id/on12RoofSlopeTextView" />
-
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="@dimen/smallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/del"
-        android:textColor="@android:color/background_light"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintBottom_toTopOf="@+id/sevenButton"
-        app:layout_constraintStart_toStartOf="@+id/footToDecimal" />
 
     <Button
         android:id="@+id/riseToSlopeButton"
@@ -208,29 +464,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Switch
-        android:id="@+id/mathMethodSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:checked="true"
-        android:text="@string/math_method"
-        android:textColor="@color/colorText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/divideButton"
-        android:layout_width="@dimen/smallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/divide"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/eightButton"
-        app:layout_constraintEnd_toStartOf="@+id/multiplyButton" />
-
     <Button
         android:id="@+id/plusButton"
         android:layout_width="@dimen/smallButtonSize"
@@ -242,26 +475,6 @@
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toTopOf="@+id/enterButton"
         app:layout_constraintEnd_toEndOf="@+id/enterButton" />
-
-    <Button
-        android:id="@+id/minusButton"
-        android:layout_width="@dimen/smallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:background="@mipmap/ic_button_background"
-        android:text="@string/minus"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/plusButton"
-        app:layout_constraintEnd_toEndOf="@+id/enterButton" />
-
-    <Button
-        android:id="@+id/multiplyButton"
-        android:layout_width="@dimen/smallButtonSize"
-        android:layout_height="@dimen/smallButtonSize"
-        android:background="@mipmap/ic_button_background_round"
-        android:text="@string/multiply"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/plusButton"
-        app:layout_constraintEnd_toStartOf="@+id/minusButton" />
 
     <Button
         android:id="@+id/sevenButton"
@@ -387,218 +600,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/spinnerLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        android:paddingLeft="4.0dip"
-        android:paddingTop="5.0dip"
-        android:paddingRight="4.0dip"
-        android:paddingBottom="1.0dip"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup">
-
-
-        <Spinner
-            android:id="@+id/jobNumberWindow1Spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="0.8"
-            android:background="@color/darkBackground"
-            android:entries="@array/stateSave"
-            android:popupBackground="@color/darkBackground" />
-
-        <Button
-            android:layout_width="@dimen/smallButtonSize"
-            android:layout_height="@dimen/smallButtonSize"
-            android:id="@+id/saveState1Button"
-            android:background="@mipmap/ic_button_background_round"
-            android:text="@string/save"
-            android:layout_weight="0.2"
-            android:textColor="@android:color/background_light" />
-
-        <Spinner
-            android:id="@+id/jobNumberWindow2Spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="0.8"
-            android:background="@color/darkBackground"
-            android:entries="@array/stateSave"
-            android:popupBackground="@color/darkBackground" />
-
-        <Button
-            android:layout_width="@dimen/smallButtonSize"
-            android:layout_height="@dimen/smallButtonSize"
-            android:id="@+id/saveState2Button"
-            android:background="@mipmap/ic_button_background_round"
-            android:text="@string/save"
-            android:layout_weight="0.2"
-            android:textColor="@android:color/background_light" />
-    </LinearLayout>
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="96dp"
-        android:layout_height="145dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/angleTitleSection"
-            android:layout_width="96dp"
-            android:layout_height="wrap_content"
-            android:text="@string/angles"
-            android:textAlignment="center"
-            android:textColor="@color/colorText"
-            android:gravity="center_horizontal" />
-
-        <RadioButton
-            android:id="@+id/angle1RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/angle_1"
-            android:textColor="@color/colorText" />
-
-        <RadioButton
-            android:id="@+id/angle2RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/angle_2"
-            android:textColor="@color/colorText" />
-
-        <RadioButton
-            android:id="@+id/angle3RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/angle_3"
-            android:textColor="@color/colorText" />
-
-        <RadioButton
-            android:id="@+id/angle4RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/angle_4"
-            android:textColor="@color/colorText" />
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/currentRoofSlopeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/_1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/standardButtonText"
-        app:layout_constraintEnd_toStartOf="@+id/on12RoofSlopeTextView"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/current_roof_slope"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/colorText"
-        app:layout_constraintEnd_toStartOf="@+id/currentRoofSlopeTextView"
-        app:layout_constraintTop_toTopOf="@+id/radioGroup" />
-
-    <LinearLayout
-        android:id="@+id/outputListLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:baselineAligned="false"
-        android:minHeight="150dp"
-        android:orientation="horizontal"
-        android:padding="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerLayout">
-
-        <ListView
-            android:id="@+id/output1ListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:background="@color/activeBackground"
-            android:stackFromBottom="true"
-            android:transcriptMode="alwaysScroll" />
-
-        <ListView
-            android:id="@+id/output2ListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:background="@color/inactiveBackground"
-            android:stackFromBottom="true"
-            android:transcriptMode="alwaysScroll" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        android:paddingLeft="4.0dip"
-        android:paddingTop="5.0dip"
-        android:paddingRight="4.0dip"
-        android:paddingBottom="1.0dip"
-        app:layout_constraintBottom_toTopOf="@+id/deleteButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outputListLayout">
-
-        <TextView
-            android:id="@+id/outputNumberTextView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1.0"
-            android:gravity="center_horizontal"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorText"
-            android:transcriptMode="alwaysScroll" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
