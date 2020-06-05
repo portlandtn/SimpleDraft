@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     TextView outputNumberTextView, currentRoofSlope;
 
     Switch mathMethod;
-    String jobNumber;
 
     SimpleDraftDb db;
     SampleDbData sampleDbData;
@@ -645,8 +644,11 @@ public class MainActivity extends AppCompatActivity {
             boolean newSave = jobNumberWindow1Spinner.getSelectedItem().toString().equals(Constants.NEW_SAVE);
 
             if (newSave) {
+                if (outputNumber1List == null) {
+                    outputNumber1List = new ArrayList<>();
+                    outputNumber1List.add(0.0);
+                }
                 saveNewState(outputNumber1List,state1Angles);
-                Toast.makeText(getApplicationContext(), jobNumber, Toast.LENGTH_SHORT).show();
             } else {
 
                 OutputState state;
@@ -655,6 +657,9 @@ public class MainActivity extends AppCompatActivity {
                 state.setAngle2(state1Angles.get(1));
                 state.setAngle3(state1Angles.get(2));
                 state.setAngle4(state1Angles.get(3));
+                if (outputNumber1List.isEmpty()) {
+                    outputNumber1List.add(0.0);
+                }
                 state.setValues(outputNumber1List);
                 Calendar c = Calendar.getInstance();
                 state.setModifiedDate(c.getTime());
@@ -667,6 +672,10 @@ public class MainActivity extends AppCompatActivity {
             boolean newSave = jobNumberWindow2Spinner.getSelectedItem().toString().equals(Constants.NEW_SAVE);
 
             if (newSave) {
+                if (outputNumber2List == null) {
+                    outputNumber2List = new ArrayList<>();
+                    outputNumber2List.add(0.0);
+                }
                 saveNewState(outputNumber2List,state2Angles);
             } else {
                 OutputState state;
@@ -676,6 +685,9 @@ public class MainActivity extends AppCompatActivity {
                 state.setAngle2(state2Angles.get(1));
                 state.setAngle3(state2Angles.get(2));
                 state.setAngle4(state2Angles.get(3));
+                if (outputNumber2List.isEmpty()) {
+                    outputNumber2List.add(0.0);
+                }
                 state.setValues(outputNumber2List);
                 Calendar c = Calendar.getInstance();
                 state.setModifiedDate(c.getTime());
@@ -779,13 +791,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         anglesButton.setOnClickListener(v -> {
+            List<OutputState> states = db.outputStateDao().getAllOutputStates();
+            if(states.size() == 0) {
+                Toast.makeText(getApplicationContext(),
+                        "You must have a job saved prior to setting angles." +
+                        "Save a new job and try again.",
+                        Toast.LENGTH_LONG).show();
+            } else {
 
-            Bundle extras = getBundleForActiveWindow(activeWindow);
+                Bundle extras = getBundleForActiveWindow(activeWindow);
 
-            Intent intent = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
+                Intent intent = new Intent(getApplicationContext(), AngleCalculatorActivity.class);
 
-            intent.putExtras(extras);
-            startActivity(intent);
+                intent.putExtras(extras);
+                startActivity(intent);
+            }
 
         });
         editJobsButton.setOnClickListener(v-> {
