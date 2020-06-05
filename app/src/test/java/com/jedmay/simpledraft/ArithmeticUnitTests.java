@@ -36,6 +36,19 @@ public class ArithmeticUnitTests {
     }
 
     @Test
+    public void addTwoNumbersWithout4DecimalsWithDetailingMathMethod() {
+        double num1 = 12.051;
+        double num2 = 2.07;
+        boolean isDetailingMath = true;
+
+        double expected = 15.0010;
+
+        double actual = Arithmetic.add(num1, num2, isDetailingMath);
+
+        assertEquals(expected, actual, deltaValue);
+    }
+
+    @Test
     public void subtractTwoNumbersWithDetailingMathMethod() {
         double num1 = 4.0408;
         double num2 = 3.0615;

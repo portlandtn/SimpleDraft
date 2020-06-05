@@ -103,6 +103,8 @@ public class Converters {
     public static double footDimensionToDecimalDimension(double footDimension) {
         double feet = extractWholeNumberFromDimension(footDimension);
         double inches = (footDimension - feet)*100;
+        // Must round to 4 places to get conversion to act correctly
+        inches = Converters.round(inches, 4);
         double sixteenths = inches;
         inches = (int) inches;
         sixteenths -= inches;
