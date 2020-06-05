@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
         switch (activeWindow) {
             case 1:
                 mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber1List);
+                if (mathValues == null) return;
                 outputNumber1List.remove(outputNumber1List.get(outputNumber1List.size() - 1)); // will be removed irregardless
                 if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.ARITHMETIC) == 2) {
                     // if outputNumber was not used in calculation, then two numbers should be removed from the stack.
@@ -249,19 +250,15 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     switch (function) {
                         case ADD:
-                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case SUBTRACT:
-                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case MULTIPLY:
-                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case DIVIDE:
-                            assert mathValues != null;
                             outputNumber1List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         default:
@@ -273,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 mathValues = DataProvider.getValuesForArithmetic(outputNumber.toString(), outputNumber2List);
+                if (mathValues == null) return;
                 outputNumber2List.remove(outputNumber2List.get(outputNumber2List.size() - 1)); // will be removed irregardless
                 if (DataProvider.getNumberOfValuesToRemoveFromList(outputNumber.toString(), MathType.ARITHMETIC) == 2) {
                     // if outputNumber was not used in calculation, then two numbers should be removed from the stack.
@@ -281,19 +279,15 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     switch (function) {
                         case ADD:
-                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.add(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case SUBTRACT:
-                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.subtract(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case MULTIPLY:
-                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.multiply(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         case DIVIDE:
-                            assert mathValues != null;
                             outputNumber2List.add(Arithmetic.divide(mathValues.get(0), mathValues.get(1), mathMethod.isChecked()));
                             break;
                         default:
@@ -307,9 +301,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         outputNumber.setLength(0);
-        updateListView(outputListView1, outputNumber1List);
-        updateListView(outputListView2, outputNumber2List);
-
+        switch (activeWindow) {
+            case 1:
+                updateListView(outputListView1, outputNumber1List);
+                break;
+            case 2:
+                updateListView(outputListView2, outputNumber2List);
+                break;
+            default:
+                break;
+        }
     }
 
     // region Update Controls
